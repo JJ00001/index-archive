@@ -1,5 +1,9 @@
-<script setup></script>
+<script setup>
+import LayoutWrapper from "@/Layouts/LayoutWrapper.vue";
+</script>
 
 <template>
-    Dashboard
+    <layout-wrapper>
+
+    </layout-wrapper>
 </template>
