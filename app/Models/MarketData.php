@@ -12,7 +12,6 @@ class MarketData extends Model
         'market_capitalization',
         'share_price',
         'weight',
-        'shares',
         'company_id',
     ];
 
