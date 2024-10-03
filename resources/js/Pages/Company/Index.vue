@@ -16,9 +16,9 @@ defineProps({
         <data-table :value="companies" striped-rows>
             <column field="ticker" header="Ticker"/>
             <column field="name" header="Name"/>
-            <column field="market_datas" header="Gewichtung in %">
-                <template #body="slotProps">
-                    {{ slotProps.data.market_datas[0].weight }} %
+            <column field="latest_weight" header="Gewichtung">
+                <template #body="{ data }">
+                    {{ data.latest_weight }} %
                 </template>
             </column>
             <column field="sector.name" header="Branche"/>

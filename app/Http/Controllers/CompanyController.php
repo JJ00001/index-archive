@@ -14,11 +14,8 @@ class CompanyController extends Controller
         $companies = Company::all()->load([
             'country',
             'sector',
-            'exchange',
-            'marketDatas' => function ($query) {
-                $query->latest()->limit(1);
-            }
-        ]);
+            'exchange'
+        ])->take(50);
 
         return inertia('Company/Index', [
             'companies' => $companies,
