@@ -2,6 +2,7 @@
 import LayoutWrapper from "@/Layouts/LayoutWrapper.vue";
 import DataTable from "primevue/datatable";
 import Column from 'primevue/column';
+import { router } from "@inertiajs/vue3";
 
 defineProps({
     companies: {
@@ -9,11 +10,16 @@ defineProps({
         required: true
     }
 });
+
+const handleRowClick = (event) => {
+    const companyId = event.data.id;
+    router.get(route('companies.show', companyId));
+};
 </script>
 
 <template>
     <layout-wrapper>
-        <data-table :value="companies" striped-rows>
+        <data-table :value="companies" striped-rows @row-click="handleRowClick" selection-mode="single">
             <column field="ticker" header="Ticker"/>
             <column field="name" header="Name"/>
             <column field="latest_weight" header="Gewichtung">
