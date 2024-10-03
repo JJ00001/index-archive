@@ -17,7 +17,6 @@ return new class extends Migration
             $table->double('market_capitalization');
             $table->double('share_price');
             $table->decimal('weight', 6, 5);
-            $table->unsignedBigInteger('shares');
             $table->timestamps();
         });
     }
