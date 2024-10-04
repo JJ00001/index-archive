@@ -34,10 +34,10 @@ class HoldingDataService
             $currency = $data[12];
 
             if ($assetClass === 'Aktien') {
-                $company = Company::firstOrCreate([
+                // Attributes beside ISIN might change
+                $company = Company::updateOrCreate(['isin' => $isin], [
                     'ticker' => $ticker,
                     'name' => $companyName,
-                    'isin' => $isin,
                     'sector_id' => Sector::firstOrCreate(['name' => $sector])->id,
                     'country_id' => Country::firstOrCreate(['name' => $country])->id,
                     'exchange_id' => Exchange::firstOrCreate(['name' => $exchange])->id,
