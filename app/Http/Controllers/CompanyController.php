@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use Date;
 
 class CompanyController extends Controller
 {
@@ -27,7 +28,15 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        return inertia('Company/Show',
-            ['company' => $company]);
+        $companyMarketData = $company->marketDatas()->get();
+        $weightHistory = [
+            'dates' => $companyMarketData->map(fn($data) => Date::make($data->date)?->format('M Y'))->toArray(),
+            'weights' => $companyMarketData->map(fn($data) => (float)$data->weight)->toArray()
+        ];
+
+        return inertia('Company/Show', [
+            'company' => $company,
+            'weightHistory' => $weightHistory,
+        ]);
     }
 }
