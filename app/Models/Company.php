@@ -13,6 +13,7 @@ class Company extends Model
         'name',
         'ticker',
         'isin',
+        'logo',
         'sector_id',
         'country_id',
         'exchange_id',
