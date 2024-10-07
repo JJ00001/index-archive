@@ -9,6 +9,13 @@ use App\Models\Currency;
 use App\Models\Exchange;
 use App\Models\MarketData;
 use App\Models\Sector;
+use DateTime;
+use Exception;
+use GuzzleHttp\Client;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class HoldingDataService
 {
@@ -44,6 +51,32 @@ class HoldingDataService
                     'currency_id' => Currency::firstOrCreate(['name' => $currency])->id,
                     'asset_class_id' => AssetClass::firstOrCreate(['name' => $assetClass])->id,
                 ]);
+
+                $companyLogoExists = (bool)$company->logo;
+
+                if ($company->wasRecentlyCreated && !$companyLogoExists) {
+                    try {
+                        $response = Http::withHeader('X-Api-Key', env('API_NINJA_API_KEY'))
+                            ->accept('application/json')
+                            ->get('https://api.api-ninjas.com/v1/logo?ticker=' . $company->ticker);
+
+                        $logoURL = $response->json()[0]['image'] ?? null;
+
+                        if ($logoURL) {
+                            $response = Http::get($logoURL);
+
+                            $logo = $response->body();
+
+                            $logoPathInStorage = 'logos/' . $company->ticker . '.png';
+
+                            Storage::disk('public')->put($logoPathInStorage, $logo);
+
+                            $company->update(['logo' => $logoPathInStorage]);
+                        }
+                    } catch (ConnectionException $e) {
+                        Log::info($e->getMessage());
+                    }
+                }
 
                 MarketData::create([
                     'company_id' => $company->id,
