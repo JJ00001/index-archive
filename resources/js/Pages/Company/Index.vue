@@ -19,7 +19,12 @@ const handleRowClick = (event) => {
 
 <template>
     <layout-wrapper>
-        <data-table :value="companies" striped-rows @row-click="handleRowClick" selection-mode="single">
+        <data-table :value="companies" @row-click="handleRowClick" selection-mode="single">
+            <column header="Logo">
+                <template #body="{ data }">
+                    <img :src="data.logo" alt="" style="max-width: 6rem; max-height: 3rem;"/>
+                </template>
+            </column>
             <column field="ticker" header="Ticker"/>
             <column field="name" header="Name"/>
             <column field="latest_weight" header="Gewichtung">
