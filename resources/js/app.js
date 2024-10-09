@@ -20,6 +20,9 @@ createInertiaApp({
             .use(PrimeVue, {
                 theme: {
                     preset: Aura,
+                    options: {
+                        darkModeSelector: 'none',
+                    }
                 }
             })
             .mount(el);
