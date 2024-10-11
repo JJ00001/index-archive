@@ -19,6 +19,8 @@
     },
     "dependencies": {
         "@primevue/themes": "^4.0.5",
+        "chart.js": "^4.4.4",
+        "primeicons": "^7.0.0",
         "primevue": "^4.0.5"
     }
 }
