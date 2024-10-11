@@ -18,7 +18,7 @@ class CompanyController extends Controller
             'exchange'
         ])->take(50);
 
-        return inertia('Company/Index', [
+        return inertia('Company/CompanyIndex', [
             'companies' => $companies,
         ]);
     }
@@ -34,7 +34,7 @@ class CompanyController extends Controller
             'weights' => $companyMarketData->map(fn($data) => (float)$data->weight)->toArray()
         ];
 
-        return inertia('Company/Show', [
+        return inertia('Company/CompanyShow', [
             'company' => $company,
             'weightHistory' => $weightHistory,
         ]);
