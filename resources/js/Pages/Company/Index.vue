@@ -20,13 +20,19 @@ const handleRowClick = (event) => {
 <template>
     <layout-wrapper>
         <data-table :value="companies" @row-click="handleRowClick" selection-mode="single">
-            <column header="Logo">
+            <column header="Unternehmen">
                 <template #body="{ data }">
-                    <img :src="data.logo" alt="" style="max-width: 6rem; max-height: 3rem;"/>
+                    <div class="flex items-center">
+                        <div class="w-20 h-8 mr-4 flex-shrink-0">
+                            <img v-if="data.logo" :src="data.logo" alt="logo" class="w-full h-full object-contain"/>
+                        </div>
+                        <div>
+                            <span class="font-bold">{{ data.name }}</span><br>
+                            <span class="text-sm text-gray-500">{{ data.ticker }}</span>
+                        </div>
+                    </div>
                 </template>
             </column>
-            <column field="ticker" header="Ticker"/>
-            <column field="name" header="Name"/>
             <column field="latest_weight" header="Gewichtung">
                 <template #body="{ data }">
                     {{ data.latest_weight }} %
