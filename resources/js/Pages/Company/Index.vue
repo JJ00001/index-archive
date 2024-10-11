@@ -1,8 +1,8 @@
 <script setup>
-import LayoutWrapper from "@/Layouts/LayoutWrapper.vue";
 import DataTable from "primevue/datatable";
 import Column from 'primevue/column';
 import { router } from "@inertiajs/vue3";
+import LayoutMain from "@/Layouts/LayoutMain.vue";
 
 defineProps({
     companies: {
@@ -18,7 +18,7 @@ const handleRowClick = (event) => {
 </script>
 
 <template>
-    <layout-wrapper>
+    <layout-main>
         <data-table :value="companies" @row-click="handleRowClick" selection-mode="single">
             <column header="Unternehmen">
                 <template #body="{ data }">
@@ -42,5 +42,5 @@ const handleRowClick = (event) => {
             <column field="country.name" header="Land"/>
             <column field="exchange.name" header="Börsenplatz"/>
         </data-table>
-    </layout-wrapper>
+    </layout-main>
 </template>
