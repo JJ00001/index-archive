@@ -12,11 +12,14 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::all()->load([
-            'country',
-            'sector',
-            'exchange'
-        ])->take(50);
+        $companies = Company::activeConstituent()
+            ->with([
+                'country',
+                'sector',
+                'exchange'
+            ])
+            ->take(50)
+            ->get();
 
         return inertia('Company/CompanyIndex', [
             'companies' => $companies,
