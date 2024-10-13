@@ -16,13 +16,16 @@ class CompanyController extends Controller
             ->with([
                 'country',
                 'sector',
-                'exchange'
+                'exchange',
             ])
-            ->take(50)
             ->get();
 
+        $sortedCompanies = $companies->sortByDesc(function ($company) {
+            return $company->latest_weight;
+        })->values();
+
         return inertia('Company/CompanyIndex', [
-            'companies' => $companies,
+            'companies' => $sortedCompanies->take(50),
         ]);
     }
 
