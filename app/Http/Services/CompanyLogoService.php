@@ -116,6 +116,40 @@ class CompanyLogoService
         ];
     }
 
+    protected function searchByTickerWithExchangeCode(): bool
+    {
+        $exchangeCode = $this->getExchangeCode($this->company->exchange->name);
+
+        if (!$exchangeCode) {
+            return false;
+        }
+
+        $tickerWithExchange = $this->company->ticker . $exchangeCode;
+
+        $results = $this->makeApiRequest(['ticker' => $tickerWithExchange]);
+
+        return $this->processResults($results);
+    }
+
+    protected function getExchangeCode($exchangeName): ?string
+    {
+        $exchangeCodes = [
+            'Tokyo Stock Exchange' => '.T',
+            'London Stock Exchange' => '.L',
+            'Nyse Euronext - Euronext Paris' => '.PA',
+            'Toronto Stock Exchange' => '.TO',
+            'Xetra' => '.DE',
+            'Bolsa De Madrid' => '.MC',
+            'Asx - All Markets' => '.AX',
+            'Hong Kong Exchanges And Clearing Ltd' => '.HK',
+            'Omx Nordic Exchange Copenhagen A/S' => '.VI',
+            'Euronext Amsterdam' => '.AS',
+            'Nasdaq Omx Nordic' => '.ST',
+        ];
+
+        return $exchangeCodes[$exchangeName] ?? null;
+    }
+
     protected function searchByName(): bool
     {
         $results = $this->makeApiRequest(['name' => $this->company->name]);
