@@ -19,15 +19,12 @@ class CompanyLogoService
 
     public function fetchLogo(): ?string
     {
-        if ($this->searchByTicker()) {
-            return $this->logoUrl;
-        }
-
-        if ($this->searchByName()) {
-            return $this->logoUrl;
-        }
-
-        if ($this->searchByNameParts()) {
+        if (
+            $this->searchByTicker()
+            || $this->searchByTickerWithExchangeCode()
+            || $this->searchByName()
+            || $this->searchByNameParts()
+        ) {
             return $this->logoUrl;
         }
 
