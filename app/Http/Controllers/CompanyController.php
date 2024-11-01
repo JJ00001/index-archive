@@ -18,14 +18,12 @@ class CompanyController extends Controller
                 'sector',
                 'exchange',
             ])
+            ->withLatestWeight()
+            ->orderByDesc('latest_weight')
             ->get();
 
-        $sortedCompanies = $companies->sortByDesc(function ($company) {
-            return $company->latest_weight;
-        })->values();
-
         return inertia('Company/CompanyIndex', [
-            'companies' => $sortedCompanies->take(50),
+            'companies' => $companies->take(50),
         ]);
     }
 
