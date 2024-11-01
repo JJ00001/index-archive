@@ -1,6 +1,8 @@
 <script setup>
 import Chart from "primevue/chart";
 import { onMounted, ref } from "vue";
+import LayoutMain from "@/Layouts/LayoutMain.vue";
+import CompanyInfoHeader from "@/Components/CompanyInfoHeader.vue";
 
 const props = defineProps({
     company: {
@@ -8,7 +10,7 @@ const props = defineProps({
         required: true
     },
     weightHistory: {
-        type: Array,
+        type: Object,
         required: true
     }
 });
@@ -81,5 +83,8 @@ const setChartOptions = () => {
 </script>
 
 <template>
-    <chart type="line" :data="chartData" :options="chartOptions" class="h-[30rem]"/>
+    <layout-main>
+        <CompanyInfoHeader :company="company"/>
+        <chart type="line" :data="chartData" :options="chartOptions" class="h-[30rem]"/>
+    </layout-main>
 </template>
