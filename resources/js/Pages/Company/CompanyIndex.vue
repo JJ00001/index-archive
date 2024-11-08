@@ -1,25 +1,36 @@
 <script setup>
 import DataTable from "primevue/datatable";
 import Column from 'primevue/column';
-import { router } from "@inertiajs/vue3";
+import { router, WhenVisible } from "@inertiajs/vue3";
 import LayoutMain from "@/Layouts/LayoutMain.vue";
+import { ref } from "vue";
 
-defineProps({
+const props = defineProps({
     companies: {
-        type: Array,
+        type: Object,
+        required: true
+    },
+    nextPage: {
+        type: Number,
         required: true
     }
 });
+
+const companyData = ref([...props.companies.data]);
 
 const handleRowClick = (event) => {
     const companyId = event.data.id;
     router.get(route('companies.show', companyId));
 };
+
+const handleSuccess = (response) => {
+    companyData.value = companyData.value.concat(response.props.companies.data);
+};
 </script>
 
 <template>
     <layout-main>
-        <data-table :value="companies" @row-click="handleRowClick" selection-mode="single">
+        <data-table :value="companyData" @row-click="handleRowClick" selection-mode="single">
             <column header="Unternehmen">
                 <template #body="{ data }">
                     <div class="flex items-center">
@@ -42,5 +53,16 @@ const handleRowClick = (event) => {
             <column field="country.name" header="Land"/>
             <column field="exchange.name" header="Börsenplatz"/>
         </data-table>
+        <WhenVisible always :params="{
+            data: {
+                page: nextPage,
+            },
+            preserveUrl: true,
+            onSuccess: handleSuccess,
+        }" :buffer="1000">
+            <template #default>
+                Lädt weitere Unternehmen...
+            </template>
+        </WhenVisible>
     </layout-main>
 </template>

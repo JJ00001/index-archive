@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Date;
+use Inertia\Inertia;
 
 class CompanyController extends Controller
 {
@@ -20,10 +21,11 @@ class CompanyController extends Controller
             ])
             ->withLatestWeight()
             ->orderByDesc('latest_weight')
-            ->get();
+            ->paginate();
 
         return inertia('Company/CompanyIndex', [
-            'companies' => $companies->take(50),
+            'companies' => Inertia::merge($companies),
+            'nextPage' => request()->input('page', 1) + 1,
         ]);
     }
 
