@@ -28,13 +28,13 @@ const handleSuccess = (response) => {
         <card>
             <template #content>
                 <companies-table :company-data="companyData"/>
-                <WhenVisible always :params="{
-            data: {
-                page: nextPage,
-            },
-            preserveUrl: true,
-            onSuccess: handleSuccess,
-        }" :buffer="1000">
+                <WhenVisible always :buffer="1000" :params="{
+                    data: {
+                        page: nextPage,
+                    },
+                    preserveUrl: true,
+                    onSuccess: handleSuccess,
+                }">
                     <template #default>
                         Lädt weitere Unternehmen...
                     </template>
