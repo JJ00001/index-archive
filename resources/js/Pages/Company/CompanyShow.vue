@@ -86,11 +86,7 @@ const setChartOptions = () => {
 <template>
     <layout-main>
         <div class="space-y-10">
-            <card>
-                <template #content>
-                    <CompanyInfoHeader :company="company"/>
-                </template>
-            </card>
+            <CompanyInfoHeader :company="company"/>
             <card>
                 <template #content>
                     <chart type="line" :data="chartData" :options="chartOptions" class="h-[30rem]"/>
