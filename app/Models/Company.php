@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Number;
 
 class Company extends Model
 {
@@ -20,6 +22,8 @@ class Company extends Model
         'currency_id',
         'asset_class_id',
     ];
+
+    protected $appends = ['market_cap'];
 
     public function country(): BelongsTo
     {
@@ -68,5 +72,15 @@ class Company extends Model
                 ->latest()
                 ->limit(1),
         ]);
+    }
+
+    protected function marketCap(): Attribute
+    {
+        $marketCap = $this->marketDatas()->latest()->first()->market_capitalization;
+        $marketCapFormatted = Number::forHumans($marketCap, 2, abbreviate: true);
+
+        return new Attribute(
+            get: fn() => $marketCapFormatted,
+        );
     }
 }
