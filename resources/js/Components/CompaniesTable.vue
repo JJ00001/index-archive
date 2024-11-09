@@ -2,6 +2,7 @@
 import DataTable from "primevue/datatable";
 import Column from 'primevue/column';
 import { router } from "@inertiajs/vue3";
+import CompanyLogo from "@/Components/CompanyLogo.vue";
 
 defineProps({
     companyData: {
@@ -22,7 +23,7 @@ const handleRowClick = (event) => {
             <template #body="{ data }">
                 <div class="flex items-center">
                     <div class="w-20 h-8 mr-4 flex-shrink-0">
-                        <img v-if="data.logo" :src="data.logo" alt="logo" class="w-full h-full object-contain"/>
+                        <company-logo :logo-path="data.logo" class="w-full h-full"/>
                     </div>
                     <div>
                         <span class="font-bold">{{ data.name }}</span><br>
