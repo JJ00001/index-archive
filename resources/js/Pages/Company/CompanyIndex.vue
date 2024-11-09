@@ -2,7 +2,7 @@
 import { WhenVisible } from "@inertiajs/vue3";
 import LayoutMain from "@/Layouts/LayoutMain.vue";
 import { ref } from "vue";
-import CompaniesTable from "@/Pages/Company/CompaniesTable.vue";
+import CompaniesTable from "@/Components/CompaniesTable.vue";
 
 const props = defineProps({
     companies: {
