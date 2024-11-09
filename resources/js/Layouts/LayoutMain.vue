@@ -8,12 +8,8 @@ import Card from "primevue/card";
     <layout-wrapper>
         <div class="space-y-10">
             <navbar class="w-full"/>
-            <div class="lg:w-10/12 mx-auto max-w-screen-2xl">
-                <Card>
-                    <template #content>
-                        <slot/>
-                    </template>
-                </Card>
+            <div class="lg:w-10/12 mx-auto max-w-screen-xl">
+                <slot/>
             </div>
         </div>
     </layout-wrapper>

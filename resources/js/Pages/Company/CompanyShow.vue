@@ -3,6 +3,7 @@ import Chart from "primevue/chart";
 import { onMounted, ref } from "vue";
 import LayoutMain from "@/Layouts/LayoutMain.vue";
 import CompanyInfoHeader from "@/Components/CompanyInfoHeader.vue";
+import Card from "primevue/card";
 
 const props = defineProps({
     company: {
@@ -84,7 +85,17 @@ const setChartOptions = () => {
 
 <template>
     <layout-main>
-        <CompanyInfoHeader :company="company"/>
-        <chart type="line" :data="chartData" :options="chartOptions" class="h-[30rem]"/>
+        <div class="space-y-10">
+            <card>
+                <template #content>
+                    <CompanyInfoHeader :company="company"/>
+                </template>
+            </card>
+            <card>
+                <template #content>
+                    <chart type="line" :data="chartData" :options="chartOptions" class="h-[30rem]"/>
+                </template>
+            </card>
+        </div>
     </layout-main>
 </template>

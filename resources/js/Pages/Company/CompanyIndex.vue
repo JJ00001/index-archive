@@ -3,6 +3,7 @@ import { WhenVisible } from "@inertiajs/vue3";
 import LayoutMain from "@/Layouts/LayoutMain.vue";
 import { ref } from "vue";
 import CompaniesTable from "@/Components/CompaniesTable.vue";
+import { Card } from "primevue";
 
 const props = defineProps({
     companies: {
@@ -24,17 +25,21 @@ const handleSuccess = (response) => {
 
 <template>
     <layout-main>
-        <companies-table :company-data="companyData"/>
-        <WhenVisible always :params="{
+        <card>
+            <template #content>
+                <companies-table :company-data="companyData"/>
+                <WhenVisible always :params="{
             data: {
                 page: nextPage,
             },
             preserveUrl: true,
             onSuccess: handleSuccess,
         }" :buffer="1000">
-            <template #default>
-                Lädt weitere Unternehmen...
+                    <template #default>
+                        Lädt weitere Unternehmen...
+                    </template>
+                </WhenVisible>
             </template>
-        </WhenVisible>
+        </card>
     </layout-main>
 </template>
