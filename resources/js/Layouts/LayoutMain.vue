@@ -1,7 +1,6 @@
 <script setup>
 import LayoutWrapper from "@/Layouts/LayoutWrapper.vue";
 import Navbar from "@/Components/Navbar.vue";
-import Card from "primevue/card";
 </script>
 
 <template>
