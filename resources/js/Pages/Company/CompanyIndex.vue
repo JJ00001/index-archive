@@ -31,7 +31,7 @@ const handleSuccess = (response) => {
 <template>
     <layout-main>
         <data-table :value="companyData" @row-click="handleRowClick" selection-mode="single">
-            <column header="Unternehmen">
+            <column header="Unternehmen" class="w-5/12">
                 <template #body="{ data }">
                     <div class="flex items-center">
                         <div class="w-20 h-8 mr-4 flex-shrink-0">
@@ -44,14 +44,14 @@ const handleSuccess = (response) => {
                     </div>
                 </template>
             </column>
-            <column field="latest_weight" header="Gewichtung">
+            <column field="latest_weight" header="Gewichtung" class="w-1/12">
                 <template #body="{ data }">
                     {{ data.latest_weight }} %
                 </template>
             </column>
-            <column field="sector.name" header="Branche"/>
-            <column field="country.name" header="Land"/>
-            <column field="exchange.name" header="Börsenplatz"/>
+            <column field="sector.name" header="Branche" class="w-2/12"/>
+            <column field="country.name" header="Land" class="w-2/12"/>
+            <column field="exchange.name" header="Börsenplatz" class="w-2/12"/>
         </data-table>
         <WhenVisible always :params="{
             data: {
