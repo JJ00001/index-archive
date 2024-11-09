@@ -40,6 +40,12 @@ class CompanyController extends Controller
             'weights' => $companyMarketData->map(fn($data) => (float)$data->weight)->toArray()
         ];
 
+        $company->load([
+            'country',
+            'exchange',
+            'sector',
+        ]);
+
         return inertia('Company/CompanyShow', [
             'company' => $company,
             'weightHistory' => $weightHistory,

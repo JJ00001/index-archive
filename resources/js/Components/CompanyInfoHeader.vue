@@ -1,6 +1,6 @@
 <script setup>
 import CompanyLogo from "@/Components/CompanyLogo.vue";
-import { Tag } from "primevue";
+import { Card, Tag } from "primevue";
 
 const props = defineProps({
     company: {
@@ -13,10 +13,17 @@ const companyTags = {
     "Ticker": props.company.ticker,
     "ISIN": props.company.isin,
 };
+
+const companyStats = {
+    "Marktkap.": '$ ' + props.company.market_cap,
+    "Branche": props.company.sector.name,
+    "Land": props.company.country.name,
+    "Börsenplatz": props.company.exchange.name,
+}
 </script>
 
 <template>
-    <div class="flex">
+    <div class="flex space-x-10">
         <company-logo :logo-path="company.logo" class="w-1/4 max-h-32 mb-auto"/>
         <div>
             <h1 class="text-4xl font-bold">{{ company.name }}</h1>
@@ -30,5 +37,15 @@ const companyTags = {
                 </tag>
             </div>
         </div>
+    </div>
+    <div class="flex space-x-5">
+        <card v-for="(value, key) in companyStats">
+            <template #title>
+                {{ key }}
+            </template>
+            <template #content>
+                {{ value }}
+            </template>
+        </card>
     </div>
 </template>
