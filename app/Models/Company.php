@@ -58,14 +58,22 @@ class Company extends Model
         return $this->hasMany(MarketData::class, 'company_id');
     }
 
-    public function scopeWithLatestWeight(Builder $query): void
+    public function scopeWithStats(Builder $query): void
     {
-        $query->addSelect([
-            'latest_weight' => MarketData::select('weight')
-                ->whereColumn('company_id', 'companies.id')
-                ->latest()
-                ->limit(1),
-        ]);
+        $latestDate = MarketData::max('date');
+
+        $subQuery = MarketData::selectRaw('
+            company_id,
+            weight as latest_weight,
+            DENSE_RANK() OVER (ORDER BY weight DESC) as `rank`
+        ')
+            ->where('date', $latestDate);
+
+        $query
+            ->joinSub($subQuery, 'stats', function ($join) {
+                $join->on('companies.id', '=', 'stats.company_id');
+            })
+            ->addSelect('companies.*', 'stats.latest_weight', 'stats.rank');
     }
 
     protected function marketCap(): Attribute

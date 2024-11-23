@@ -18,8 +18,8 @@ class CompanyController extends Controller
                 'sector',
                 'exchange',
             ])
-            ->withLatestWeight()
-            ->orderByDesc('latest_weight')
+            ->withStats()
+            ->orderBy('rank')
             ->paginate();
 
         return inertia('Company/CompanyIndex', [
@@ -33,17 +33,21 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
+        $company = Company::withStats()
+            ->where('id', $company->id)
+            ->with([
+                'country',
+                'exchange',
+                'sector',
+            ])
+            ->firstOrFail();
+
+        // TODO refactor to a service
         $companyMarketData = $company->marketDatas()->get();
         $weightHistory = [
             'dates' => $companyMarketData->map(fn($data) => Date::make($data->date)?->format('M Y'))->toArray(),
             'weights' => $companyMarketData->map(fn($data) => (float)$data->weight)->toArray()
         ];
-
-        $company->load([
-            'country',
-            'exchange',
-            'sector',
-        ]);
 
         return inertia('Company/CompanyShow', [
             'company' => $company,
