@@ -18,7 +18,7 @@ const items = ref([
     {
         label: 'Länder',
         icon: 'pi pi-map',
-        route: '/companies'
+        route: '/countries'
     },
 ]);
 </script>
