@@ -2,7 +2,7 @@
 import { WhenVisible } from "@inertiajs/vue3";
 import LayoutMain from "@/Layouts/LayoutMain.vue";
 import { ref } from "vue";
-import CompaniesTable from "@/Components/CompaniesTable.vue";
+import CompanyIndexTable from "@/Components/CompanyIndexTable.vue";
 import { Card } from "primevue";
 
 const props = defineProps({
@@ -27,7 +27,7 @@ const handleSuccess = (response) => {
     <layout-main>
         <card>
             <template #content>
-                <companies-table :company-data="companyData"/>
+                <company-index-table :company-data="companyData"/>
                 <WhenVisible always :buffer="1000" :params="{
                     data: {
                         page: nextPage,
