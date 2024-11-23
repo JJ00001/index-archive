@@ -13,8 +13,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::activeConstituent()
-            ->with([
+        $companies = Company::with([
                 'country',
                 'sector',
                 'exchange',

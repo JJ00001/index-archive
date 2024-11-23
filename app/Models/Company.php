@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ActiveConstituentScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Number;
 
+#[ScopedBy(ActiveConstituentScope::class)]
 class Company extends Model
 {
     protected $fillable = [
@@ -53,15 +56,6 @@ class Company extends Model
     public function marketDatas(): HasMany
     {
         return $this->hasMany(MarketData::class, 'company_id');
-    }
-
-    public function scopeActiveConstituent(Builder $query): void
-    {
-        $latestDate = MarketData::max('date');
-
-        $query->whereHas('marketDatas', function ($query) use ($latestDate) {
-            $query->where('date', $latestDate);
-        });
     }
 
     public function scopeWithLatestWeight(Builder $query): void
