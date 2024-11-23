@@ -19,7 +19,8 @@ const handleRowClick = (event) => {
 
 <template>
     <data-table :value="companyData" @row-click="handleRowClick" selection-mode="single">
-        <column header="Unternehmen" class="w-5/12">
+        <column class="w-1/12" field="rank" header="Position"/>
+        <column class="w-4/12" header="Unternehmen">
             <template #body="{ data }">
                 <div class="flex items-center">
                     <div class="w-20 h-8 mr-4 flex-shrink-0">
