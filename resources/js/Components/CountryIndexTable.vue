@@ -17,7 +17,11 @@ const handleRowClick = () => {
 <template>
     <data-table :value="countryData" selection-mode="single" @row-click="handleRowClick">
         <column class="w-1/3" field="name" header="Name"/>
-        <column class="w-1/3" field="weight" header="Gewichtung"/>
+        <column class="w-1/3" field="weight" header="Gewichtung">
+            <template #body="{ data }">
+                {{ $n((Number(data.weight) / 100), 'percent') }}
+            </template>
+        </column>
         <column class="w-1/3" field="companies_count" header="Anzahl Unternehmen"/>
     </data-table>
 </template>

@@ -35,7 +35,7 @@ const handleRowClick = (event) => {
         </column>
         <column field="latest_weight" header="Gewichtung" class="w-1/12">
             <template #body="{ data }">
-                {{ data.latest_weight }} %
+                {{ $n((Number(data.latest_weight) / 100), 'percent') }}
             </template>
         </column>
         <column field="sector.name" header="Branche" class="w-2/12"/>
