@@ -13,7 +13,7 @@ const items = ref([
     {
         label: 'Branchen',
         icon: 'pi pi-th-large',
-        route: '/companies'
+        route: '/sectors'
     },
     {
         label: 'Länder',
