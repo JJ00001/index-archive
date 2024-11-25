@@ -17,13 +17,20 @@ createInertiaApp({
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
         const i18n = createI18n({
-            locale: 'en',
+            locale: 'de',
             numberFormats: {
                 en: {
                     currencyCompact: {
                         style: 'currency',
                         currency: 'USD',
                         notation: 'compact',
+                    }
+                },
+                de: {
+                    percent: {
+                        style: 'percent',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
                     }
                 }
             }
