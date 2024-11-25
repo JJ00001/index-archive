@@ -8,6 +8,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import 'primeicons/primeicons.css';
+import { createI18n } from "vue-i18n";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -15,6 +16,19 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
+        const i18n = createI18n({
+            locale: 'en',
+            numberFormats: {
+                en: {
+                    currencyCompact: {
+                        style: 'currency',
+                        currency: 'USD',
+                        notation: 'compact',
+                    }
+                }
+            }
+        });
+
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
@@ -26,6 +40,7 @@ createInertiaApp({
                     }
                 }
             })
+            .use(i18n)
             .mount(el);
     },
     progress: {
