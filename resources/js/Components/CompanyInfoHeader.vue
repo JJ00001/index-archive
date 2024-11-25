@@ -1,6 +1,7 @@
 <script setup>
 import CompanyLogo from "@/Components/CompanyLogo.vue";
 import { Card, Tag } from "primevue";
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
     company: {
@@ -9,13 +10,15 @@ const props = defineProps({
     },
 });
 
+const {n} = useI18n();
+
 const companyTags = {
     "Ticker": props.company.ticker,
     "ISIN": props.company.isin,
 };
 
 const companyStats = {
-    "Marktkap.": '$ ' + props.company.market_capitalization,
+    "Marktkap.": n(props.company.market_capitalization, 'currencyCompact'),
     "Branche": props.company.sector.name,
     "Land": props.company.country.name,
     "Börsenplatz": props.company.exchange.name,
