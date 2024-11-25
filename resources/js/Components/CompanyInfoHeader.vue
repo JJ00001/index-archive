@@ -15,7 +15,7 @@ const companyTags = {
 };
 
 const companyStats = {
-    "Marktkap.": '$ ' + props.company.market_cap,
+    "Marktkap.": '$ ' + props.company.market_capitalization,
     "Branche": props.company.sector.name,
     "Land": props.company.country.name,
     "Börsenplatz": props.company.exchange.name,

@@ -5,11 +5,9 @@ namespace App\Models;
 use App\Models\Scopes\ActiveConstituentScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Number;
 
 #[ScopedBy(ActiveConstituentScope::class)]
 class Company extends Model
@@ -25,8 +23,6 @@ class Company extends Model
         'currency_id',
         'asset_class_id',
     ];
-
-    protected $appends = ['market_cap'];
 
     public function country(): BelongsTo
     {
@@ -65,7 +61,8 @@ class Company extends Model
         $subQuery = MarketData::selectRaw('
             company_id,
             weight as latest_weight,
-            DENSE_RANK() OVER (ORDER BY weight DESC) as `rank`
+            DENSE_RANK() OVER (ORDER BY weight DESC) as `rank`,
+            market_capitalization
         ')
             ->where('date', $latestDate);
 
@@ -73,16 +70,6 @@ class Company extends Model
             ->joinSub($subQuery, 'stats', function ($join) {
                 $join->on('companies.id', '=', 'stats.company_id');
             })
-            ->addSelect('companies.*', 'stats.latest_weight', 'stats.rank');
-    }
-
-    protected function marketCap(): Attribute
-    {
-        $marketCap = $this->marketDatas()->latest()->first()->market_capitalization;
-        $marketCapFormatted = Number::forHumans($marketCap, 2, abbreviate: true);
-
-        return new Attribute(
-            get: fn() => $marketCapFormatted,
-        );
+            ->addSelect('companies.*', 'stats.latest_weight', 'stats.rank', 'stats.market_capitalization');
     }
 }
