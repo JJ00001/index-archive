@@ -19,18 +19,16 @@ createInertiaApp({
         const i18n = createI18n({
             locale: 'de',
             numberFormats: {
-                en: {
-                    currencyCompact: {
-                        style: 'currency',
-                        currency: 'USD',
-                        notation: 'compact',
-                    }
-                },
                 de: {
                     percent: {
                         style: 'percent',
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
+                    },
+                    currencyUSDCompact: {
+                        style: 'currency',
+                        currency: 'USD',
+                        notation: 'compact',
                     }
                 }
             }
