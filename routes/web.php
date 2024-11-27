@@ -11,5 +11,5 @@ Route::get('/', function () {
 });
 
 Route::resource('companies', CompanyController::class)->only(['index', 'show']);
-Route::resource('countries', CountryController::class)->only(['index']);
+Route::resource('countries', CountryController::class)->only(['index', 'show']);
 Route::resource('sectors', SectorController::class)->only(['index']);
