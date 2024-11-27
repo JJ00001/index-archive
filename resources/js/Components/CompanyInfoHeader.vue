@@ -26,8 +26,8 @@ const companyStats = {
 </script>
 
 <template>
-    <div class="flex space-x-10">
-        <company-logo :logo-path="company.logo" class="w-1/4 max-h-32 mb-auto"/>
+    <div class="flex space-x-16">
+        <company-logo :logo-path="company.logo" class="max-w-[20%] max-h-24"/>
         <div>
             <h1 class="text-4xl font-bold">{{ company.name }}</h1>
             <div class="flex space-x-3 mt-2">
