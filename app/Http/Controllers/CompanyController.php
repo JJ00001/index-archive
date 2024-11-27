@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use Date;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class CompanyController extends Controller
@@ -43,10 +43,16 @@ class CompanyController extends Controller
             ->firstOrFail();
 
         // TODO refactor to a service
-        $companyMarketData = $company->marketDatas()->get();
+        $companyMarketData = DB::select('
+            SELECT date, weight
+            FROM market_data
+            WHERE company_id = ?
+            ORDER BY date
+        ', [$company->id]);
+
         $weightHistory = [
-            'dates' => $companyMarketData->map(fn($data) => Date::make($data->date)?->format('M Y'))->toArray(),
-            'weights' => $companyMarketData->map(fn($data) => (float)$data->weight)->toArray()
+            'dates' => array_map(fn($data) => $data->date, $companyMarketData),
+            'weights' => array_map(fn($data) => $data->weight, $companyMarketData),
         ];
 
         return inertia('Company/CompanyShow', [
