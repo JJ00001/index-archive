@@ -19,7 +19,7 @@ const handleRowClick = () => {
         <column class="w-1/3" field="name" header="Name"/>
         <column class="w-1/3" field="weight" header="Gewichtung">
             <template #body="{ data }">
-                {{ $n((Number(data.weight) / 100), 'percent') }}
+                {{ $n(Number(data.weight), 'percent') }}
             </template>
         </column>
         <column class="w-1/3" field="companies_count" header="Anzahl Unternehmen"/>

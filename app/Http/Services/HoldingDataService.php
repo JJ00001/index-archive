@@ -31,7 +31,8 @@ class HoldingDataService
             $assetClass = $data[3];
             // Raw market capitalization value is in thousands. Multiply by 1000 to convert it to the actual value.
             $marketCap = $data[4]['raw'] * 1000;
-            $weight = $data[5]['raw'];
+            // Raw weight value is in percentage. Divide by 100 to convert it decimal representation.
+            $weight = $data[5]['raw'] / 100;
             $isin = $data[8];
             $sharePrice = $data[9]['raw'];
             $country = $data[10];

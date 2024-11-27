@@ -46,7 +46,7 @@ const handleSuccess = (response) => {
         </column>
         <column field="latest_weight" header="Gewichtung" class="w-1/12">
             <template #body="{ data }">
-                {{ $n((Number(data.latest_weight) / 100), 'percent') }}
+                {{ $n(Number(data.latest_weight), 'percent') }}
             </template>
         </column>
         <column field="sector.name" header="Branche" class="w-2/12"/>
