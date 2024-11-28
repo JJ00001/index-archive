@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\WeightHistory\CompanyWeightHistoryStrategy;
+use App\Http\Services\WeightHistory\WeightHistoryService;
 use App\Models\Company;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class CompanyController extends Controller
@@ -14,10 +15,10 @@ class CompanyController extends Controller
     public function index()
     {
         $companies = Company::with([
-                'country',
-                'sector',
-                'exchange',
-            ])
+            'country',
+            'sector',
+            'exchange',
+        ])
             ->withStats()
             ->orderBy('rank')
             ->paginate();
@@ -42,18 +43,8 @@ class CompanyController extends Controller
             ])
             ->firstOrFail();
 
-        // TODO refactor to a service
-        $companyMarketData = DB::select('
-            SELECT date, weight
-            FROM market_data
-            WHERE company_id = ?
-            ORDER BY date
-        ', [$company->id]);
-
-        $weightHistory = [
-            'dates' => array_map(fn($data) => $data->date, $companyMarketData),
-            'weights' => array_map(fn($data) => $data->weight, $companyMarketData),
-        ];
+        $weightHistoryService = new WeightHistoryService(new CompanyWeightHistoryStrategy());
+        $weightHistory = $weightHistoryService->getWeightHistory($company->id);
 
         return inertia('Company/CompanyShow', [
             'company' => $company,
