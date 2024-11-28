@@ -1,6 +1,7 @@
 <script setup>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
+import { router } from "@inertiajs/vue3";
 
 defineProps({
     sectorData: {
@@ -9,8 +10,9 @@ defineProps({
     }
 });
 
-const handleRowClick = () => {
-    alert('Coming soon');
+const handleRowClick = (event) => {
+    const sectorId = event.data.id;
+    router.get(route('sectors.show', sectorId));
 };
 </script>
 
