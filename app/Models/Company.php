@@ -56,15 +56,13 @@ class Company extends Model
 
     public function scopeWithStats(Builder $query): void
     {
-        $latestDate = MarketData::max('date');
-
         $subQuery = MarketData::selectRaw('
             company_id,
             weight as latest_weight,
             DENSE_RANK() OVER (ORDER BY weight DESC) as `rank`,
             market_capitalization
         ')
-            ->where('date', $latestDate);
+            ->where('date', MarketData::maxDate());
 
         $query
             ->joinSub($subQuery, 'stats', function ($join) {

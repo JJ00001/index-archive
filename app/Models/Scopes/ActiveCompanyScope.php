@@ -15,9 +15,7 @@ class ActiveCompanyScope implements Scope
     public function apply(Builder $builder, Model $model): void
     {
         $builder->whereHas('marketDatas', function (Builder $builder) {
-            $latestDate = MarketData::max('date');
-
-            $builder->where('date', $latestDate);
+            $builder->where('date', MarketData::maxDate());
         });
     }
 }

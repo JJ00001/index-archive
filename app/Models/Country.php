@@ -27,15 +27,13 @@ class Country extends Model
 
     public function scopeWithWeight(Builder $query): void
     {
-        $latestDate = MarketData::max('date');
-
         $query->addSelect([
-            'weight' => function ($query) use ($latestDate) {
+            'weight' => function ($query) {
                 $query->selectRaw('SUM(market_data.weight)')
                     ->from('companies')
-                    ->join('market_data', function ($join) use ($latestDate) {
+                    ->join('market_data', function ($join) {
                         $join->on('companies.id', '=', 'market_data.company_id')
-                            ->where('market_data.date', $latestDate);
+                            ->where('market_data.date', MarketData::maxDate());
                     })
                     ->whereColumn('companies.country_id', 'countries.id');
             },
