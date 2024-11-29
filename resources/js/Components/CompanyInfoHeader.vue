@@ -2,6 +2,7 @@
 import CompanyLogo from "@/Components/CompanyLogo.vue";
 import { Card, Tag } from "primevue";
 import { useI18n } from 'vue-i18n';
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     company: {
@@ -12,16 +13,28 @@ const props = defineProps({
 
 const {n} = useI18n();
 
+const company = props.company;
+
 const companyTags = {
-    "Ticker": props.company.ticker,
-    "ISIN": props.company.isin,
+    "Ticker": company.ticker,
+    "ISIN": company.isin,
 };
 
 const companyStats = {
-    "Marktkap.": n(props.company.market_capitalization, 'currencyUSDCompact'),
-    "Branche": props.company.sector.name,
-    "Land": props.company.country.name,
-    "Börsenplatz": props.company.exchange.name,
+    "Marktkap.": {
+        name: n(company.market_capitalization, 'currencyUSDCompact'),
+    },
+    "Branche": {
+        name: company.sector.name,
+        route: route('sectors.show', {sector: company.sector.id})
+    },
+    "Land": {
+        name: company.country.name,
+        route: route('countries.show', {country: company.country.id})
+    },
+    "Börsenplatz": {
+        name: company.exchange.name,
+    },
 }
 </script>
 
@@ -42,12 +55,13 @@ const companyStats = {
         </div>
     </div>
     <div class="flex space-x-5">
-        <card v-for="(value, key) in companyStats">
+        <card v-for="(stat, key) in companyStats">
             <template #title>
                 {{ key }}
             </template>
             <template #content>
-                {{ value }}
+                <Link v-if="stat.route" :href="stat.route" class="underline underline-offset-2">{{ stat.name }}</Link>
+                <span v-else>{{ stat.name }}</span>
             </template>
         </card>
     </div>
