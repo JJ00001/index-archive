@@ -1,6 +1,7 @@
 <script setup>
 import Chart from "primevue/chart";
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
     data: {
@@ -8,6 +9,8 @@ const props = defineProps({
         required: true
     }
 });
+
+const {n, d} = useI18n();
 
 const dates = ref(props.data['dates']);
 const weights = ref(props.data['weights']);
@@ -52,8 +55,8 @@ const setChartOptions = () => {
                 ticks: {
                     color: textColorSecondary,
                     callback: function (value, index) {
-                        // Show every 6th label
-                        return index % 12 === 0 ? this.getLabelForValue(value) : '';
+                        // Show every 12th label
+                        return index % 12 === 0 ? d(new Date(this.getLabelForValue(value)), 'short') : '';
                     }
                 },
                 grid: {
@@ -62,7 +65,10 @@ const setChartOptions = () => {
             },
             y: {
                 ticks: {
-                    color: textColorSecondary
+                    color: textColorSecondary,
+                    callback: function (value) {
+                        return n(value, 'percent');
+                    }
                 },
                 grid: {
                     color: surfaceBorder
@@ -79,5 +85,5 @@ onMounted(() => {
 </script>
 
 <template>
-    <chart :data="chartData" :options="chartOptions" class="h-[30rem]" type="line"/>
+    <chart :data="chartData" :options="chartOptions" class="h-[20rem]" type="line"/>
 </template>
