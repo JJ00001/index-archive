@@ -29,6 +29,18 @@ createInertiaApp({
                         style: 'currency',
                         currency: 'USD',
                         notation: 'compact',
+                    },
+                    currencyUSD: {
+                        style: 'currency',
+                        currency: 'USD',
+                    }
+                }
+            },
+            datetimeFormats: {
+                de: {
+                    short: {
+                        year: 'numeric',
+                        month: 'short',
                     }
                 }
             }
