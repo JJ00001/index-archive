@@ -31,7 +31,7 @@ const handleSuccess = (response) => {
 <template>
     <data-table :value="companyData" @row-click="handleRowClick" selection-mode="single">
         <column class="w-1/12" field="rank" header="Position"/>
-        <column class="w-4/12" header="Unternehmen">
+        <column class="w-7/12" header="Unternehmen">
             <template #body="{ data }">
                 <div class="flex items-center">
                     <div class="w-20 h-8 mr-4 flex-shrink-0">
@@ -44,14 +44,16 @@ const handleSuccess = (response) => {
                 </div>
             </template>
         </column>
-        <column field="latest_weight" header="Gewichtung" class="w-1/12">
+        <column class="w-2/12" field="latest_weight" header="Gewichtung">
             <template #body="{ data }">
                 {{ $n(Number(data.latest_weight), 'percent') }}
             </template>
         </column>
-        <column field="sector.name" header="Branche" class="w-2/12"/>
-        <column field="country.name" header="Land" class="w-2/12"/>
-        <column field="exchange.name" header="Börsenplatz" class="w-2/12"/>
+        <column class="w-2/12" field="market_capitalization" header="Marktkap.">
+            <template #body="{ data, field}">
+                {{ $n(Number(data[field]), 'currencyUSDCompact') }}
+            </template>
+        </column>
     </data-table>
     <WhenVisible :buffer="1000" :params="{
                     data: {

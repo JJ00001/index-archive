@@ -14,12 +14,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::with([
-            'country',
-            'sector',
-            'exchange',
-        ])
-            ->withStats()
+        $companies = Company::withStats()
             ->orderBy('rank')
             ->paginate();
 
