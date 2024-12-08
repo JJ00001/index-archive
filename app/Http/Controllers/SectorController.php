@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Services\WeightHistory\SectorWeightHistoryStrategy;
 use App\Http\Services\WeightHistory\WeightHistoryService;
 use App\Models\Sector;
+use Inertia\Inertia;
 
 class SectorController extends Controller
 {
@@ -24,9 +25,17 @@ class SectorController extends Controller
         $weightHistoryStrategy = new WeightHistoryService(new SectorWeightHistoryStrategy());
         $weightHistory = $weightHistoryStrategy->getWeightHistory($sector->id);
 
+        $sectorCompanies = $sector
+            ->companies()
+            ->withStats()
+            ->orderBy('rank')
+            ->paginate();
+
         return inertia('Sector/SectorShow', [
             'sector' => $sector,
-            'weightHistory' => $weightHistory
+            'weightHistory' => $weightHistory,
+            'companies' => Inertia::merge($sectorCompanies),
+            'nextCompaniesPage' => request()->input('page', 1) + 1,
         ]);
     }
 }

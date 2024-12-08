@@ -2,6 +2,7 @@
 import LayoutMain from "@/Layouts/LayoutMain.vue";
 import Card from "primevue/card";
 import WeightChart from "@/Components/WeightChart.vue";
+import CompanyIndexTable from "@/Components/CompanyIndexTable.vue";
 
 const props = defineProps({
     sector: {
@@ -10,6 +11,14 @@ const props = defineProps({
     },
     weightHistory: {
         type: Object,
+        required: true
+    },
+    companies: {
+        type: Object,
+        required: true
+    },
+    nextCompaniesPage: {
+        type: Number,
         required: true
     }
 });
@@ -22,6 +31,11 @@ const props = defineProps({
             <card>
                 <template #content>
                     <weight-chart :data="weightHistory"/>
+                </template>
+            </card>
+            <card>
+                <template #content>
+                    <company-index-table :companies="companies" :next-page="nextCompaniesPage"/>
                 </template>
             </card>
         </div>
