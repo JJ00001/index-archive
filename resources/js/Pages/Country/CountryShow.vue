@@ -18,6 +18,7 @@ const props = defineProps({
 <template>
     <layout-main>
         <div class="space-y-10">
+            <h1 class="text-4xl font-bold">{{ country.name }}</h1>
             <card>
                 <template #content>
                     <weight-chart :data="weightHistory"/>
