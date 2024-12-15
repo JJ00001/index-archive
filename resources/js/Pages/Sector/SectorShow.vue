@@ -29,11 +29,17 @@ const props = defineProps({
         <div class="space-y-10">
             <h1 class="text-4xl font-bold">{{ sector.name }}</h1>
             <card>
+                <template #title>
+                    <h2 class="text-2xl font-bold">Gewichtung</h2>
+                </template>
                 <template #content>
                     <weight-chart :data="weightHistory"/>
                 </template>
             </card>
             <card>
+                <template #title>
+                    <h2 class="text-2xl font-bold">Unternehmen</h2>
+                </template>
                 <template #content>
                     <company-index-table :companies="companies" :next-page="nextCompaniesPage"/>
                 </template>

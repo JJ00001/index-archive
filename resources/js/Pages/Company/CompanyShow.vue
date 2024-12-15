@@ -21,6 +21,9 @@ const props = defineProps({
         <div class="space-y-10">
             <CompanyInfoHeader :company="company"/>
             <card>
+                <template #title>
+                    <h2 class="text-2xl font-bold">Gewichtung</h2>
+                </template>
                 <template #content>
                     <weight-chart :data="weightHistory"/>
                 </template>
