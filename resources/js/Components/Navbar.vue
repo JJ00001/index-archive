@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 import Menubar from "primevue/menubar";
-import InputText from "primevue/inputtext";
 
 const items = ref([
     {
@@ -33,11 +32,6 @@ const items = ref([
                 <span :class="item.icon"/>
                 <span class="ml-2">{{ item.label }}</span>
             </Link>
-        </template>
-        <template #end>
-            <div class="flex items-center gap-2">
-                <InputText placeholder="Suchen" type="text" class="w-32 sm:w-auto"/>
-            </div>
         </template>
     </Menubar>
 </template>
