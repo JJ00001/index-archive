@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Services\WeightHistory\CountryWeightHistoryStrategy;
 use App\Http\Services\WeightHistory\WeightHistoryService;
 use App\Models\Country;
+use Inertia\Inertia;
 
 class CountryController extends Controller
 {
@@ -24,9 +25,17 @@ class CountryController extends Controller
         $weightHistoryService = new WeightHistoryService(new CountryWeightHistoryStrategy());
         $weightHistory = $weightHistoryService->getWeightHistory($country->id);
 
+        $countryCompanies = $country
+            ->companies()
+            ->withStats()
+            ->orderBy('rank')
+            ->paginate();
+
         return inertia('Country/CountryShow', [
             'country' => $country,
             'weightHistory' => $weightHistory,
+            'companies' => Inertia::merge($countryCompanies),
+            'nextCompaniesPage' => request()->input('page', 1) + 1,
         ]);
     }
 }
