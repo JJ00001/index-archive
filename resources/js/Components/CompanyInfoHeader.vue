@@ -1,8 +1,8 @@
 <script setup>
 import CompanyLogo from "@/Components/CompanyLogo.vue";
-import { Card, Tag } from "primevue";
+import { Tag } from "primevue";
 import { useI18n } from 'vue-i18n';
-import { Link } from "@inertiajs/vue3";
+import StatCardGroup from "@/Components/StatCardGroup.vue";
 
 const props = defineProps({
     company: {
@@ -20,22 +20,26 @@ const companyTags = {
     "ISIN": company.isin,
 };
 
-const companyStats = {
-    "Marktkap.": {
-        name: n(company.market_capitalization, 'currencyUSDCompact'),
+const companyStats = [
+    {
+        title: 'Marktkap.',
+        value: n(company.market_capitalization, 'currencyUSDCompact'),
     },
-    "Branche": {
-        name: company.sector.name,
+    {
+        title: 'Branche',
+        value: company.sector.name,
         route: route('sectors.show', {sector: company.sector.id})
     },
-    "Land": {
-        name: company.country.name,
+    {
+        title: 'Land',
+        value: company.country.name,
         route: route('countries.show', {country: company.country.id})
     },
-    "Börsenplatz": {
-        name: company.exchange.name,
+    {
+        title: 'Börsenplatz',
+        value: company.exchange.name,
     },
-}
+];
 </script>
 
 <template>
@@ -54,15 +58,5 @@ const companyStats = {
             </div>
         </div>
     </div>
-    <div class="flex space-x-5">
-        <card v-for="(stat, key) in companyStats">
-            <template #title>
-                {{ key }}
-            </template>
-            <template #content>
-                <Link v-if="stat.route" :href="stat.route" class="underline underline-offset-2">{{ stat.name }}</Link>
-                <span v-else>{{ stat.name }}</span>
-            </template>
-        </card>
-    </div>
+    <stat-card-group :stats="companyStats"/>
 </template>
