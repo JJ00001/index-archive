@@ -14,8 +14,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::withStats()
-            ->orderBy('rank')
+        $companies = Company::orderBy('rank')
             ->paginate();
 
         return inertia('Company/CompanyIndex', [
@@ -29,14 +28,11 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        $company = Company::withStats()
-            ->where('id', $company->id)
-            ->with([
-                'country',
-                'exchange',
-                'sector',
-            ])
-            ->firstOrFail();
+        $company->load([
+            'country',
+            'exchange',
+            'sector',
+        ]);
 
         $weightHistoryService = new WeightHistoryService(new CompanyWeightHistoryStrategy());
         $weightHistory = $weightHistoryService->getWeightHistory($company->id);

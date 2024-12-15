@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Models\Scopes\ActiveCompanyScope;
+use App\Models\Scopes\CompanyStatsScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[ScopedBy(ActiveCompanyScope::class)]
+#[ScopedBy([ActiveCompanyScope::class, CompanyStatsScope::class])]
 class Company extends Model
 {
     protected $fillable = [
@@ -52,22 +52,5 @@ class Company extends Model
     public function marketDatas(): HasMany
     {
         return $this->hasMany(MarketData::class, 'company_id');
-    }
-
-    public function scopeWithStats(Builder $query): void
-    {
-        $subQuery = MarketData::selectRaw('
-            company_id,
-            weight as latest_weight,
-            DENSE_RANK() OVER (ORDER BY weight DESC) as `rank`,
-            market_capitalization
-        ')
-            ->where('date', MarketData::maxDate());
-
-        $query
-            ->joinSub($subQuery, 'stats', function ($join) {
-                $join->on('companies.id', '=', 'stats.company_id');
-            })
-            ->addSelect('companies.*', 'stats.latest_weight', 'stats.rank', 'stats.market_capitalization');
     }
 }

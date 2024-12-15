@@ -27,7 +27,6 @@ class SectorController extends Controller
 
         $sectorCompanies = $sector
             ->companies()
-            ->withStats()
             ->orderBy('rank')
             ->paginate();
 

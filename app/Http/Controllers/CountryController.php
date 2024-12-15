@@ -27,7 +27,6 @@ class CountryController extends Controller
 
         $countryCompanies = $country
             ->companies()
-            ->withStats()
             ->orderBy('rank')
             ->paginate();
 
