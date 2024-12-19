@@ -51,12 +51,6 @@ class HoldingDataService
                     'asset_class_id' => AssetClass::firstOrCreate(['name' => $assetClass])->id,
                 ]);
 
-                $companyLogoExists = (bool)$company->logo;
-
-                if ($company->wasRecentlyCreated && !$companyLogoExists) {
-                    FetchCompanyLogo::dispatch($company);
-                }
-
                 MarketData::create([
                     'company_id' => $company->id,
                     'market_capitalization' => max($marketCap, 0),
