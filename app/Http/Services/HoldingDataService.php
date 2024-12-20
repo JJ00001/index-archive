@@ -107,12 +107,43 @@ class HoldingDataService
 
         Log::info('Upserting companies...');
 
-        Company::withoutGlobalScopes()
-            ->upsert(
-                $companies,
-                ['isin'],
-                ['ticker', 'name', 'sector_id', 'country_id', 'exchange_id', 'currency_id', 'asset_class_id', 'updated_at']
-            );
+        $existingCompanies = Company::withoutGlobalScopes()
+            ->whereIn('isin', array_column($companies, 'isin'))
+            ->get()
+            ->keyBy('isin');
+
+        $companiesToUpsert = [];
+        $fieldsToCheck = ['ticker', 'name', 'sector_id', 'country_id', 'exchange_id', 'currency_id', 'asset_class_id'];
+
+        foreach ($companies as $companyData) {
+            $existing = $existingCompanies[$companyData['isin']] ?? null;
+            if (!$existing) {
+                $companiesToUpsert[] = $companyData;
+            } else {
+                $changed = false;
+                foreach ($fieldsToCheck as $field) {
+                    if ($existing->$field !== $companyData[$field]) {
+                        $changed = true;
+
+                        Log::info('Field ' . $field . ' changed for ISIN: ' . $companyData['isin'] . ' (' . $existing->$field . ' -> ' . $companyData[$field] . ')');
+                    }
+                }
+
+                if ($changed) {
+                    $companiesToUpsert[] = $companyData;
+                }
+            }
+        }
+
+        if (!empty($companiesToUpsert)) {
+            Log::info('Upserting companies ' . count($companiesToUpsert));
+            Company::withoutGlobalScopes()
+                ->upsert(
+                    $companiesToUpsert,
+                    ['isin'],
+                    array_merge($fieldsToCheck, ['updated_at'])
+                );
+        }
 
         Log::info('Companies upserted. Resolving Market Data IDs...');
 
