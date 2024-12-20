@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Http\Services\HoldingDataService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,8 +23,8 @@ class DatabaseSeeder extends Seeder
         }, $files);
 
         foreach ($filenames as $filename) {
+            Log::info('Starting seeding ' . $filename);
             $holdingDataService->writeHoldingDataToDB($filename);
-            dump('Seeded ' . $filename);
         }
     }
 }
