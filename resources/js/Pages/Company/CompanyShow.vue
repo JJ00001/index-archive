@@ -2,7 +2,7 @@
 import LayoutMain from "@/Layouts/LayoutMain.vue";
 import CompanyInfoHeader from "@/Components/CompanyInfoHeader.vue";
 import Card from "primevue/card";
-import WeightChart from "@/Components/WeightChart.vue";
+import WeightChart from "@/Components/Charts/WeightChart.vue";
 
 const props = defineProps({
     company: {

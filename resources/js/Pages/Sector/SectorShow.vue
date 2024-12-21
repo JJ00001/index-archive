@@ -1,7 +1,7 @@
 <script setup>
 import LayoutMain from "@/Layouts/LayoutMain.vue";
 import Card from "primevue/card";
-import WeightChart from "@/Components/WeightChart.vue";
+import WeightChart from "@/Components/Charts/WeightChart.vue";
 import CompanyIndexTable from "@/Components/CompanyIndexTable.vue";
 import StatCardGroup from "@/Components/StatCardGroup.vue";
 import { useI18n } from "vue-i18n";
