@@ -56,81 +56,48 @@ class CompanyLogoService
         }
 
         foreach ($results as $company) {
-            if ($this->isDesiredCompany($company)) {
+            if ($this->compareTickers($company) || $this->compareNames($company)) {
+                Log::info("Result confirmed");
+
                 $this->logoUrl = $company['image'];
 
                 return true;
             }
+
+            Log::warning("Result rejected");
         }
 
         return false;
     }
 
-    protected function isDesiredCompany($company): bool
+    protected function compareTickers($company): bool
     {
-        $dbName = $this->normalizeCompanyName($this->company->name);
-        $apiName = $this->normalizeCompanyName($company['name']);
+        $dbTicker = $this->normalizeCompanyTicker($this->company->ticker);
+        $apiTicker = $this->normalizeCompanyTicker($company['ticker']);
 
-        return levenshtein($company['ticker'], $this->company->ticker) <= 3
-            && (
-                $dbName === $apiName
-                || str_contains($apiName, $dbName)
-                || str_contains($dbName, $apiName)
-            );
+        Log::info("Comparing normalized tickers: $apiTicker vs. $dbTicker");
+
+        return $apiTicker === $dbTicker;
     }
 
-    protected function normalizeCompanyName($name): string
+    protected function normalizeCompanyTicker(string $ticker): string
     {
-        $name = strtolower($name);
+        $exchangeSuffixes = array_values($this->getExchangeCodes());
 
-        $suffixes = $this->getCommonCompanySuffixes();
+        foreach ($exchangeSuffixes as $suffix) {
+            if (str_ends_with($ticker, $suffix)) {
+                $ticker = substr($ticker, 0, -strlen($suffix));
 
-        foreach ($suffixes as $suffix) {
-            $name = str_replace(' ' . $suffix, '', $name);
+                break;
+            }
         }
 
-        return trim($name);
+        return $ticker;
     }
 
-    public function getCommonCompanySuffixes(): array
+    protected function getExchangeCodes(): array
     {
         return [
-            'inc',
-            'incorporated',
-            'corp',
-            'corporation',
-            'ltd',
-            'llc',
-            'limited',
-            'co',
-            'company',
-            'ag',
-            'class a',
-            'class b',
-            'class c',
-            'plc',
-            'sa',
-        ];
-    }
-
-    protected function searchByTickerWithExchangeCode(): bool
-    {
-        $exchangeCode = $this->getExchangeCode($this->company->exchange->name);
-
-        if (!$exchangeCode) {
-            return false;
-        }
-
-        $tickerWithExchange = $this->company->ticker . $exchangeCode;
-
-        $results = $this->makeApiRequest(['ticker' => $tickerWithExchange]);
-
-        return $this->processResults($results);
-    }
-
-    protected function getExchangeCode($exchangeName): ?string
-    {
-        $exchangeCodes = [
             'NASDAQ' => '.O',
             'New York Stock Exchange Inc.' => '.N',
             'Six Swiss Exchange Ag' => '.SW',
@@ -162,6 +129,68 @@ class CompanyLogoService
             'Bme Bolsas Y Mercados Espanoles' => '.BM',
             'NYSE Arca' => '.ARCA',
         ];
+    }
+
+    protected function compareNames($company): bool
+    {
+        $dbName = $this->normalizeCompanyName($this->company->name);
+        $apiName = $this->normalizeCompanyName($company['name']);
+
+        return levenshtein($dbName, $apiName) <= 3;
+    }
+
+    protected function normalizeCompanyName($name): string
+    {
+        $name = strtolower($name);
+
+        $suffixes = $this->getCommonCompanySuffixes();
+
+        foreach ($suffixes as $suffix) {
+            $name = str_replace(' ' . $suffix, '', $name);
+        }
+
+        return trim($name);
+    }
+
+    protected function getCommonCompanySuffixes(): array
+    {
+        return [
+            'inc',
+            'incorporated',
+            'corp',
+            'corporation',
+            'ltd',
+            'llc',
+            'limited',
+            'co',
+            'company',
+            'ag',
+            'class a',
+            'class b',
+            'class c',
+            'plc',
+            'sa',
+        ];
+    }
+
+    protected function searchByTickerWithExchangeCode(): bool
+    {
+        $exchangeCode = $this->findExchangeCode($this->company->exchange->name);
+
+        if (!$exchangeCode) {
+            return false;
+        }
+
+        $tickerWithExchange = $this->company->ticker . $exchangeCode;
+
+        $results = $this->makeApiRequest(['ticker' => $tickerWithExchange]);
+
+        return $this->processResults($results);
+    }
+
+    protected function findExchangeCode($exchangeName): ?string
+    {
+        $exchangeCodes = $this->getExchangeCodes();
 
         return $exchangeCodes[$exchangeName] ?? null;
     }
