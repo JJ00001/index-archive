@@ -7,6 +7,7 @@ use App\Models\Company;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 
 class FetchCompanyLogo implements ShouldQueue, ShouldBeUnique
 {
@@ -32,13 +33,16 @@ class FetchCompanyLogo implements ShouldQueue, ShouldBeUnique
     {
         $companyLogoService = new CompanyLogoService($this->company);
 
+        Log::info("Starting logo fetch: {$this->company->name} ({$this->company->ticker})");
+
         $logoUrl = $companyLogoService->fetchLogo();
 
-        dd($logoUrl);
-//        if ($logoUrl) {
-//            $companyLogoService->storeLogo($logoUrl);
-//        } else {
-//            dd('No logo found');
-//        }
+        if ($logoUrl) {
+            $companyLogoService->storeLogo();
+
+            Log::info("Finished logo fetch: {$this->company->name} ({$this->company->ticker})");
+        } else {
+            Log::warning("Finished logo fetch: None found {$this->company->name} ({$this->company->ticker})");
+        }
     }
 }
