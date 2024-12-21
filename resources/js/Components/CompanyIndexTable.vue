@@ -31,7 +31,7 @@ const handleSuccess = (response) => {
 <template>
     <div class="max-h-[550px] overflow-y-auto">
         <data-table :value="companyData" selection-mode="single" @row-click="handleRowClick">
-            <column class="w-1/12" field="rank" header="Position"/>
+            <column class="w-1/12" field="rank" header="Pos."/>
             <column class="w-7/12" header="Unternehmen">
                 <template #body="{ data }">
                     <div class="flex items-center">
