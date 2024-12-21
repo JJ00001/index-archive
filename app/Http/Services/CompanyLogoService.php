@@ -131,17 +131,36 @@ class CompanyLogoService
     protected function getExchangeCode($exchangeName): ?string
     {
         $exchangeCodes = [
-            'Tokyo Stock Exchange' => '.T',
+            'NASDAQ' => '.O',
+            'New York Stock Exchange Inc.' => '.N',
+            'Six Swiss Exchange Ag' => '.SW',
             'London Stock Exchange' => '.L',
+            'Tokyo Stock Exchange' => '.T',
             'Nyse Euronext - Euronext Paris' => '.PA',
             'Toronto Stock Exchange' => '.TO',
             'Xetra' => '.DE',
             'Bolsa De Madrid' => '.MC',
             'Asx - All Markets' => '.AX',
             'Hong Kong Exchanges And Clearing Ltd' => '.HK',
-            'Omx Nordic Exchange Copenhagen A/S' => '.VI',
+            'Omx Nordic Exchange Copenhagen A/S' => '.CO',
             'Euronext Amsterdam' => '.AS',
+            'Nyse Euronext - Euronext Brussels' => '.BR',
+            'Borsa Italiana' => '.MI',
             'Nasdaq Omx Nordic' => '.ST',
+            'Singapore Exchange' => '.SI',
+            'Irish Stock Exchange - All Market' => '.IR',
+            'Nasdaq Omx Helsinki Ltd.' => '.HE',
+            'Oslo Bors Asa' => '.OL',
+            'Tel Aviv Stock Exchange' => '.TA',
+            'Wiener Boerse Ag' => '.VI',
+            'Nyse Mkt Llc' => '.MKT',
+            'Nyse Euronext - Euronext Lisbon' => '.LS',
+            'SIX Swiss Exchange' => '.SW',
+            'Deutsche Börse AG' => '.DE',
+            'New Zealand Exchange Ltd' => '.NZ',
+            'Cboe BZX formerly known as BATS' => '.BZ',
+            'Bme Bolsas Y Mercados Espanoles' => '.BM',
+            'NYSE Arca' => '.ARCA',
         ];
 
         return $exchangeCodes[$exchangeName] ?? null;
