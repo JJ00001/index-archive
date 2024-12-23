@@ -22,6 +22,10 @@ class SectorController extends Controller
 
     public function show(Sector $sector)
     {
+        $sector = Sector::withStats()
+            ->where('id', $sector->id)
+            ->firstOrFail();
+
         $weightHistoryStrategy = new WeightHistoryService(new SectorWeightHistoryStrategy());
         $weightHistory = $weightHistoryStrategy->getWeightHistory($sector->id);
 
