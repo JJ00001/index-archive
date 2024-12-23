@@ -22,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (request()->ip() === '104.28.62.24') {
+            config(['app.debug' => true]);
+        }
     }
 }
