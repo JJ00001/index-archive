@@ -15,7 +15,7 @@ class CompanyController extends Controller
     public function index()
     {
         $companies = Company::orderBy('rank')
-            ->paginate();
+            ->paginate(200);
 
         return inertia('Company/CompanyIndex', [
             'companies' => Inertia::merge($companies),
