@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    // Custom config
+
+    'api_ninja_api_key' => env('api_ninja_api_key'),
+    'msci_world_scraping_url' => env('msci_world_scraping_url'),
 ];
