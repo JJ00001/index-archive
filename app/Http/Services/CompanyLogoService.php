@@ -136,7 +136,9 @@ class CompanyLogoService
         $dbName = $this->normalizeCompanyName($this->company->name);
         $apiName = $this->normalizeCompanyName($company['name']);
 
-        return levenshtein($dbName, $apiName) <= 3;
+        return strlen($dbName) < 6
+            ? levenshtein($dbName, $apiName) <= 1
+            : levenshtein($dbName, $apiName) <= 3;
     }
 
     protected function normalizeCompanyName($name): string
