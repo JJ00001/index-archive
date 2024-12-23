@@ -19,6 +19,57 @@ use Random\RandomException;
 
 class HoldingDataService
 {
+    /**
+     * @throws DateMalformedStringException
+     * @throws GuzzleException
+     * @throws RandomException
+     * @throws JsonException
+     */
+    public function scrape()
+    {
+        $baseURL = config('app.msci_world_scraping_url');
+        $startDate = new DateTime('2018-01-01');
+        $endDate = new DateTime('2018-01-10');
+        $date = $startDate;
+        $client = new Client();
+
+        while ($date <= $endDate) {
+            $dateFormatted = $date->format('Y-m-d');
+            $randomDelay = random_int(1000, 3000);
+
+            $url = $baseURL . $date->format('Ymd');
+            $response = $client->request('GET', $url, ['delay' => $randomDelay]);
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode === 200) {
+                $filename = storage_path('holdingsData/' . $dateFormatted . '.json');
+                $response = $response->getBody()->getContents();
+
+                $response = str_replace("\u{FEFF}", '', $response);
+                $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+
+                Log::info('Scraping complete for: ' . $dateFormatted);
+
+                if (!empty($response['aaData'])) {
+                    $jsonData = json_encode($response, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+                    file_put_contents($filename, $jsonData);
+                } else {
+                    Log::info('No data for: ' . $dateFormatted);
+
+                    $date = $date->modify('next day');
+                    continue;
+                }
+            } else {
+                Log::info('Request failed with status code: ' . $statusCode);
+            }
+
+            $date = $date->modify('first day of next month');
+        }
+    }
+
+    /**
+     * @throws JsonException
+     */
     public function writeHoldingDataToDB(string $filename)
     {
         $directoryPath = storage_path('holdingsData/');
