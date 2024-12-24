@@ -11,7 +11,6 @@ const props = defineProps({
 const modifyOptions = (options) => {
     options.scales.y.stacked = true;
     options.scales.y.min = 0;
-    options.scales.y.max = 100;
 
     return options;
 };
