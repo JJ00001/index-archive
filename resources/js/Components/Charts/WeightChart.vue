@@ -72,7 +72,8 @@ const setChartOptions = () => {
                 },
                 grid: {
                     color: surfaceBorder
-                }
+                },
+                min: 0,
             }
         }
     };
