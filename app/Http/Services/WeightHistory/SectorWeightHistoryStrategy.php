@@ -8,6 +8,16 @@ class SectorWeightHistoryStrategy implements WeightHistoryStrategy
 {
     public function getWeightHistory(int $id): array
     {
+        $sectorMarketData = $this->fetchWeightHistory($id);
+
+        return [
+            'dates' => array_map(fn($data) => $data->date, $sectorMarketData),
+            'weights' => array_map(fn($data) => $data->weight, $sectorMarketData),
+        ];
+    }
+
+    private function fetchWeightHistory(int $id): array
+    {
         $query = "
             SELECT
               market_data.date,
@@ -23,11 +33,6 @@ class SectorWeightHistoryStrategy implements WeightHistoryStrategy
               market_data.date
         ";
 
-        $sectorMarketData = DB::select($query, [$id]);
-
-        return [
-            'dates' => array_map(fn($data) => $data->date, $sectorMarketData),
-            'weights' => array_map(fn($data) => $data->weight, $sectorMarketData),
-        ];
+        return DB::select($query, [$id]);
     }
 }
