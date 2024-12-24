@@ -1,7 +1,7 @@
 <script setup>
 import DataTable from "primevue/datatable";
 import Column from 'primevue/column';
-import { router, WhenVisible } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 import CompanyLogo from "@/Components/CompanyLogo.vue";
 import { ref } from "vue";
 
@@ -56,16 +56,16 @@ const handleSuccess = (response) => {
                 </template>
             </column>
         </data-table>
-        <WhenVisible :buffer="400" :params="{
-                    data: {
-                        page: nextPage,
-                    },
-                    preserveUrl: true,
-                    onSuccess: handleSuccess,
-                }" always>
-            <template #default>
-                Lädt ...
-            </template>
-        </WhenVisible>
+        <!--        <WhenVisible :buffer="400" :params="{-->
+        <!--                    data: {-->
+        <!--                        page: nextPage,-->
+        <!--                    },-->
+        <!--                    preserveUrl: true,-->
+        <!--                    onSuccess: handleSuccess,-->
+        <!--                }" always>-->
+        <!--            <template #default>-->
+        <!--                Lädt ...-->
+        <!--            </template>-->
+        <!--        </WhenVisible>-->
     </div>
 </template>
