@@ -24,7 +24,7 @@ const setChartData = () => {
         labels: dates,
         datasets: [
             {
-                label: "Anteil vom MSCI World Index",
+                label: "Gewichtung (%) im Index",
                 data: weights,
                 fill: false,
                 borderColor: documentStyle.getPropertyValue('--p-cyan-500'),
