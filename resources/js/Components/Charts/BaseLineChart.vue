@@ -56,7 +56,15 @@ const setChartOptions = () => {
                 labels: {
                     color: textColor
                 }
+            },
+            tooltip: {
+                position: 'nearest'
             }
+        },
+        interaction: {
+            intersect: false,
+            mode: 'index',
+            axis: 'x',
         },
         scales: {
             x: {
