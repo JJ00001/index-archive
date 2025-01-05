@@ -19,6 +19,21 @@ const modifyOptions = (options) => {
     options.scales.y.ticks.callback = function (value) {
         return n(value, 'percent');
     };
+    options.plugins.tooltip = {
+        ...options.plugins.tooltip,
+        callbacks: {
+            label: (context) => {
+                const rawDate = context.label;
+                const weightValue = context.parsed.y;
+
+                const dateStr = d(new Date(rawDate), 'short');
+                const weightStr = n(weightValue, 'percent');
+
+                return `${dateStr}: ${weightStr}`;
+            },
+            title: () => null,
+        },
+    };
 
     return options;
 };
