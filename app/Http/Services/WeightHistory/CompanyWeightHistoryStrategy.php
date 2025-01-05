@@ -11,8 +11,10 @@ class CompanyWeightHistoryStrategy implements WeightHistoryStrategy
         $companyMarketData = $this->fetchWeightHistory($id);
 
         return [
-            'dates' => array_map(fn($data) => $data->date, $companyMarketData),
-            'weights' => array_map(fn($data) => $data->weight, $companyMarketData),
+            'labels' => array_map(fn($data) => $data->date, $companyMarketData),
+            'datasets' => [
+                'Gewichtung' => array_map(fn($data) => $data->weight, $companyMarketData)
+            ]
         ];
     }
 

@@ -11,8 +11,10 @@ class CountryWeightHistoryStrategy implements WeightHistoryStrategy
         $countryMarketData = $this->fetchWeightHistory($id);
 
         return [
-            'dates' => array_map(fn($data) => $data->date, $countryMarketData),
-            'weights' => array_map(fn($data) => $data->weight, $countryMarketData),
+            'labels' => array_map(fn($data) => $data->date, $countryMarketData),
+            'datasets' => [
+                'Gewichtung' => array_map(fn($data) => $data->weight, $countryMarketData)
+            ]
         ];
     }
 

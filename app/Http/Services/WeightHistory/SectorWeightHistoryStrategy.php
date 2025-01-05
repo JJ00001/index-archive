@@ -11,8 +11,10 @@ class SectorWeightHistoryStrategy implements WeightHistoryStrategy
         $sectorMarketData = $this->fetchWeightHistory($id);
 
         return [
-            'dates' => array_map(fn($data) => $data->date, $sectorMarketData),
-            'weights' => array_map(fn($data) => $data->weight, $sectorMarketData),
+            'labels' => array_map(fn($data) => $data->date, $sectorMarketData),
+            'datasets' => [
+                'Gewichtung' => array_map(fn($data) => $data->weight, $sectorMarketData)
+            ]
         ];
     }
 
