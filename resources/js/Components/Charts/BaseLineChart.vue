@@ -40,7 +40,8 @@ const setChartData = () => {
                 fill: true,
                 backgroundColor: color.transparent,
                 borderColor: color.solid,
-                tension: 0.5
+                tension: 0,
+                radius: 0,
             };
         })
     };
