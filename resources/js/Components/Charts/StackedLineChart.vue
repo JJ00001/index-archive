@@ -12,7 +12,7 @@ const props = defineProps({
 const {n, d} = useI18n();
 
 const modifyOptions = (options) => {
-    options.scales.y.stacked = true;
+    options.scales.y.stacked = false;
     options.scales.y.min = 0;
     options.scales.y.ticks.callback = function (value) {
         return n(value, {style: 'percent', maximumFractionDigits: 0});
@@ -24,8 +24,18 @@ const modifyOptions = (options) => {
 
     return options;
 };
+
+const modifyChartData = (chartData) => {
+    return {
+        ...chartData,
+        datasets: chartData.datasets.map(dataset => ({
+            ...dataset,
+            fill: false
+        }))
+    };
+};
 </script>
 
 <template>
-    <base-line-chart :data="data" :modifyOptions="modifyOptions"/>
+    <base-line-chart :data="data" :modify-chart-data="modifyChartData" :modify-options="modifyOptions"/>
 </template>
