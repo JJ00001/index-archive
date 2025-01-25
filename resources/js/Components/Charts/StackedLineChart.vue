@@ -21,6 +21,22 @@ const modifyOptions = (options) => {
         // Show every 12th label
         return index % 12 === 0 ? d(new Date(this.getLabelForValue(value)), 'short') : '';
     }
+    options.plugins.tooltip = {
+        ...options.plugins.tooltip,
+        callbacks: {
+            label: (context) => {
+                const label = context.dataset.label;
+                const valueFormatted = n(context.parsed.y, 'percent');
+
+                return `${label}: ${valueFormatted}`;
+            },
+            title: (context) => {
+                const rawDate = context[0].label;
+
+                return d(new Date(rawDate), 'short');
+            },
+        },
+    };
 
     return options;
 };
