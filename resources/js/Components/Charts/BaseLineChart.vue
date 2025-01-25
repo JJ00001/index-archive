@@ -10,7 +10,11 @@ const props = defineProps({
     modifyOptions: {
         type: Function,
         required: false
-    }
+    },
+    modifyChartData: {
+        type: Function,
+        required: false
+    },
 });
 
 const chartData = ref();
@@ -25,7 +29,7 @@ const generateColor = (index, alpha = 0.2) => {
 };
 
 const setChartData = () => {
-    return {
+    let data = {
         labels: props.data.labels,
         datasets: Object.keys(props.data.datasets).map((dataset, index) => {
             const color = generateColor(index);
@@ -40,6 +44,12 @@ const setChartData = () => {
             };
         })
     };
+
+    if (props.modifyChartData) {
+        data = props.modifyChartData(data);
+    }
+
+    return data;
 };
 
 const setChartOptions = () => {
