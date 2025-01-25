@@ -15,8 +15,12 @@ class SectorController extends Controller
             ->orderByDesc('weight')
             ->get();
 
+        $weightHistoryStrategy = new WeightHistoryService(new SectorWeightHistoryStrategy());
+        $multipleWeightHistory = $weightHistoryStrategy->getMultipleWeightHistory($sectors);
+
         return inertia('Sector/SectorIndex', [
-            'sectors' => $sectors
+            'sectors' => $sectors,
+            'multipleWeightHistory' => $multipleWeightHistory,
         ]);
     }
 
