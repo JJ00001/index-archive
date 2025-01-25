@@ -15,8 +15,12 @@ class CountryController extends Controller
             ->orderByDesc('weight')
             ->get();
 
+        $weightHistoryStrategy = new WeightHistoryService(new CountryWeightHistoryStrategy());
+        $multipleWeightHistory = $weightHistoryStrategy->getMultipleWeightHistory($countries);
+
         return inertia('Country/CountryIndex', [
             'countries' => $countries,
+            'multipleWeightHistory' => $multipleWeightHistory,
         ]);
     }
 
