@@ -65,7 +65,8 @@ const setChartOptions = () => {
         plugins: {
             legend: {
                 labels: {
-                    color: textColor
+                    color: textColor,
+                    usePointStyle: true,
                 },
                 onHover: (event) => event.native.target.style.cursor = 'pointer',
                 onLeave: (event) => event.native.target.style.cursor = 'default',
