@@ -6,19 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class CountryWeightHistoryStrategy extends BaseWeightHistoryStrategy
 {
-    public function getWeightHistory(int $id): array
-    {
-        $countryMarketData = $this->fetchWeightHistory($id);
-
-        return [
-            'labels' => array_map(fn($data) => $data->date, $countryMarketData),
-            'datasets' => [
-                'Gewichtung' => array_map(fn($data) => $data->weight, $countryMarketData)
-            ]
-        ];
-    }
-
-    private function fetchWeightHistory(int $id): array
+    public function fetchWeightHistory(int $id): array
     {
         $query = "
             SELECT

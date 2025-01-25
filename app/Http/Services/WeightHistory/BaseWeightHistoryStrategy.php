@@ -4,5 +4,15 @@ namespace App\Http\Services\WeightHistory;
 
 abstract class BaseWeightHistoryStrategy implements WeightHistoryStrategy
 {
-    abstract public function getWeightHistory(int $id): array;
+    public function getWeightHistory(int $id): array
+    {
+        $marketData = $this->fetchWeightHistory($id);
+
+        return [
+            'labels' => array_map(fn($data) => $data->date, $marketData),
+            'datasets' => [
+                'Gewichtung' => array_map(fn($data) => $data->weight, $marketData)
+            ]
+        ];
+    }
 }
