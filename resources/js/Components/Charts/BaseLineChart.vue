@@ -66,7 +66,9 @@ const setChartOptions = () => {
             legend: {
                 labels: {
                     color: textColor
-                }
+                },
+                onHover: (event) => event.native.target.style.cursor = 'pointer',
+                onLeave: (event) => event.native.target.style.cursor = 'default',
             },
             tooltip: {
                 position: 'nearest'
