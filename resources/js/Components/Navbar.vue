@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import Menubar from "primevue/menubar";
 
 const items = ref([
@@ -20,6 +20,13 @@ const items = ref([
         route: '/countries'
     },
 ]);
+
+const page = usePage();
+const currentRoute = page.url;
+
+const isActive = (route) => {
+    return currentRoute === route;
+}
 </script>
 
 <template>
@@ -28,7 +35,8 @@ const items = ref([
             <span class="font-bold text-2xl mr-10">MSCI World Tracker</span>
         </template>
         <template #item="{ item }">
-            <Link class="flex items-center px-4 py-2" :href="item.route">
+            <Link :class="{ 'bg-slate-100 rounded-md': isActive(item.route) }" :href="item.route"
+                  class="flex items-center px-4 py-2">
                 <span :class="item.icon"/>
                 <span class="ml-2">{{ item.label }}</span>
             </Link>
