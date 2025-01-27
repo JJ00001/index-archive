@@ -26,6 +26,10 @@ class CountryController extends Controller
 
     public function show(Country $country)
     {
+        $country = Country::withStats()
+            ->where('id', $country->id)
+            ->firstOrFail();
+
         $weightHistoryService = new WeightHistoryService(new CountryWeightHistoryStrategy());
         $weightHistory = $weightHistoryService->getWeightHistory($country->id);
 

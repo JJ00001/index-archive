@@ -3,6 +3,8 @@ import LayoutMain from "@/Layouts/LayoutMain.vue";
 import Card from "primevue/card";
 import WeightChart from "@/Components/Charts/WeightChart.vue";
 import CompanyIndexTable from "@/Components/CompanyIndexTable.vue";
+import StatCardGroup from "@/Components/StatCardGroup.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
     country: {
@@ -22,12 +24,26 @@ const props = defineProps({
         required: true
     }
 });
+
+const {n} = useI18n();
+
+const countryStats = [
+    {
+        title: 'Anzahl Unternehmen',
+        value: props.country.companies_count,
+    },
+    {
+        title: 'Gewichtung',
+        value: n(Number(props.country.weight), 'percent'),
+    }
+]
 </script>
 
 <template>
     <layout-main>
         <div class="space-y-10">
             <h1 class="text-4xl font-bold">{{ country.name }}</h1>
+            <stat-card-group :stats="countryStats"/>
             <card>
                 <template #title>
                     <h2 class="text-2xl font-bold">Gewichtung</h2>
