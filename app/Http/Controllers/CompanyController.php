@@ -17,9 +17,13 @@ class CompanyController extends Controller
         $companies = Company::orderBy('rank')
             ->paginate(200);
 
+        $weightHistoryService = new WeightHistoryService(new CompanyWeightHistoryStrategy());
+        $multipleWeightHistory = $weightHistoryService->getMultipleWeightHistory($companies->take(10));
+
         return inertia('Company/CompanyIndex', [
             'companies' => Inertia::merge($companies),
             'nextPage' => request()->input('page', 1) + 1,
+            'multipleWeightHistory' => $multipleWeightHistory,
         ]);
     }
 
