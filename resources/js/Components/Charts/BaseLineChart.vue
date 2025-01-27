@@ -42,6 +42,7 @@ const setChartData = () => {
                 borderColor: color.solid,
                 tension: 0,
                 radius: 0,
+                borderWidth: 2,
             };
         })
     };
