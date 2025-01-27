@@ -3,6 +3,7 @@ import LayoutMain from "@/Layouts/LayoutMain.vue";
 import CompanyInfoHeader from "@/Components/CompanyInfoHeader.vue";
 import Card from "primevue/card";
 import WeightChart from "@/Components/Charts/WeightChart.vue";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
 const props = defineProps({
     company: {
@@ -14,10 +15,22 @@ const props = defineProps({
         required: true
     }
 });
+
+const breadcrumbItems = [
+    {
+        label: 'Unternehmen',
+        route: '/companies'
+    },
+    {
+        label: props.company.name,
+        route: null
+    },
+];
 </script>
 
 <template>
     <layout-main>
+        <breadcrumbs :items="breadcrumbItems"/>
         <div class="space-y-10">
             <CompanyInfoHeader :company="company"/>
             <card>

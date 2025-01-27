@@ -5,6 +5,7 @@ import WeightChart from "@/Components/Charts/WeightChart.vue";
 import CompanyIndexTable from "@/Components/CompanyIndexTable.vue";
 import StatCardGroup from "@/Components/StatCardGroup.vue";
 import { useI18n } from "vue-i18n";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
 const props = defineProps({
     country: {
@@ -37,10 +38,22 @@ const countryStats = [
         value: n(Number(props.country.weight), 'percent'),
     }
 ]
+
+const breadcrumbItems = [
+    {
+        label: 'Länder',
+        route: '/countries'
+    },
+    {
+        label: props.country.name,
+        route: null
+    },
+];
 </script>
 
 <template>
     <layout-main>
+        <breadcrumbs :items="breadcrumbItems"/>
         <div class="space-y-10">
             <h1 class="text-4xl font-bold">{{ country.name }}</h1>
             <stat-card-group :stats="countryStats"/>
