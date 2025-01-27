@@ -42,12 +42,21 @@ const modifyOptions = (options) => {
 };
 
 const modifyChartData = (chartData) => {
+    const HIDE_MIN_THRESHOLD = 0.01;
+    const HIDE_MAX_THRESHOLD = 0.5;
+
     return {
         ...chartData,
-        datasets: chartData.datasets.map(dataset => ({
-            ...dataset,
-            fill: false
-        }))
+        datasets: chartData.datasets.map(dataset => {
+            const lastDataPoint = dataset.data.at(-1);
+            const shouldHide = lastDataPoint < HIDE_MIN_THRESHOLD || lastDataPoint > HIDE_MAX_THRESHOLD;
+
+            return {
+                ...dataset,
+                fill: false,
+                hidden: shouldHide,
+            };
+        })
     };
 };
 </script>
