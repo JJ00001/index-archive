@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Services\HoldingDataService;
 use Illuminate\Console\Command;
 
 class TinkerInProd extends Command
@@ -26,7 +25,6 @@ class TinkerInProd extends Command
      */
     public function handle()
     {
-        $hs = new HoldingDataService();
-        $hs->scrape();
+
     }
 }
