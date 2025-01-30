@@ -27,7 +27,7 @@ class LogUserJourney
             $referrer = $request->header('referer', 'Direct Visit');
             $sessionId = Session::getId();
 
-            $locationResponse = Http::get("https://ip-api.com/json/{$ip}");
+            $locationResponse = Http::get("http://ip-api.com/json/{$ip}");
             if ($locationResponse->successful()) {
                 $locationData = $locationResponse->json();
                 $country = $locationData['country'] ?? 'Unknown';
