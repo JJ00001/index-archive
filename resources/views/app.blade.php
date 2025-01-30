@@ -11,7 +11,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Analytics -->
-        <script defer data-domain="msci-world-tracker.com" src="/analytics.js"></script>
+        <script defer data-domain="msci-world-tracker.com" src="https://plausible.io/js/script.js"></script>
 
         <!-- Scripts -->
         @routes
