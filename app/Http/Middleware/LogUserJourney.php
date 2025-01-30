@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
 class LogUserJourney
@@ -25,7 +24,6 @@ class LogUserJourney
             $userAgent = $request->userAgent();
             $url = $request->fullUrl();
             $referrer = $request->header('referer', 'Direct Visit');
-            $sessionId = Session::getId();
 
             $locationResponse = Http::get("http://ip-api.com/json/{$ip}");
             if ($locationResponse->successful()) {
@@ -36,15 +34,7 @@ class LogUserJourney
                 $country = $city = 'Unknown';
             }
 
-            Log::info("User Journey:
-            [IP: $ip]
-            [User-Agent: $userAgent]
-            [Country: $country]
-            [City: $city]
-            [URL: $url]
-            [Referrer: $referrer]
-            [Session: $sessionId]"
-            );
+            Log::info("User Journey: $ip $country $city $url $userAgent $referrer");
         }
 
         return $next($request);
