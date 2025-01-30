@@ -20,7 +20,15 @@ Route::get('/analytics.js', function () {
 });
 
 Route::post('/analytics-event', function (Request $request) {
-    $data = json_decode($request->getContent(), true);
+    $dataDecoded = json_decode($request->getContent(), true) ?? [];
+
+    $data = [
+        'n' => $dataDecoded['n'] ?? 'pageview',
+        'u' => $dataDecoded['u'] ?? url('/'),
+        'd' => $dataDecoded['d'] ?? parse_url(config('app.url'), PHP_URL_HOST),
+        'r' => $dataDecoded['r'] ?? '',
+        'p' => $dataDecoded['p'] ?? null,
+    ];
 
     return Http::post('https://plausible.io/api/event', $data);
 });
