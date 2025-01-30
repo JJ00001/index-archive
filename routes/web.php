@@ -20,6 +20,7 @@ Route::get('/analytics.js', function () {
 });
 
 Route::post('/analytics-event', function (Request $request) {
-    Log::info('analytics.js');
-    return Http::post('https://plausible.io/api/event', $request->all());
+    $data = json_decode($request->getContent(), true);
+
+    return Http::post('https://plausible.io/api/event', $data);
 });
