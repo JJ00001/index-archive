@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "laravel-boost": {
+      "command": "/Users/julienguntermann/Library/Application Support/Herd/bin/php83",
+      "args": [
+        "/Users/julienguntermann/Herd/msci-world-tracker/artisan",
+        "boost:mcp"
+      ]
+    },
+    "herd": {
+      "command": "/Users/julienguntermann/Library/Application Support/Herd/bin/php83",
+      "args": [
+        "/Applications/Herd.app/Contents/Resources/herd-mcp.phar"
+      ],
+      "env": {
+        "SITE_PATH": "/Users/julienguntermann/Herd/msci-world-tracker"
+      }
+    }
+  }
+}
