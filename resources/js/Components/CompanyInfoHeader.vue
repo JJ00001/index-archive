@@ -1,8 +1,8 @@
 <script setup>
-import CompanyLogo from "@/Components/CompanyLogo.vue";
-import { Tag } from "primevue";
-import { useI18n } from 'vue-i18n';
-import StatCardGroup from "@/Components/StatCardGroup.vue";
+import CompanyLogo from '@/Components/CompanyLogo.vue'
+import { Badge } from '@/components/ui/badge'
+import { useI18n } from 'vue-i18n'
+import StatCardGroup from '@/Components/StatCardGroup.vue'
 
 const props = defineProps({
     company: {
@@ -48,13 +48,12 @@ const companyStats = [
         <div>
             <h1 class="text-4xl font-bold">{{ company.name }}</h1>
             <div class="flex space-x-3 mt-2">
-                <tag v-for="(value, key) in companyTags" severity="secondary">
-                    <template #default>
-                        <div class="text-lg">
-                            {{ key }} <span class="font-light">{{ value }}</span>
-                        </div>
-                    </template>
-                </tag>
+                <Badge v-for="(value, key) in companyTags"
+                       class="text-lg"
+                       variant="secondary">
+                    {{ key }}
+                    <span class="font-light">{{ value }}</span>
+                </Badge>
             </div>
         </div>
     </div>
