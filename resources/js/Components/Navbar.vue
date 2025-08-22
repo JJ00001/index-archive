@@ -1,22 +1,25 @@
 <script setup>
 import { ref } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
-import Menubar from 'primevue/menubar'
+import {
+    NavigationMenu,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    navigationMenuTriggerStyle,
+} from '@/Components/ui/navigation-menu'
 
 const items = ref([
     {
         label: 'Unternehmen',
-        icon: 'pi pi-building',
         route: '/companies'
     },
     {
         label: 'Branchen',
-        icon: 'pi pi-th-large',
         route: '/sectors'
     },
     {
         label: 'Länder',
-        icon: 'pi pi-map',
         route: '/countries'
     },
 ]);
@@ -30,17 +33,31 @@ const isActive = (route) => {
 </script>
 
 <template>
-  <Menubar :model="items"
-           class="rounded-none! border-t-0! border-x-0! border-b">
-        <template #start>
+    <div class="border-b px-4 py-2">
+        <div class="flex items-center">
             <span class="font-bold text-2xl mr-10">MSCI World Tracker</span>
-        </template>
-        <template #item="{ item }">
-            <Link :class="{ 'bg-slate-100 rounded-md': isActive(item.route) }" :href="item.route"
-                  class="flex items-center px-4 py-2">
-                <span :class="item.icon"/>
-                <span class="ml-2">{{ item.label }}</span>
-            </Link>
-        </template>
-    </Menubar>
+            <NavigationMenu>
+                <NavigationMenuList>
+                    <NavigationMenuItem v-for="item in items"
+                                        :key="item.route">
+                        <NavigationMenuLink as-child>
+                            <Link
+                                :class="[
+                                    navigationMenuTriggerStyle(),
+                                    'flex items-center gap-2',
+                                    {
+                                        'bg-primary text-primary-foreground font-medium shadow-sm': isActive(item.route),
+                                        'hover:bg-accent hover:text-accent-foreground': !isActive(item.route)
+                                    }
+                                ]"
+                                :href="item.route"
+                            >
+                                {{ item.label }}
+                            </Link>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                </NavigationMenuList>
+            </NavigationMenu>
+        </div>
+    </div>
 </template>
