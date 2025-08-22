@@ -20,6 +20,7 @@
     "dependencies": {
         "@primevue/themes": "^4.0.5",
         "@tailwindcss/postcss": "^4.1.12",
+        "@tanstack/vue-table": "^8.21.3",
         "@vueuse/core": "^13.7.0",
         "chart.js": "^4.4.4",
         "class-variance-authority": "^0.7.1",

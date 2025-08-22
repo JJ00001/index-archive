@@ -1,0 +1,16 @@
+<script setup>
+import { cn } from '@/lib/utils'
+
+const props = defineProps({
+    class: { type: null, required: false },
+})
+</script>
+
+<template>
+    <caption
+        :class="cn('text-muted-foreground mt-4 text-sm', props.class)"
+        data-slot="table-caption"
+    >
+        <slot />
+    </caption>
+</template>
