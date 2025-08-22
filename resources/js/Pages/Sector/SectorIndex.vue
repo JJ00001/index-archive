@@ -1,6 +1,6 @@
 <script setup>
 import LayoutMain from '@/Layouts/LayoutMain.vue'
-import { Card } from 'primevue'
+import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card'
 import SectorIndexTable from '@/Components/SectorIndexTable.vue'
 import { ref } from 'vue'
 import StackedLineChart from '@/Components/Charts/StackedLineChart.vue'
@@ -27,20 +27,20 @@ const multipleWeightHistoryData = ref({
 <template>
     <layout-main>
         <div class="space-y-10">
-            <card>
-                <template #content>
+            <Card>
+                <CardContent>
                     <sector-index-table :sector-data="sectorData"/>
-                </template>
-            </card>
-            <card>
-                <template #title>
-                    <h2 class="text-2xl font-bold">Gewichtungs-Vergleich</h2>
-                </template>
-                <template #content>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle class="text-2xl font-bold">Gewichtungs-Vergleich</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <stacked-line-chart :data="multipleWeightHistoryData"
                                       class="h-160" />
-                </template>
-            </card>
+                </CardContent>
+            </Card>
         </div>
     </layout-main>
 </template>

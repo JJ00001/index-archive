@@ -1,7 +1,7 @@
 <script setup>
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import CompanyIndexTable from '@/Components/CompanyIndexTable.vue'
-import { Card } from 'primevue'
+import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card'
 import StackedLineChart from '@/Components/Charts/StackedLineChart.vue'
 import { ref } from 'vue'
 
@@ -29,20 +29,20 @@ const multipleWeightHistoryData = ref({
 <template>
     <layout-main>
         <div class="space-y-10">
-            <card>
-                <template #content>
+            <Card>
+                <CardContent>
                     <company-index-table :companies="companies" :next-page="nextPage"/>
-                </template>
-            </card>
-            <card>
-                <template #title>
-                    <h2 class="text-2xl font-bold">Gewichtungs-Vergleich (Top 10)</h2>
-                </template>
-                <template #content>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle class="text-2xl font-bold">Gewichtungs-Vergleich (Top 10)</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <stacked-line-chart :data="multipleWeightHistoryData"
                                       class="h-160" />
-                </template>
-            </card>
+                </CardContent>
+            </Card>
         </div>
     </layout-main>
 </template>
