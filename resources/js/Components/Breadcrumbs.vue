@@ -1,6 +1,6 @@
 <script setup>
-import Breadcrumb from 'primevue/breadcrumb';
-import { Link } from "@inertiajs/vue3";
+import Breadcrumb from 'primevue/breadcrumb'
+import { Link } from '@inertiajs/vue3'
 
 const props = defineProps({
     items: {
@@ -11,7 +11,8 @@ const props = defineProps({
 </script>
 
 <template>
-    <Breadcrumb :model="items" class="mb-6 !ps-0">
+  <Breadcrumb :model="items"
+              class="mb-6 ps-0!">
         <template #item="{ item }">
             <Link v-if="item.route" :href="item.route">
                 <span class="hover:underline">{{ item.label }}</span>

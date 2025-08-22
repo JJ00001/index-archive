@@ -1,6 +1,6 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
-import Chart from "primevue/chart";
+import { onMounted, ref, watch } from 'vue'
+import Chart from 'primevue/chart'
 
 const props = defineProps({
     data: {
@@ -119,5 +119,8 @@ watch(() => props.data, () => {
 </script>
 
 <template>
-    <chart :data="chartData" :options="chartOptions" class="h-[20rem]" type="line"/>
+  <chart :data="chartData"
+         :options="chartOptions"
+         class="h-80"
+         type="line" />
 </template>

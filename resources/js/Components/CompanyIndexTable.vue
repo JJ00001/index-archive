@@ -1,9 +1,9 @@
 <script setup>
-import DataTable from "primevue/datatable";
-import Column from 'primevue/column';
-import { router } from "@inertiajs/vue3";
-import CompanyLogo from "@/Components/CompanyLogo.vue";
-import { ref } from "vue";
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import { router } from '@inertiajs/vue3'
+import CompanyLogo from '@/Components/CompanyLogo.vue'
+import { ref } from 'vue'
 
 const props = defineProps({
     companies: {
@@ -35,7 +35,7 @@ const handleSuccess = (response) => {
         <column class="w-7/12" header="Unternehmen">
             <template #body="{ data }">
                 <div class="flex items-center">
-                    <div class="w-20 h-8 mr-4 flex-shrink-0">
+                  <div class="w-20 h-8 mr-4 shrink-0">
                         <company-logo :logo-path="data.logo" class="w-full h-full"/>
                     </div>
                     <div>

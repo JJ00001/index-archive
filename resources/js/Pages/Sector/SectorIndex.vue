@@ -1,9 +1,9 @@
 <script setup>
-import LayoutMain from "@/Layouts/LayoutMain.vue";
-import { Card } from "primevue";
-import SectorIndexTable from "@/Components/SectorIndexTable.vue";
-import { ref } from "vue";
-import StackedLineChart from "@/Components/Charts/StackedLineChart.vue";
+import LayoutMain from '@/Layouts/LayoutMain.vue'
+import { Card } from 'primevue'
+import SectorIndexTable from '@/Components/SectorIndexTable.vue'
+import { ref } from 'vue'
+import StackedLineChart from '@/Components/Charts/StackedLineChart.vue'
 
 const props = defineProps({
     sectors: {
@@ -37,7 +37,8 @@ const multipleWeightHistoryData = ref({
                     <h2 class="text-2xl font-bold">Gewichtungs-Vergleich</h2>
                 </template>
                 <template #content>
-                    <stacked-line-chart :data="multipleWeightHistoryData" class="h-[40rem]"/>
+                  <stacked-line-chart :data="multipleWeightHistoryData"
+                                      class="h-160" />
                 </template>
             </card>
         </div>

@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from "vue";
-import { Link, usePage } from "@inertiajs/vue3";
-import Menubar from "primevue/menubar";
+import { ref } from 'vue'
+import { Link, usePage } from '@inertiajs/vue3'
+import Menubar from 'primevue/menubar'
 
 const items = ref([
     {
@@ -30,7 +30,8 @@ const isActive = (route) => {
 </script>
 
 <template>
-    <Menubar :model="items" class="!rounded-none !border-t-0 !border-x-0 border-b">
+  <Menubar :model="items"
+           class="rounded-none! border-t-0! border-x-0! border-b">
         <template #start>
             <span class="font-bold text-2xl mr-10">MSCI World Tracker</span>
         </template>
