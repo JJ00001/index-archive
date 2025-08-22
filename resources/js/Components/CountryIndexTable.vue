@@ -1,6 +1,6 @@
 <script setup>
 import { router } from '@inertiajs/vue3'
-import { ProgressBar } from 'primevue'
+import { Progress } from '@/components/ui/progress'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
 
 defineProps({
@@ -34,9 +34,8 @@ const handleRowClick = (country) => {
                 <TableCell>{{ country.name }}</TableCell>
                 <TableCell>
                     {{ $n(Number(country.weight), 'percent') }}
-                    <ProgressBar :show-value="false"
-                                 :value="country.weight * 100"
-                                 class="h-2!" />
+                    <Progress :model-value="country.weight * 100"
+                              class="h-2" />
                 </TableCell>
                 <TableCell>{{ country.companies_count }}</TableCell>
             </TableRow>
