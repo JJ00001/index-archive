@@ -13,9 +13,10 @@ defineProps({
 <template>
     <div class="flex space-x-5">
         <Card v-for="stat in stats"
-              :key="stat.title">
+              :key="stat.title"
+              class="flex-1">
             <CardHeader>
-                <CardTitle>{{ stat.title }}</CardTitle>
+                <CardTitle class="whitespace-nowrap">{{ stat.title }}</CardTitle>
             </CardHeader>
             <CardContent>
                 <Link v-if="stat.route" :href="stat.route" class="underline underline-offset-2">{{ stat.value }}</Link>
