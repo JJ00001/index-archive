@@ -22,10 +22,6 @@ const handleRowClick = (event) => {
     const companyId = event.data.id;
     router.get(route('companies.show', companyId));
 };
-
-const handleSuccess = (response) => {
-    companyData.value = companyData.value.concat(response.props.companies.data);
-};
 </script>
 
 <template>
@@ -56,15 +52,4 @@ const handleSuccess = (response) => {
             </template>
         </column>
     </data-table>
-    <!--        <WhenVisible :buffer="400" :params="{-->
-    <!--                    data: {-->
-    <!--                        page: nextPage,-->
-    <!--                    },-->
-    <!--                    preserveUrl: true,-->
-    <!--                    onSuccess: handleSuccess,-->
-    <!--                }" always>-->
-    <!--            <template #default>-->
-    <!--                Lädt ...-->
-    <!--            </template>-->
-    <!--        </WhenVisible>-->
 </template>
