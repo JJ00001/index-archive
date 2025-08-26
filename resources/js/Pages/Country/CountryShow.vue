@@ -62,7 +62,8 @@ const breadcrumbItems = [
                     <CardTitle class="text-2xl font-bold">Gewichtung</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <weight-chart :data="weightHistory"/>
+                    <weight-chart :data="weightHistory"
+                                  class="h-60" />
                 </CardContent>
             </Card>
             <Card>
