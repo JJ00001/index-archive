@@ -120,4 +120,25 @@
   body {
     @apply bg-background text-foreground;
   }
+  :root {
+    /* ... */
+    --vis-tooltip-background-color: none !important;
+    --vis-tooltip-border-color: none !important;
+    --vis-tooltip-text-color: none !important;
+    --vis-tooltip-shadow-color: none !important;
+    --vis-tooltip-backdrop-filter: none !important;
+    --vis-tooltip-padding: none !important;
+
+    /* Convert theme oklch colors to HSL for consistency */
+    --vis-primary-color: 0 0% 21%; /* matches --primary oklch(0.205 0 0) */
+    --vis-secondary-color: 0 0% 56%; /* matches --muted-foreground oklch(0.556 0 0) */
+    --vis-text-color: 0 0% 56%; /* matches --muted-foreground oklch(0.556 0 0) */
+  }
+
+  .dark {
+    /* Convert theme oklch colors to HSL for consistency */
+    --vis-primary-color: 0 0% 98%; /* matches dark --primary oklch(0.985 0 0) */
+    --vis-secondary-color: 0 0% 71%; /* matches dark --muted-foreground oklch(0.708 0 0) */
+    --vis-text-color: 0 0% 71%; /* matches dark --muted-foreground oklch(0.708 0 0) */
+  }
 }
