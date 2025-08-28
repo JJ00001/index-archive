@@ -26,22 +26,22 @@ const props = defineProps({
     }
 });
 
-const {n} = useI18n();
+const { n, t } = useI18n()
 
 const countryStats = [
     {
-        title: 'Anzahl Unternehmen',
+        title: t('company.count'),
         value: props.country.companies_count,
     },
     {
-        title: 'Gewichtung',
+        title: t('weight'),
         value: n(Number(props.country.weight), 'percent'),
     }
 ]
 
 const breadcrumbItems = [
     {
-        label: 'Länder',
+        label: t('country.name', 2),
         route: '/countries'
     },
     {
@@ -59,7 +59,7 @@ const breadcrumbItems = [
             <stat-card-group :stats="countryStats"/>
             <Card>
                 <CardHeader>
-                    <CardTitle class="text-2xl font-bold">Gewichtung</CardTitle>
+                    <CardTitle class="text-2xl font-bold">{{ $t('weight') }}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <weight-chart :data="weightHistory"
@@ -68,7 +68,7 @@ const breadcrumbItems = [
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle class="text-2xl font-bold">Unternehmen</CardTitle>
+                    <CardTitle class="text-2xl font-bold">{{ $t('company.name', 2) }}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <company-index-table :companies="companies" :next-page="nextCompaniesPage"/>

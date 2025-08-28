@@ -11,7 +11,7 @@ const props = defineProps({
     },
 });
 
-const {n} = useI18n();
+const { n, t } = useI18n()
 
 const company = props.company;
 
@@ -22,21 +22,21 @@ const companyTags = {
 
 const companyStats = [
     {
-        title: 'Marktkap.',
+        title: t('marketCap'),
         value: n(company.market_capitalization, 'currencyUSDCompact'),
     },
     {
-        title: 'Branche',
+        title: t('sector.name'),
         value: company.sector.name,
         route: route('sectors.show', {sector: company.sector.id})
     },
     {
-        title: 'Land',
+        title: t('country.name'),
         value: company.country.name,
         route: route('countries.show', {country: company.country.id})
     },
     {
-        title: 'Börsenplatz',
+        title: t('exchange'),
         value: company.exchange.name,
     },
 ];

@@ -13,17 +13,17 @@ const props = defineProps({
 const { n, d } = useI18n()
 
 const chartData = computed(() => {
-    if (!props.data?.labels || !props.data?.datasets?.Gewichtung) {
+    if (!props.data?.labels || !props.data?.datasets?.weight) {
         return []
     }
 
     return props.data.labels.map((label, index) => ({
         date: label,
-        Gewichtung: parseFloat(props.data.datasets.Gewichtung[index]),
+        weight: parseFloat(props.data.datasets.weight[index]),
     }))
 })
 
-const categories = ['Gewichtung']
+const categories = ['weight']
 
 const xFormatter = (value) => {
     const dataPoint = chartData.value[value]

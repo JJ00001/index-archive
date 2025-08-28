@@ -4,6 +4,7 @@ import CompanyInfoHeader from '@/Components/CompanyInfoHeader.vue'
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card'
 import WeightChart from '@/Components/Charts/WeightChart.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
     company: {
@@ -16,9 +17,11 @@ const props = defineProps({
     }
 });
 
+const { t } = useI18n()
+
 const breadcrumbItems = [
     {
-        label: 'Unternehmen',
+        label: t('company.name'),
         route: '/companies'
     },
     {
@@ -35,7 +38,7 @@ const breadcrumbItems = [
             <CompanyInfoHeader :company="company"/>
             <Card>
                 <CardHeader>
-                    <CardTitle class="text-2xl font-bold">Gewichtung</CardTitle>
+                    <CardTitle class="text-2xl font-bold">{{ $t('weight') }}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <weight-chart :data="weightHistory"

@@ -27,10 +27,10 @@ const handleRowClick = (company) => {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead class="w-1/12">Pos.</TableHead>
-                    <TableHead class="w-7/12">Unternehmen</TableHead>
-                    <TableHead class="w-2/12">Gewichtung</TableHead>
-                    <TableHead class="w-2/12">Marktkap.</TableHead>
+                    <TableHead class="w-1/12">{{ $t('rank') }}</TableHead>
+                    <TableHead class="w-7/12">{{ $t('company.name') }}</TableHead>
+                    <TableHead class="w-2/12">{{ $t('weight') }}</TableHead>
+                    <TableHead class="w-2/12">{{ $t('marketCap') }}</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>

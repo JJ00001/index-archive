@@ -8,18 +8,21 @@ import {
     NavigationMenuList,
     navigationMenuTriggerStyle,
 } from '@/Components/ui/navigation-menu'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const items = ref([
     {
-        label: 'Unternehmen',
+        label: t('company.name', 2),
         route: '/companies'
     },
     {
-        label: 'Branchen',
+        label: t('sector.name', 2),
         route: '/sectors'
     },
     {
-        label: 'Länder',
+        label: t('country.name', 2),
         route: '/countries'
     },
 ]);

@@ -26,22 +26,22 @@ const props = defineProps({
     }
 });
 
-const {n} = useI18n();
+const { n, t } = useI18n()
 
 const sectorStats = [
     {
-        title: 'Anzahl Unternehmen',
+        title: t('company.count'),
         value: props.sector.companies_count,
     },
     {
-        title: 'Gewichtung',
+        title: t('weight'),
         value: n(Number(props.sector.weight), 'percent'),
     }
 ]
 
 const breadcrumbItems = [
     {
-        label: 'Branchen',
+        label: t('sector.name', 2),
         route: '/sectors'
     },
     {
@@ -59,7 +59,7 @@ const breadcrumbItems = [
             <stat-card-group :stats="sectorStats"/>
             <Card>
                 <CardHeader>
-                    <CardTitle class="text-2xl font-bold">Gewichtung</CardTitle>
+                    <CardTitle class="text-2xl font-bold">{{ $t('weight') }}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <weight-chart :data="weightHistory"
@@ -68,7 +68,7 @@ const breadcrumbItems = [
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle class="text-2xl font-bold">Unternehmen</CardTitle>
+                    <CardTitle class="text-2xl font-bold">{{ $t('company.name', 2) }}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <company-index-table :companies="companies" :next-page="nextCompaniesPage"/>
