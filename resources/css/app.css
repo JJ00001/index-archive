@@ -142,3 +142,12 @@
     --vis-text-color: 0 0% 71%; /* matches dark --muted-foreground oklch(0.708 0 0) */
   }
 }
+
+@theme {
+  --font-apple-garamond: 'Apple Garamond', serif;
+}
+
+@font-face {
+  font-family: 'Apple Garamond';
+  src: url('../fonts/apple_garamond/AppleGaramond.ttf') format('truetype');
+}
