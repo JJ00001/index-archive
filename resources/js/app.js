@@ -15,9 +15,9 @@ createInertiaApp({
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
         const i18n = createI18n({
-            locale: 'de',
+            locale: 'en',
             numberFormats: {
-                de: {
+                en: {
                     percent: {
                         style: 'percent',
                         minimumFractionDigits: 2,
@@ -35,7 +35,7 @@ createInertiaApp({
                 }
             },
             datetimeFormats: {
-                de: {
+                en: {
                     short: {
                         year: 'numeric',
                         month: 'short',
