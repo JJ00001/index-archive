@@ -1,33 +1,44 @@
 <script setup>
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
 import { router } from '@inertiajs/vue3'
-import { ProgressBar } from 'primevue'
+import { Progress } from '@/Components/ui/progress'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
 
 defineProps({
     countryData: {
         type: Array,
-        required: true
-    }
-});
+        required: true,
+    },
+})
 
-const handleRowClick = (event) => {
-    const countryId = event.data.id;
-    router.get(route('countries.show', countryId));
-};
+const handleRowClick = (country) => {
+    router.get(route('countries.show', country.id))
+}
 </script>
 
 <template>
-    <data-table :value="countryData" selection-mode="single" @row-click="handleRowClick">
-        <column class="w-1/3" field="name" header="Name"/>
-        <column class="w-1/3" field="weight" header="Gewichtung">
-            <template #body="{ data }">
-                {{ $n(Number(data.weight), 'percent') }}
-              <ProgressBar :show-value="false"
-                           :value="data.weight * 100"
-                           class="h-2!" />
-            </template>
-        </column>
-        <column class="w-1/3" field="companies_count" header="Anzahl Unternehmen"/>
-    </data-table>
+    <Table>
+        <TableHeader>
+            <TableRow>
+                <TableHead class="w-1/3">Name</TableHead>
+                <TableHead class="w-1/3">Gewichtung</TableHead>
+                <TableHead class="w-1/3">Anzahl Unternehmen</TableHead>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            <TableRow
+                v-for="country in countryData"
+                :key="country.id"
+                class="cursor-pointer hover:bg-muted/50"
+                @click="handleRowClick(country)"
+            >
+                <TableCell>{{ country.name }}</TableCell>
+                <TableCell>
+                    {{ $n(Number(country.weight), 'percent') }}
+                    <Progress :model-value="country.weight * 100"
+                              class="h-2" />
+                </TableCell>
+                <TableCell>{{ country.companies_count }}</TableCell>
+            </TableRow>
+        </TableBody>
+    </Table>
 </template>

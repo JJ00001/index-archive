@@ -1,0 +1,18 @@
+<script setup>
+import { cn } from '@/lib/utils'
+
+const props = defineProps({
+    class: { type: null, required: false },
+})
+</script>
+
+<template>
+    <tfoot
+        :class="
+      cn('bg-muted/50 border-t font-medium [&>tr]:last:border-b-0', props.class)
+    "
+        data-slot="table-footer"
+    >
+    <slot />
+    </tfoot>
+</template>

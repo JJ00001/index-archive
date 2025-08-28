@@ -1,11 +1,11 @@
 <script setup>
-import LayoutMain from "@/Layouts/LayoutMain.vue";
-import Card from "primevue/card";
-import WeightChart from "@/Components/Charts/WeightChart.vue";
-import CompanyIndexTable from "@/Components/CompanyIndexTable.vue";
-import StatCardGroup from "@/Components/StatCardGroup.vue";
-import { useI18n } from "vue-i18n";
-import Breadcrumbs from "@/Components/Breadcrumbs.vue";
+import LayoutMain from '@/Layouts/LayoutMain.vue'
+import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card'
+import WeightChart from '@/Components/Charts/WeightChart.vue'
+import CompanyIndexTable from '@/Components/CompanyIndexTable.vue'
+import StatCardGroup from '@/Components/StatCardGroup.vue'
+import { useI18n } from 'vue-i18n'
+import Breadcrumbs from '@/Components/Breadcrumbs.vue'
 
 const props = defineProps({
     country: {
@@ -57,22 +57,23 @@ const breadcrumbItems = [
         <div class="space-y-10">
             <h1 class="text-4xl font-bold">{{ country.name }}</h1>
             <stat-card-group :stats="countryStats"/>
-            <card>
-                <template #title>
-                    <h2 class="text-2xl font-bold">Gewichtung</h2>
-                </template>
-                <template #content>
-                    <weight-chart :data="weightHistory"/>
-                </template>
-            </card>
-            <card>
-                <template #title>
-                    <h2 class="text-2xl font-bold">Unternehmen</h2>
-                </template>
-                <template #content>
+            <Card>
+                <CardHeader>
+                    <CardTitle class="text-2xl font-bold">Gewichtung</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <weight-chart :data="weightHistory"
+                                  class="h-60" />
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle class="text-2xl font-bold">Unternehmen</CardTitle>
+                </CardHeader>
+                <CardContent>
                     <company-index-table :companies="companies" :next-page="nextCompaniesPage"/>
-                </template>
-            </card>
+                </CardContent>
+            </Card>
         </div>
     </layout-main>
 </template>
