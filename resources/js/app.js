@@ -41,6 +41,26 @@ createInertiaApp({
                         month: 'short',
                     }
                 }
+            },
+            messages: {
+                en: {
+                    company: {
+                        name: 'Company | Companies',
+                        count: 'Companies (Count)',
+                    },
+                    sector: {
+                        name: 'Sector | Sectors',
+                        count: 'Sectors (Count)',
+                    },
+                    country: {
+                        name: 'Country | Countries',
+                        count: 'Countries (Count)',
+                    },
+                    weight: 'Weight',
+                    marketCap: 'Capitalization',
+                    rank: 'Rank',
+                    exchange: 'Exchange',
+                },
             }
         });
 
