@@ -13,7 +13,7 @@ abstract class BaseWeightHistoryStrategy implements WeightHistoryStrategy
         return [
             'labels' => array_map(fn($data) => $data->date, $marketData),
             'datasets' => [
-                'Gewichtung' => array_map(fn($data) => $data->weight, $marketData)
+                'weight' => array_map(fn($data) => $data->weight, $marketData),
             ]
         ];
     }
