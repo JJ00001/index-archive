@@ -41,13 +41,19 @@ class HoldingDataService
             $statusCode = $response->getStatusCode();
 
             if ($statusCode === 200) {
+                $indexDirectory = storage_path('holdingsData/'.$index->id);
+
+                if ( ! is_dir($indexDirectory)) {
+                    mkdir($indexDirectory);
+                }
+
                 $filename = storage_path('holdingsData/'.$index->id.'/'.$dateFormatted.'.json');
                 $response = $response->getBody()->getContents();
 
                 $response = str_replace("\u{FEFF}", '', $response);
                 $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
-                Log::info('Scraping complete for: ' . $dateFormatted);
+                Log::info('Received a response');
 
                 if (!empty($response['aaData'])) {
                     $jsonData = json_encode($response, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
