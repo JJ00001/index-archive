@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Http\Services\HoldingDataService;
+use App\Http\Services\ScrapeMarketDataService;
 use App\Models\Index;
 use DateMalformedStringException;
 use DateTime;
@@ -37,11 +37,11 @@ class ScrapeHoldingDataJob implements ShouldQueue
      * @throws RandomException
      * @throws JsonException
      */
-    public function handle(HoldingDataService $holdingDataService): void
+    public function handle(): void
     {
         Log::info('Starting scrape job for index: '.$this->index->name);
 
-        $holdingDataService->scrape($this->index, $this->startDate, $this->endDate);
+        ScrapeMarketDataService::scrape($this->index, $this->startDate, $this->endDate);
 
         Log::info('Scrape job completed for index: '.$this->index->name);
     }
