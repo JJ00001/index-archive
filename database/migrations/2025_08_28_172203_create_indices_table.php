@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::create('indices', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->foreignIdFor(IndexProvider::class)->constrained();
             $table->text('description')->nullable();
             $table->string('currency')->default('USD');
