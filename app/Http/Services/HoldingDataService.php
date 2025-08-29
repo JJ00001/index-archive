@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Exchange;
+use App\Models\Index;
 use App\Models\MarketData;
 use App\Models\Sector;
 use DateMalformedStringException;
@@ -25,11 +26,9 @@ class HoldingDataService
      * @throws RandomException
      * @throws JsonException
      */
-    public function scrape()
+    public function scrape(Index $index, DateTime $startDate, DateTime $endDate)
     {
-        $baseURL = config('app.msci_world_scraping_url');
-        $startDate = new DateTime('2018-01-01');
-        $endDate = new DateTime('2018-01-10');
+        $baseURL = $index->dataSources()->first()->base_url;
         $date = $startDate;
         $client = new Client();
 
