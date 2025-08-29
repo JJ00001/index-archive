@@ -41,7 +41,7 @@ class HoldingDataService
             $statusCode = $response->getStatusCode();
 
             if ($statusCode === 200) {
-                $filename = storage_path('holdingsData/' . $dateFormatted . '.json');
+                $filename = storage_path('holdingsData/'.$index->id.'/'.$dateFormatted.'.json');
                 $response = $response->getBody()->getContents();
 
                 $response = str_replace("\u{FEFF}", '', $response);
