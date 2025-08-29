@@ -18,6 +18,8 @@ return new class extends Migration {
             $table->foreignIdFor(Index::class)->constrained();
             $table->foreignIdFor(Company::class)->constrained();
             $table->timestamps();
+
+            $table->unique(['index_id', 'company_id']);
         });
     }
 
