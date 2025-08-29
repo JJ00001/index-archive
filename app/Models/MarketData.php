@@ -13,12 +13,12 @@ class MarketData extends Model
         'market_capitalization',
         'share_price',
         'weight',
-        'company_id',
+        'index_holding_id',
     ];
 
-    public function company(): BelongsTo
+    public function indexHolding(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(IndexHolding::class);
     }
 
     // TODO remove and refactor raw SQL statements to use eloquent
