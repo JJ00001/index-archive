@@ -17,8 +17,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Index::class)->constrained();
             $table->foreignIdFor(Company::class)->constrained();
-            $table->date('date_added');
-            $table->date('date_removed')->nullable();
             $table->timestamps();
         });
     }
