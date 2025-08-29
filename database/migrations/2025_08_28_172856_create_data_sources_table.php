@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Index::class)->constrained();
             $table->text('base_url');
-            $table->json('field_mappings');
+            $table->json('field_mappings')->nullable();
             $table->timestamps();
         });
     }
