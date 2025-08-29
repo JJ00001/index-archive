@@ -59,7 +59,7 @@ class HoldingDataService
                     $jsonData = json_encode($response, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
                     file_put_contents($filename, $jsonData);
                 } else {
-                    Log::info('No data for: ' . $dateFormatted);
+                    Log::info('Data in response is empty');
 
                     $date = $date->modify('next day');
                     continue;
