@@ -41,7 +41,8 @@ class ScrapeHoldingDataJob implements ShouldQueue
     {
         Log::info('Starting scrape job for index: '.$this->index->name);
 
-        ScrapeMarketDataService::scrape($this->index, $this->startDate, $this->endDate);
+        $service = new ScrapeMarketDataService($this->index, $this->startDate, $this->endDate);
+        $service->scrape();
 
         Log::info('Scrape job completed for index: '.$this->index->name);
     }

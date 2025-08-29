@@ -10,34 +10,43 @@ use Illuminate\Support\Facades\Log;
 class ScrapeMarketDataService
 {
 
+    private Client $client;
+
+    public function __construct(
+        private Index $index,
+        private DateTime $startDate,
+        private DateTime $endDate
+    ) {
+        $this->client = new Client();
+    }
+
     /**
      * @throws \DateMalformedStringException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Random\RandomException
      * @throws \JsonException
      */
-    public static function scrape(Index $index, DateTime $startDate, DateTime $endDate)
+    public function scrape()
     {
-        $baseURL = $index->dataSources()->first()->base_url;
-        $date    = $startDate;
-        $client  = new Client();
+        $baseURL      = $this->index->dataSources()->first()->base_url;
+        $date         = $this->startDate;
 
-        while ($date <= $endDate && $date <= now()) {
+        while ($date <= $this->endDate && $date <= now()) {
             $dateFormatted = $date->format('Y-m-d');
             $randomDelay   = random_int(1000, 3000);
 
             $url        = $baseURL.$date->format('Ymd');
-            $response   = $client->request('GET', $url, ['delay' => $randomDelay]);
+            $response = $this->client->request('GET', $url, ['delay' => $randomDelay]);
             $statusCode = $response->getStatusCode();
 
             if ($statusCode === 200) {
-                $indexDirectory = storage_path('holdingsData/'.$index->id);
+                $indexDirectory = storage_path('holdingsData/'.$this->index->id);
 
                 if ( ! is_dir($indexDirectory)) {
                     mkdir($indexDirectory);
                 }
 
-                $filename = storage_path('holdingsData/'.$index->id.'/'.$dateFormatted.'.json');
+                $filename = storage_path('holdingsData/'.$this->index->id.'/'.$dateFormatted.'.json');
                 $response = $response->getBody()->getContents();
 
                 $response = str_replace("\u{FEFF}", '', $response);
