@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Index;
+use App\Models\IndexHolding;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,8 +13,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('market_data', function (Blueprint $table) {
-            $table->foreignIdFor(Index::class)->nullable()->constrained(
-            ); // TODO - change to not nullable after completing transition period
+            // TODO - change to not nullable after completing transition period
+            $table->foreignIdFor(IndexHolding::class)->after('id')->nullable()->constrained();
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('market_data', function (Blueprint $table) {
-            $table->dropConstrainedForeignIdFor(Index::class);
+            $table->dropConstrainedForeignIdFor(IndexHolding::class);
         });
     }
 
