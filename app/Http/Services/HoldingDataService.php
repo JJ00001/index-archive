@@ -32,7 +32,7 @@ class HoldingDataService
         $date = $startDate;
         $client = new Client();
 
-        while ($date <= $endDate) {
+        while ($date <= $endDate && $date <= now()) {
             $dateFormatted = $date->format('Y-m-d');
             $randomDelay = random_int(1000, 3000);
 
