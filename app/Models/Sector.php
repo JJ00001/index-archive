@@ -35,8 +35,9 @@ class Sector extends Model
             'weight' => function ($query) {
                 $query->selectRaw('SUM(market_data.weight)')
                     ->from('companies')
+                    ->join('index_holdings', 'index_holdings.company_id', '=', 'companies.id')
                     ->join('market_data', function ($join) {
-                        $join->on('companies.id', '=', 'market_data.company_id')
+                        $join->on('index_holdings.id', '=', 'market_data.index_holding_id')
                             ->where('market_data.date', MarketData::maxDate());
                     })
                     ->whereColumn('companies.sector_id', 'sectors.id');

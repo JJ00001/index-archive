@@ -11,7 +11,8 @@ class CompanyWeightHistoryStrategy extends BaseWeightHistoryStrategy
         return DB::select('
             SELECT date, weight
             FROM market_data
-            WHERE company_id = ?
+            JOIN index_holdings ON index_holdings.id = market_data.index_holding_id
+            WHERE index_holdings.company_id = ?
             ORDER BY date
         ', [$id]);
     }

@@ -15,11 +15,12 @@ class CompanyStatsScope implements Scope
     public function apply(Builder $builder, Model $model): void
     {
         $subQuery = MarketData::selectRaw('
-            company_id,
+            index_holdings.company_id,
             weight as latest_weight,
             DENSE_RANK() OVER (ORDER BY weight DESC) as `rank`,
             market_capitalization
         ')
+                              ->join('index_holdings', 'index_holdings.id', '=', 'market_data.index_holding_id')
             ->where('date', MarketData::maxDate());
 
         $builder
