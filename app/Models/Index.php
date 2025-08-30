@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Index extends Model
 {
@@ -16,9 +17,9 @@ class Index extends Model
         'currency',
     ];
 
-    public function dataSources(): HasMany
+    public function dataSource(): HasOne
     {
-        return $this->hasMany(DataSource::class);
+        return $this->hasOne(DataSource::class);
     }
 
     public function indexHoldings(): HasMany
@@ -30,4 +31,5 @@ class Index extends Model
     {
         return $this->belongsTo(IndexProvider::class);
     }
+
 }

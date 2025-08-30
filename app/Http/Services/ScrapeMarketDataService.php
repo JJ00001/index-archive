@@ -28,7 +28,7 @@ class ScrapeMarketDataService
      */
     public function scrape()
     {
-        $baseURL      = $this->index->dataSources()->first()->base_url;
+        $baseURL = $this->index->dataSource()->base_url;
         $date         = $this->startDate;
 
         while ($date <= $this->endDate && $date <= now()) {
