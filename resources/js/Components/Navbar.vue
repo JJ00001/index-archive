@@ -30,9 +30,9 @@ const items = ref([
 
 <template>
     <div class="border-b">
-        <div class="px-6 py-4">
+        <div class="px-6 py-1">
             <div class="flex items-center justify-between">
-                <h1 class="font-apple-garamond text-4xl">MSCI World Tracker</h1>
+                <h1 class="font-apple-garamond text-5xl">IndexArchive</h1>
                 <NavigationMenu>
                     <NavigationMenuList class="gap-2">
                         <NavigationMenuItem v-for="item in items"
