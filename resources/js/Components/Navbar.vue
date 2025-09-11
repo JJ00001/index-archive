@@ -14,16 +14,12 @@ const { t } = useI18n()
 
 const items = ref([
     {
+        label: t('index.name', 2),
+        route: '/indices',
+    },
+    {
         label: t('company.name', 2),
-        route: '/companies'
-    },
-    {
-        label: t('sector.name', 2),
-        route: '/sectors'
-    },
-    {
-        label: t('country.name', 2),
-        route: '/countries'
+        route: '/companies',
     },
 ]);
 </script>
