@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
     indices: {
@@ -12,8 +13,7 @@ const props = defineProps({
 const indexData = ref([...props.indices])
 
 const handleRowClick = (index) => {
-    console.log('coming soon')
-    // router.get(route('indices.show', index.id))
+    router.get(route('indices.show', index.id))
 }
 </script>
 
