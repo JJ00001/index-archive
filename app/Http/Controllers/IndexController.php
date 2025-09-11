@@ -16,4 +16,11 @@ class IndexController extends Controller
         ]);
     }
 
+    public function top()
+    {
+        $indices = Index::limit(5)->get(['id', 'name']);
+
+        return response()->json($indices);
+    }
+
 }
