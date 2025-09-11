@@ -46,7 +46,7 @@ onMounted(fetchData)
                         <!-- Indices Dropdown -->
                         <NavigationMenuItem>
                             <NavigationMenuTrigger>
-                                {{ t('index.name', 2) }}
+                                {{ t('index.name') }}
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <div class="w-80">
@@ -77,7 +77,7 @@ onMounted(fetchData)
                         <!-- Companies Dropdown -->
                         <NavigationMenuItem>
                             <NavigationMenuTrigger>
-                                {{ t('company.name', 2) }}
+                                {{ t('company.name') }}
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <div class="w-80">
