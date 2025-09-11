@@ -1,27 +1,39 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import {
     NavigationMenu,
+    NavigationMenuContent,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
-    navigationMenuTriggerStyle,
+    NavigationMenuTrigger,
 } from '@/Components/ui/navigation-menu'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-const items = ref([
-    {
-        label: t('index.name', 2),
-        route: '/indices',
-    },
-    {
-        label: t('company.name', 2),
-        route: '/companies',
-    },
-]);
+const indices = ref([])
+const companies = ref([])
+const loading = ref(true)
+
+const fetchData = async () => {
+    try {
+        const [indicesResponse, companiesResponse] = await Promise.all([
+            fetch(route('api.indices.top')),
+            fetch(route('api.companies.top')),
+        ])
+
+        indices.value = await indicesResponse.json()
+        companies.value = await companiesResponse.json()
+    } catch (error) {
+        console.error('Failed to fetch navigation data:', error)
+    } finally {
+        loading.value = false
+    }
+}
+
+onMounted(fetchData)
 </script>
 
 <template>
@@ -31,14 +43,69 @@ const items = ref([
                 <h1 class="font-apple-garamond text-5xl">IndexArchive</h1>
                 <NavigationMenu>
                     <NavigationMenuList class="gap-2">
-                        <NavigationMenuItem v-for="item in items"
-                                            :key="item.route">
-                            <NavigationMenuLink as-child>
-                                <Link :class="[navigationMenuTriggerStyle()]"
-                                      :href="item.route">
-                                    {{ item.label }}
-                                </Link>
-                            </NavigationMenuLink>
+                        <!-- Indices Dropdown -->
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>
+                                {{ t('index.name', 2) }}
+                            </NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <div class="w-80">
+                                    <!-- View All Button -->
+                                    <div class="mb-2 pb-2 border-b">
+                                        <NavigationMenuLink as-child>
+                                            <Link :href="'/indices'"
+                                                  class="block select-none rounded-md p-2 text-sm font-medium leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                                                View All {{ t('index.name', 2) }} →
+                                            </Link>
+                                        </NavigationMenuLink>
+                                    </div>
+                                    <!-- Individual indices -->
+                                    <div v-if="!loading && indices.length > 0">
+                                        <NavigationMenuLink v-for="index in indices"
+                                                            :key="index.id"
+                                                            as-child>
+                                            <Link :href="`/indices/${index.id}`"
+                                                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                                                <div class="text-sm font-medium leading-none">{{ index.name }}</div>
+                                            </Link>
+                                        </NavigationMenuLink>
+                                    </div>
+                                </div>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+
+                        <!-- Companies Dropdown -->
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>
+                                {{ t('company.name', 2) }}
+                            </NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <div class="w-80">
+                                    <!-- View All Button -->
+                                    <div class="mb-2 pb-2 border-b">
+                                        <NavigationMenuLink as-child>
+                                            <Link :href="'/companies'"
+                                                  class="block select-none rounded-md p-2 text-sm font-medium leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                                                View All {{ t('company.name', 2) }} →
+                                            </Link>
+                                        </NavigationMenuLink>
+                                    </div>
+                                    <!-- Individual companies -->
+                                    <div v-if="!loading && companies.length > 0">
+                                        <NavigationMenuLink v-for="company in companies"
+                                                            :key="company.id"
+                                                            as-child>
+                                            <Link :href="`/companies/${company.id}`"
+                                                  class="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                                                <div class="text-sm font-medium leading-none">{{ company.name }}</div>
+                                                <p class="text-sm leading-snug text-muted-foreground">{{
+                                                        company.ticker
+                                                    }}</p>
+                                            </Link>
+                                        </NavigationMenuLink>
+                                    </div>
+                                </div>
+                            </NavigationMenuContent>
                         </NavigationMenuItem>
                     </NavigationMenuList>
                 </NavigationMenu>
