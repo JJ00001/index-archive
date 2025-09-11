@@ -11,7 +11,7 @@ Route::redirect('/', '/companies');
 Route::resource('companies', CompanyController::class)->only(['index', 'show']);
 Route::resource('countries', CountryController::class)->only(['index', 'show']);
 Route::resource('sectors', SectorController::class)->only(['index', 'show']);
-Route::resource('indices', IndexController::class)->only(['index']);
+Route::resource('indices', IndexController::class)->only(['index', 'show']);
 
 Route::prefix('api')->name('api.')->group(function () {
     Route::get('/indices/top', [IndexController::class, 'top'])->name('indices.top');
