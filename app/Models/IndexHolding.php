@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ActiveIndexHoldingScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[ScopedBy([ActiveIndexHoldingScope::class])]
 class IndexHolding extends Model
 {
 
@@ -31,4 +34,5 @@ class IndexHolding extends Model
     {
         return $this->hasMany(MarketData::class);
     }
+
 }
