@@ -12,3 +12,8 @@ Route::resource('companies', CompanyController::class)->only(['index', 'show']);
 Route::resource('countries', CountryController::class)->only(['index', 'show']);
 Route::resource('sectors', SectorController::class)->only(['index', 'show']);
 Route::resource('indices', IndexController::class)->only(['index']);
+
+Route::prefix('api')->name('api.')->group(function () {
+    Route::get('/indices/top', [IndexController::class, 'top'])->name('indices.top');
+    Route::get('/companies/top', [CompanyController::class, 'top'])->name('companies.top');
+});
