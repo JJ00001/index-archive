@@ -49,7 +49,7 @@ onMounted(fetchData)
                                 {{ t('index.name') }}
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
-                                <div class="w-80">
+                                <div class="w-60">
                                     <!-- View All Button -->
                                     <div class="mb-2 pb-2 border-b">
                                         <NavigationMenuLink as-child>
@@ -80,7 +80,7 @@ onMounted(fetchData)
                                 {{ t('company.name') }}
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
-                                <div class="w-80">
+                                <div class="w-60">
                                     <!-- View All Button -->
                                     <div class="mb-2 pb-2 border-b">
                                         <NavigationMenuLink as-child>

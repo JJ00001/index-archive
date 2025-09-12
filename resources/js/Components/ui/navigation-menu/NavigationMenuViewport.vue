@@ -17,7 +17,7 @@ const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-    <div class="absolute top-full left-0 isolate z-50 flex justify-center">
+    <div class="absolute top-full right-0 isolate z-50 flex justify-end">
         <NavigationMenuViewport
             :class="
         cn(
