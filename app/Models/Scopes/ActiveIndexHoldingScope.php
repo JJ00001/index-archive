@@ -2,7 +2,6 @@
 
 namespace App\Models\Scopes;
 
-use App\Models\MarketData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -15,10 +14,21 @@ class ActiveIndexHoldingScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->whereHas('company', function (Builder $companyQ) {
-            $companyQ->whereHas('marketDatas', function (Builder $marketDataQ) {
-                $marketDataQ->where('date', MarketData::maxDate());
-            });
+        $builder->whereHas('marketData', function (Builder $marketDataQ) {
+            $marketDataQ->whereRaw(
+                '
+                date = (
+                    SELECT MAX(md.date) 
+                    FROM market_data md 
+                    JOIN index_holdings ih ON md.index_holding_id = ih.id 
+                    WHERE ih.index_id = (
+                        SELECT index_id 
+                        FROM index_holdings 
+                        WHERE id = market_data.index_holding_id
+                    )
+                )
+            '
+            );
         });
     }
 
