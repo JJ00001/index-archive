@@ -18,7 +18,7 @@ class AssetClassFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->randomElement(['Aktien', 'Bonds', 'Cash', 'Commodities']),
+            'name' => fake()->unique()->word(),
         ];
     }
 

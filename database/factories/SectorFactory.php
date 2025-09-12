@@ -18,9 +18,7 @@ class SectorFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->randomElement(
-                ['Information Technology', 'Healthcare', 'Financials', 'Consumer Discretionary']
-            ),
+            'name' => fake()->unique()->word(),
         ];
     }
 

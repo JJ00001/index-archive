@@ -18,7 +18,7 @@ class ExchangeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->randomElement(['NASDAQ', 'NYSE', 'LSE', 'TSE']),
+            'name' => fake()->unique()->safari(),
         ];
     }
 

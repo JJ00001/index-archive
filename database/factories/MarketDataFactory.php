@@ -18,7 +18,9 @@ class MarketDataFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'share_price' => fake()->randomFloat(2, 1, 1000),
+            'weight' => fake()->randomFloat(2, 0, 1),
+            'market_capitalization' => fake()->randomFloat(2, 1, 1000000000),
         ];
     }
 
