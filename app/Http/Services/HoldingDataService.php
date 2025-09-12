@@ -156,7 +156,8 @@ class HoldingDataService
             ->whereIn('isin', array_column($companies, 'isin'))
             ->pluck('id', 'isin');
 
-        $existingHoldings = IndexHolding::where('index_id', $index->id)
+        $existingHoldings = IndexHolding::withoutGlobalScopes()
+                                        ->where('index_id', $index->id)
                                         ->pluck('company_id')
                                         ->toArray();
 
@@ -177,7 +178,8 @@ class HoldingDataService
         }
 
         // Get IndexHolding IDs for MarketData
-        $indexHoldingIds = IndexHolding::where('index_id', $index->id)
+        $indexHoldingIds = IndexHolding::withoutGlobalScopes()
+                                       ->where('index_id', $index->id)
                                        ->join('companies', 'companies.id', '=', 'index_holdings.company_id')
                                        ->whereIn('companies.isin', array_column($marketData, 'company_isin'))
                                        ->pluck('index_holdings.id', 'companies.isin');
