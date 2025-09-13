@@ -14,6 +14,7 @@ use App\Models\Sector;
 use Illuminate\Support\Facades\Log;
 use JsonException;
 
+// TODO Refactor for maintainability, readability
 class HoldingDataService
 {
 
@@ -55,6 +56,11 @@ class HoldingDataService
             $currencyName   = $holding[$fieldMappings['currency']];
 
             if ($assetClassName === 'Equity') {
+                if (empty($isin) || $isin === '-') {
+                    Log::info("Skipping company '$companyName' - no ISIN provided");
+                    continue;
+                }
+
                 if (!isset($sectors[$sectorName])) {
                     $newSector = Sector::firstOrCreate(['name' => $sectorName]);
                     $sectors[$sectorName] = $newSector->id;
