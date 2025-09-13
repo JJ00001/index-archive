@@ -60,4 +60,13 @@ class Company extends Model
     {
         return $this->hasManyThrough(MarketData::class, IndexHolding::class);
     }
+
+    // TODO Update to permanent fix
+    public function logo(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value ?: 'logos/'.$this->isin.'.png',
+        );
+    }
+
 }
