@@ -56,6 +56,14 @@ createInertiaApp({
                         name: 'Country | Countries',
                         count: 'Countries (Count)',
                     },
+                    index: {
+                        name: 'Index | Indices',
+                        count: 'Indices (Count)',
+                        holding: 'Holding | Holdings',
+                    },
+                    indexProvider: {
+                        name: 'Index Provider | Index Providers',
+                    },
                     weight: 'Weight',
                     marketCap: 'Capitalization',
                     rank: 'Rank',

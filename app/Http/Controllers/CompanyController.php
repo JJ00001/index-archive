@@ -14,8 +14,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::orderBy('rank')
-            ->paginate(200);
+        $companies = Company::paginate(200);
 
         $weightHistoryService = new WeightHistoryService(new CompanyWeightHistoryStrategy());
         $multipleWeightHistory = $weightHistoryService->getMultipleWeightHistory($companies->take(10));
@@ -45,5 +44,13 @@ class CompanyController extends Controller
             'company' => $company,
             'weightHistory' => $weightHistory,
         ]);
+    }
+
+    public function top()
+    {
+        $companies = Company::limit(5)
+                            ->get(['id', 'name', 'ticker']);
+
+        return response()->json($companies);
     }
 }

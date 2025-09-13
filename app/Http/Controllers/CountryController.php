@@ -35,7 +35,6 @@ class CountryController extends Controller
 
         $countryCompanies = $country
             ->companies()
-            ->orderBy('rank')
             ->paginate(200);
 
         return inertia('Country/CountryShow', [

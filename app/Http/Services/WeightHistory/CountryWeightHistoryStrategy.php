@@ -14,7 +14,8 @@ class CountryWeightHistoryStrategy extends BaseWeightHistoryStrategy
               SUM(market_data.weight) AS weight
             FROM
               market_data
-              JOIN companies ON companies.id = market_data.company_id
+              JOIN index_holdings ON index_holdings.id = market_data.index_holding_id
+              JOIN companies ON companies.id = index_holdings.company_id
             WHERE
               companies.country_id = ?
             GROUP BY

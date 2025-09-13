@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\ActiveCompanyScope;
-use App\Models\Scopes\CompanyStatsScope;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-#[ScopedBy([ActiveCompanyScope::class, CompanyStatsScope::class])]
 class Company extends Model
 {
+
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'ticker',
@@ -49,8 +51,22 @@ class Company extends Model
         return $this->belongsTo(AssetClass::class);
     }
 
-    public function marketDatas(): HasMany
+    public function indexHoldings(): HasMany
     {
-        return $this->hasMany(MarketData::class, 'company_id');
+        return $this->hasMany(IndexHolding::class);
     }
+
+    public function marketDatas(): HasManyThrough
+    {
+        return $this->hasManyThrough(MarketData::class, IndexHolding::class);
+    }
+
+    // TODO Update to permanent fix
+    public function logo(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value ?: 'logos/'.$this->isin.'.png',
+        );
+    }
+
 }

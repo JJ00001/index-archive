@@ -1,0 +1,50 @@
+<script setup>
+import { ref } from 'vue'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+import { router } from '@inertiajs/vue3'
+
+const props = defineProps({
+    indices: {
+        type: Array,
+        required: true,
+    },
+})
+
+const indexData = ref([...props.indices])
+
+const handleRowClick = (index) => {
+    router.get(route('indices.show', index.id))
+}
+</script>
+
+<template>
+    <div class="h-[550px] overflow-auto">
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead class="w-6/12">{{ $t('index.name') }}</TableHead>
+                    <TableHead class="w-3/12">{{ $t('indexProvider.name') }}</TableHead>
+                    <TableHead class="w-1/12">{{ $t('index.holding', 2) }}</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <TableRow
+                    v-for="index in indexData"
+                    :key="index.id"
+                    class="cursor-pointer hover:bg-muted/50"
+                    @click="handleRowClick(index)"
+                >
+                    <TableCell>
+                        {{ index.name }}
+                    </TableCell>
+                    <TableCell>
+                        {{ index.index_provider?.name }}
+                    </TableCell>
+                    <TableCell>
+                        {{ index.index_holdings_count || '-' }}
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
+    </div>
+</template>

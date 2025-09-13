@@ -7,76 +7,31 @@ use App\Models\Company;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Exchange;
+use App\Models\Index;
+use App\Models\IndexHolding;
 use App\Models\MarketData;
 use App\Models\Sector;
-use DateMalformedStringException;
-use DateTime;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 use JsonException;
-use Random\RandomException;
 
+// TODO Refactor for maintainability, readability
 class HoldingDataService
 {
-    /**
-     * @throws DateMalformedStringException
-     * @throws GuzzleException
-     * @throws RandomException
-     * @throws JsonException
-     */
-    public function scrape()
-    {
-        $baseURL = config('app.msci_world_scraping_url');
-        $startDate = new DateTime('2018-01-01');
-        $endDate = new DateTime('2018-01-10');
-        $date = $startDate;
-        $client = new Client();
-
-        while ($date <= $endDate) {
-            $dateFormatted = $date->format('Y-m-d');
-            $randomDelay = random_int(1000, 3000);
-
-            $url = $baseURL . $date->format('Ymd');
-            $response = $client->request('GET', $url, ['delay' => $randomDelay]);
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode === 200) {
-                $filename = storage_path('holdingsData/' . $dateFormatted . '.json');
-                $response = $response->getBody()->getContents();
-
-                $response = str_replace("\u{FEFF}", '', $response);
-                $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
-
-                Log::info('Scraping complete for: ' . $dateFormatted);
-
-                if (!empty($response['aaData'])) {
-                    $jsonData = json_encode($response, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
-                    file_put_contents($filename, $jsonData);
-                } else {
-                    Log::info('No data for: ' . $dateFormatted);
-
-                    $date = $date->modify('next day');
-                    continue;
-                }
-            } else {
-                Log::info('Request failed with status code: ' . $statusCode);
-            }
-
-            $date = $date->modify('first day of next month');
-        }
-    }
 
     /**
      * @throws JsonException
      */
-    public function writeHoldingDataToDB(string $filename)
+    public function writeHoldingDataToDB(string $fullFilePath)
     {
-        $directoryPath = storage_path('holdingsData/');
-        $filePath = glob($directoryPath . $filename)[0];
-        $fileContent = file_get_contents($filePath);
+        $fileContent      = file_get_contents($fullFilePath);
         $jsonData = json_decode($fileContent, true, 512, JSON_THROW_ON_ERROR);
-        $dateFromFilename = pathinfo(basename($filename), PATHINFO_FILENAME);
+        $dateFromFilename = pathinfo(basename($fullFilePath), PATHINFO_FILENAME);
+
+        $pathParts = explode('/', $fullFilePath);
+        $indexId   = $pathParts[array_search('holdingsData', $pathParts) + 1];
+        $index     = Index::findOrFail($indexId);
+
+        $fieldMappings = $index->dataSource->field_mappings;
 
         $companies = [];
         $marketData = [];
@@ -88,19 +43,24 @@ class HoldingDataService
         $assetClasses = AssetClass::pluck('id', 'name');
 
         foreach ($jsonData['aaData'] as $holding) {
-            $ticker = $holding[0];
-            $companyName = $holding[1];
-            $sectorName = $holding[2];
-            $assetClassName = $holding[3];
-            $marketCapRaw = $holding[4]['raw'] ?? 0;
-            $weightRaw = $holding[5]['raw'] ?? 0;
-            $isin = $holding[8];
-            $sharePriceRaw = $holding[9]['raw'] ?? 0;
-            $countryName = $holding[10];
-            $exchangeName = $holding[11];
-            $currencyName = $holding[12];
+            $ticker         = $holding[$fieldMappings['symbol']];
+            $companyName    = $holding[$fieldMappings['name']];
+            $sectorName     = $holding[$fieldMappings['sector']];
+            $assetClassName = $holding[$fieldMappings['asset_type']];
+            $marketCapRaw = $holding[$fieldMappings['market_cap']]['raw'] ?? 0;
+            $weightRaw      = $holding[$fieldMappings['weight_percentage']]['raw'] ?? 0;
+            $isin           = $holding[$fieldMappings['isin']];
+            $sharePriceRaw  = $holding[$fieldMappings['share_price']]['raw'] ?? 0;
+            $countryName    = $holding[$fieldMappings['country']];
+            $exchangeName   = $holding[$fieldMappings['exchange']];
+            $currencyName   = $holding[$fieldMappings['currency']];
 
-            if ($assetClassName === 'Aktien') {
+            if ($assetClassName === 'Equity') {
+                if (empty($isin) || $isin === '-') {
+                    Log::info("Skipping company '$companyName' - no ISIN provided");
+                    continue;
+                }
+
                 if (!isset($sectors[$sectorName])) {
                     $newSector = Sector::firstOrCreate(['name' => $sectorName]);
                     $sectors[$sectorName] = $newSector->id;
@@ -145,7 +105,7 @@ class HoldingDataService
                 ];
 
                 $marketData[] = [
-                    'company_id' => $isin, // temporary reference
+                    'company_isin' => $isin, // temporary reference for IndexHolding lookup
                     'market_capitalization' => max($marketCapRaw * 1000, 0),
                     'weight' => max($weightRaw / 100, 0),
                     'share_price' => max($sharePriceRaw, 0),
@@ -196,27 +156,58 @@ class HoldingDataService
                 );
         }
 
-        Log::info('Companies upserted. Resolving Market Data IDs...');
+        Log::info('Companies upserted. Creating Index Holdings...');
 
         $companyIds = Company::withoutGlobalScopes()
             ->whereIn('isin', array_column($companies, 'isin'))
             ->pluck('id', 'isin');
 
+        $existingHoldings = IndexHolding::withoutGlobalScopes()
+                                        ->where('index_id', $index->id)
+                                        ->pluck('company_id')
+                                        ->toArray();
+
+        // Create new IndexHolding records only
+        $newIndexHoldings = [];
+        foreach ($companies as $companyData) {
+            $companyId = $companyIds[$companyData['isin']] ?? null;
+            if ($companyId && ! in_array($companyId, $existingHoldings)) {
+                $newIndexHoldings[] = [
+                    'index_id' => $index->id,
+                    'company_id' => $companyId,
+                ];
+            }
+        }
+
+        if ( ! empty($newIndexHoldings)) {
+            IndexHolding::insert($newIndexHoldings);
+        }
+
+        // Get IndexHolding IDs for MarketData
+        $indexHoldingIds = IndexHolding::withoutGlobalScopes()
+                                       ->where('index_id', $index->id)
+                                       ->join('companies', 'companies.id', '=', 'index_holdings.company_id')
+                                       ->whereIn('companies.isin', array_column($marketData, 'company_isin'))
+                                       ->pluck('index_holdings.id', 'companies.isin');
+
         foreach ($marketData as &$data) {
-            $isin = $data['company_id'];
-            if (isset($companyIds[$isin])) {
-                $data['company_id'] = $companyIds[$isin];
+            $isin = $data['company_isin'];
+            if (isset($indexHoldingIds[$isin])) {
+                $data['index_holding_id'] = $indexHoldingIds[$isin];
+                unset($data['company_isin']); // Remove temporary reference
             } else {
-                // If we don't find a matching company, log it or handle as needed
-                Log::warning('No matching company found for ISIN: ' . $isin);
+                Log::warning('No matching index holding found for ISIN: '.$isin);
             }
         }
 
         unset($data);
 
+        // Filter out market data without valid index_holding_id
+        $validMarketData = array_filter($marketData, fn($data) => isset($data['index_holding_id']));
+
         Log::info('Inserting Market Data...');
 
-        MarketData::insert($marketData);
+        MarketData::insert($validMarketData);
 
         Log::info('Data processing complete!');
     }
