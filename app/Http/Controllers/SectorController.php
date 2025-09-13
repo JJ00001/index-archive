@@ -35,7 +35,6 @@ class SectorController extends Controller
 
         $sectorCompanies = $sector
             ->companies()
-            ->orderBy('rank')
             ->paginate(200);
 
         return inertia('Sector/SectorShow', [
