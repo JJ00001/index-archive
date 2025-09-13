@@ -1,6 +1,6 @@
 <script setup>
 import CompanyLogo from '@/Components/CompanyLogo.vue'
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/Components/ui/badge'
 import { useI18n } from 'vue-i18n'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
 
@@ -11,7 +11,7 @@ const props = defineProps({
     },
 });
 
-const { n, t } = useI18n()
+const { t } = useI18n()
 
 const company = props.company;
 
@@ -21,10 +21,6 @@ const companyTags = {
 };
 
 const companyStats = [
-    {
-        title: t('marketCap'),
-        value: n(company.market_capitalization, 'currencyUSDCompact'),
-    },
     {
         title: t('sector.name'),
         value: company.sector.name,
