@@ -44,6 +44,7 @@ class DataSource extends Model
             'name' => 1,
             'sector' => 2,
             'asset_type' => 3,
+            'market_cap' => 4, // TODO Temporary fix for backwards compatibility. Remove references
             'weight_percentage' => 5,
             'isin' => 9,
             'share_price' => 11,

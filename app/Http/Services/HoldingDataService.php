@@ -46,7 +46,7 @@ class HoldingDataService
             $companyName    = $holding[$fieldMappings['name']];
             $sectorName     = $holding[$fieldMappings['sector']];
             $assetClassName = $holding[$fieldMappings['asset_type']];
-            $marketCapRaw   = $holding['market_cap']['raw'] ?? 0;
+            $marketCapRaw = $holding[$fieldMappings['market_cap']]['raw'] ?? 0;
             $weightRaw      = $holding[$fieldMappings['weight_percentage']]['raw'] ?? 0;
             $isin           = $holding[$fieldMappings['isin']];
             $sharePriceRaw  = $holding[$fieldMappings['share_price']]['raw'] ?? 0;
