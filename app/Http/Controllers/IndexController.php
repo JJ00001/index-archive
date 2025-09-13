@@ -9,7 +9,7 @@ class IndexController extends Controller
 
     public function index()
     {
-        $indices = Index::all();
+        $indices = Index::withCount('indexHoldings')->get();
 
         return inertia('Index/IndexIndex', [
             'indices' => $indices,
