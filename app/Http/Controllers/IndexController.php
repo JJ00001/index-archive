@@ -18,7 +18,9 @@ class IndexController extends Controller
 
     public function show(Index $index)
     {
-        $index->load(['indexProvider', 'indexHoldings']);
+        $index->load(['indexProvider', 'indexHoldings.company']);
+
+        $companies = $index->indexHoldings->pluck('company')->take(200);
 
         $stats = [
             [
@@ -38,6 +40,7 @@ class IndexController extends Controller
         return inertia('Index/IndexShow', [
             'index' => $index,
             'stats' => $stats,
+            'companies' => ['data' => $companies],
         ]);
     }
 
