@@ -42,6 +42,7 @@ class CompanyLogoService
 
     protected function makeApiRequest($params): array
     {
+        // TODO change env call to config
         $response = Http::withHeader('X-Api-Key', env('API_NINJA_API_KEY'))
             ->accept('application/json')
             ->get('https://api.api-ninjas.com/v1/logo?', $params);
@@ -225,7 +226,6 @@ class CompanyLogoService
         $logo = $response->body();
         $logoPathInStorage = 'logos/' . $this->company->isin . '.png';
         Storage::disk('public')->put($logoPathInStorage, $logo);
-        $this->company->update(['logo' => $logoPathInStorage]);
 
         Log::info("Logo stored for: {$this->company->name} ({$this->company->ticker})");
     }
