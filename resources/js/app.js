@@ -23,6 +23,11 @@ createInertiaApp({
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     },
+                    percentFine: {
+                        style: 'percent',
+                        minimumFractionDigits: 3,
+                        maximumFractionDigits: 3,
+                    },
                     currencyUSDCompact: {
                         style: 'currency',
                         currency: 'USD',
