@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\Storage;
 
 class Company extends Model
 {
@@ -61,11 +62,18 @@ class Company extends Model
         return $this->hasManyThrough(MarketData::class, IndexHolding::class);
     }
 
-    // TODO Update to permanent fix
     public function logo(): Attribute
     {
+        $filePath = 'logos/'.$this->isin.'.png';
+
         return Attribute::make(
-            get: fn($value) => $value ?: 'logos/'.$this->isin.'.png',
+            get: function () use ($filePath) {
+                if (Storage::disk('public')->exists($filePath)) {
+                    return $filePath;
+                }
+
+                return null;
+            }
         );
     }
 
