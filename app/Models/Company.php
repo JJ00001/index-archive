@@ -27,6 +27,8 @@ class Company extends Model
         'asset_class_id',
     ];
 
+    protected $appends = ['logo'];
+
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
