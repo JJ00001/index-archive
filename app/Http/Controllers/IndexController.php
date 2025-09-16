@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\IndexHoldingCompanyCollection;
 use App\Models\Index;
 
 class IndexController extends Controller
@@ -18,14 +19,14 @@ class IndexController extends Controller
 
     public function show(Index $index)
     {
-        $index->load(['indexProvider', 'indexHoldings.company']);
+        $index->load(['indexProvider']);
 
-        $companies = $index->indexHoldings->pluck('company')->take(200);
+        $companies = new IndexHoldingCompanyCollection($index->indexHoldings->take(100));
 
         $stats = [
             [
                 'title' => 'Holdings',
-                'value' => $index->indexHoldings->count(),
+                'value' => $index->indexHoldings()->count(),
             ],
             [
                 'title' => 'Provider',
@@ -40,7 +41,7 @@ class IndexController extends Controller
         return inertia('Index/IndexShow', [
             'index' => $index,
             'stats' => $stats,
-            'companies' => ['data' => $companies],
+            'companies' => $companies,
         ]);
     }
 
