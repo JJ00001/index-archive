@@ -27,7 +27,9 @@ const handleRowClick = (company) => {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead class="w-full">{{ $t('company.name') }}</TableHead>
+                    <TableHead class="w-1/12">{{ $t('rank') }}</TableHead>
+                    <TableHead class="w-10/12">{{ $t('company.name') }}</TableHead>
+                    <TableHead class="w-1/12">{{ $t('weight') }}</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -37,6 +39,9 @@ const handleRowClick = (company) => {
                     class="cursor-pointer hover:bg-muted/50"
                     @click="handleRowClick(company)"
                 >
+                    <TableCell class="font-mono">
+                        {{ company.rank }}
+                    </TableCell>
                     <TableCell>
                         <div class="flex items-center">
                             <div class="w-20 h-8 mr-4 shrink-0">
@@ -49,6 +54,9 @@ const handleRowClick = (company) => {
                                 <span class="text-sm text-muted-foreground">{{ company.ticker }}</span>
                             </div>
                         </div>
+                    </TableCell>
+                    <TableCell>
+                        {{ $n(company.weight, 'percentFine') }}
                     </TableCell>
                 </TableRow>
             </TableBody>
