@@ -33,6 +33,8 @@ const breadcrumbItems = [
         route: null,
     },
 ]
+
+const companiesCount = props.companies.data.length
 </script>
 
 <template>
@@ -44,7 +46,7 @@ const breadcrumbItems = [
             <StatCardGroup :stats="stats" />
             <Card>
                 <CardHeader>
-                    <CardTitle>{{ t('index.holding', 2) }}</CardTitle>
+                    <CardTitle>{{ t('index.holding', 2) + ' (Top ' + companiesCount + ')' }}</CardTitle>
                     <CardDescription>
                         Companies currently held in the {{ index.name }} index
                     </CardDescription>
