@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 class Index extends Model
 {
@@ -33,6 +35,23 @@ class Index extends Model
     public function indexProvider(): BelongsTo
     {
         return $this->belongsTo(IndexProvider::class);
+    }
+
+    public function latestMarketData(): HasManyThrough
+    {
+        return $this
+            ->hasManyThrough(MarketData::class, IndexHolding::class)
+            ->where('date', $this->latestMarketDataDate());
+    }
+
+    public function latestMarketDataDate(): ?string
+    {
+        return $this->marketData()->max('date');
+    }
+
+    public function marketData(): HasManyThrough
+    {
+        return $this->hasManyThrough(MarketData::class, IndexHolding::class);
     }
 
 }
