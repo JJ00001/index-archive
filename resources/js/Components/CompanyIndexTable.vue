@@ -9,10 +9,6 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    nextPage: {
-        type: Number,
-        required: true,
-    },
 })
 
 const companyData = ref([...props.companies.data])

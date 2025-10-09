@@ -6,21 +6,16 @@ import { Card, CardContent } from '@/Components/ui/card'
 const props = defineProps({
     companies: {
         type: Object,
-        required: true
+        required: true,
     },
-    nextPage: {
-        type: Number,
-        required: true
-    },
-});
+})
 </script>
 
 <template>
     <layout-main>
         <Card>
             <CardContent>
-                <company-index-table :companies="companies"
-                                     :next-page="nextPage" />
+                <company-index-table :companies="companies" />
             </CardContent>
         </Card>
     </layout-main>
