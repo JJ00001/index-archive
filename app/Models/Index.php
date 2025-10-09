@@ -37,6 +37,26 @@ class Index extends Model
         return $this->belongsTo(IndexProvider::class);
     }
 
+    public function sectorStats(): Collection
+    {
+        return $this->latestMarketData()
+                    ->with('indexHolding.company.sector')
+                    ->get()
+                    ->groupBy('indexHolding.company.sector.id')
+                    ->map(function ($marketDataItems, $sectorId) {
+                        $sector = $marketDataItems->first()->indexHolding->company->sector;
+
+                        return (object)[
+                            'id' => $sector->id,
+                            'name' => $sector->name,
+                            'weight' => $marketDataItems->sum('weight'),
+                            'companies_count' => $marketDataItems->count(),
+                        ];
+                    })
+                    ->sortByDesc('weight')
+                    ->values();
+    }
+
     public function latestMarketData(): HasManyThrough
     {
         return $this
