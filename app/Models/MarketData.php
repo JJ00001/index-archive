@@ -29,9 +29,4 @@ class MarketData extends Model
     {
         return Attribute::make(fn(float $value) => round($value, 5));
     }
-
-    public static function maxDate(): mixed
-    {
-        return self::max('date');
-    }
 }
