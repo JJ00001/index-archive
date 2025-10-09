@@ -26,26 +26,8 @@ class Country extends Model
         $query->withCount('companies');
     }
 
-    public function scopeWithWeight(Builder $query): void
-    {
-        $query->addSelect([
-            'weight' => function ($query) {
-                $query->selectRaw('SUM(market_data.weight)')
-                    ->from('companies')
-                    ->join('index_holdings', 'index_holdings.company_id', '=', 'companies.id')
-                    ->join('market_data', function ($join) {
-                        $join->on('index_holdings.id', '=', 'market_data.index_holding_id')
-                            ->where('market_data.date', MarketData::maxDate());
-                    })
-                    ->whereColumn('companies.country_id', 'countries.id');
-            },
-        ]);
-    }
-
     public function scopeWithStats(Builder $query): void
     {
-        $query
-            ->withCompaniesCount()
-            ->withWeight();
+        $query->withCompaniesCount();
     }
 }
