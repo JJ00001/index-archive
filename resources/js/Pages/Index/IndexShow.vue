@@ -4,6 +4,7 @@ import StatCardGroup from '@/Components/StatCardGroup.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
 import { useI18n } from 'vue-i18n'
 import CompanyIndexTable from '@/Components/CompanyIndexTable.vue'
+import SectorIndexTable from '@/Components/SectorIndexTable.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
 
 const props = defineProps({
@@ -16,6 +17,10 @@ const props = defineProps({
         required: true,
     },
     companies: {
+        type: Object,
+        required: true,
+    },
+    sectors: {
         type: Object,
         required: true,
     },
@@ -53,6 +58,17 @@ const companiesCount = props.companies.data.length
                 </CardHeader>
                 <CardContent>
                     <company-index-table :companies="companies" />
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>{{ t('sector.name', 2) }}</CardTitle>
+                    <CardDescription>
+                        Sector allocation for the {{ index.name }} index
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <sector-index-table :sector-data="sectors.data" />
                 </CardContent>
             </Card>
         </div>
