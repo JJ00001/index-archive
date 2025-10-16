@@ -8,7 +8,6 @@ use App\Models\Index;
 
 class IndexController extends Controller
 {
-
     public function index()
     {
         $indices = Index::withCount('indexHoldings')->get();
@@ -55,5 +54,4 @@ class IndexController extends Controller
 
         return response()->json($indices);
     }
-
 }

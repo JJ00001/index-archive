@@ -12,7 +12,6 @@ use Illuminate\Support\Collection;
 
 class Index extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -40,21 +39,21 @@ class Index extends Model
     public function sectorStats(): Collection
     {
         return $this->latestMarketData()
-                    ->with('indexHolding.company.sector')
-                    ->get()
-                    ->groupBy('indexHolding.company.sector.id')
-                    ->map(function ($marketDataItems, $sectorId) {
-                        $sector = $marketDataItems->first()->indexHolding->company->sector;
+            ->with('indexHolding.company.sector')
+            ->get()
+            ->groupBy('indexHolding.company.sector.id')
+            ->map(function ($marketDataItems, $sectorId) {
+                $sector = $marketDataItems->first()->indexHolding->company->sector;
 
-                        return (object)[
-                            'id' => $sector->id,
-                            'name' => $sector->name,
-                            'weight' => $marketDataItems->sum('weight'),
-                            'companies_count' => $marketDataItems->count(),
-                        ];
-                    })
-                    ->sortByDesc('weight')
-                    ->values();
+                return (object)[
+                    'id' => $sector->id,
+                    'name' => $sector->name,
+                    'weight' => $marketDataItems->sum('weight'),
+                    'companies_count' => $marketDataItems->count(),
+                ];
+            })
+            ->sortByDesc('weight')
+            ->values();
     }
 
     public function countryStats(): Collection
@@ -93,5 +92,4 @@ class Index extends Model
     {
         return $this->hasManyThrough(MarketData::class, IndexHolding::class);
     }
-
 }
