@@ -6,7 +6,7 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\SectorController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/companies');
+Route::redirect('/', '/indices');
 
 Route::resource('companies', CompanyController::class)->only(['index', 'show']);
 Route::resource('countries', CountryController::class)->only(['index', 'show']);
