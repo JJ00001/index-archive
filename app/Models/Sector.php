@@ -41,19 +41,24 @@ class Sector extends Model
         ]);
     }
 
+    public function scopeWithCompaniesCountInIndex(Builder $query, Index $index): void
+    {
+        $query->addSelect([
+            'companies_count' => Company::query()
+                                        ->whereColumn('sector_id', 'sectors.id')
+                                        ->whereExists(function ($subQuery) use ($index) {
+                                            $subQuery->from('index_holdings')
+                                                     ->whereColumn('index_holdings.company_id', 'companies.id')
+                                                     ->where('index_holdings.index_id', $index->id);
+                                        })
+                                        ->selectRaw('COUNT(*)'),
+        ]);
+    }
+
     public function scopeWithStatsInIndex(Builder $query, Index $index): void
     {
         $query
             ->withWeightInIndex($index)
-            ->addSelect([
-                'companies_count' => Company::query()
-                                            ->whereColumn('sector_id', 'sectors.id')
-                                            ->whereExists(function ($subQuery) use ($index) {
-                                                $subQuery->from('index_holdings')
-                                                         ->whereColumn('index_holdings.company_id', 'companies.id')
-                                                         ->where('index_holdings.index_id', $index->id);
-                                            })
-                                            ->selectRaw('COUNT(*)'),
-            ]);
+            ->withCompaniesCountInIndex($index);
     }
 }
