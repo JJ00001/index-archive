@@ -57,6 +57,26 @@ class Index extends Model
                     ->values();
     }
 
+    public function countryStats(): Collection
+    {
+        return $this->latestMarketData()
+                    ->with('indexHolding.company.country')
+                    ->get()
+                    ->groupBy('indexHolding.company.country.id')
+                    ->map(function ($marketDataItems, $countryId) {
+                        $country = $marketDataItems->first()->indexHolding->company->country;
+
+                        return (object)[
+                            'id' => $country->id,
+                            'name' => $country->name,
+                            'weight' => $marketDataItems->sum('weight'),
+                            'companies_count' => $marketDataItems->count(),
+                        ];
+                    })
+                    ->sortByDesc('weight')
+                    ->values();
+    }
+
     public function latestMarketData(): HasManyThrough
     {
         return $this
