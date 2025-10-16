@@ -5,6 +5,7 @@ import Breadcrumbs from '@/Components/Breadcrumbs.vue'
 import { useI18n } from 'vue-i18n'
 import CompanyIndexTable from '@/Components/CompanyIndexTable.vue'
 import SectorIndexTable from '@/Components/SectorIndexTable.vue'
+import CountryIndexTable from '@/Components/CountryIndexTable.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
 
 const props = defineProps({
@@ -23,6 +24,10 @@ const props = defineProps({
     sectors: {
         type: Object,
         required: true,
+    },
+  countries: {
+    type: Object,
+    required: true,
     },
 })
 
@@ -69,6 +74,17 @@ const companiesCount = props.companies.data.length
                 </CardHeader>
                 <CardContent>
                     <sector-index-table :sector-data="sectors.data" />
+                </CardContent>
+            </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>{{ t('country.name', 2) }}</CardTitle>
+              <CardDescription>
+                Country allocation for the {{ index.name }} index
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <country-index-table :country-data="countries.data" />
                 </CardContent>
             </Card>
         </div>
