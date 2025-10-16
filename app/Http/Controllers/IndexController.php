@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\IndexHoldingCompanyCollection;
+use App\Http\Resources\IndexHoldingCountryCollection;
 use App\Http\Resources\IndexHoldingSectorCollection;
 use App\Models\Index;
 
@@ -25,6 +26,8 @@ class IndexController extends Controller
 
         $sectors = new IndexHoldingSectorCollection($index);
 
+        $countries = new IndexHoldingCountryCollection($index);
+
         $stats = [
             [
                 'title' => 'Holdings',
@@ -45,6 +48,7 @@ class IndexController extends Controller
             'stats' => $stats,
             'companies' => $companies,
             'sectors' => $sectors,
+            'countries' => $countries,
         ]);
     }
 
