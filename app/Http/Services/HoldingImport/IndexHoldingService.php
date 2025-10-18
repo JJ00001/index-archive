@@ -14,30 +14,50 @@ class IndexHoldingService
     {
         Log::info('Creating Index Holdings...');
 
+        $companyIds = $this->getCompanyIds($companies);
+        $existingHoldings = $this->getExistingHoldings($index);
+        $newHoldings = $this->buildNewHoldings($index, $companies, $companyIds, $existingHoldings);
+
+        if (! empty($newHoldings)) {
+            IndexHolding::insert($newHoldings);
+        }
+    }
+
+    private function getCompanyIds(Collection $companies): Collection
+    {
         $companyIsins = $companies->pluck('isin')->toArray();
 
-        $companyIds = Company::withoutGlobalScopes()
+        return Company::withoutGlobalScopes()
             ->whereIn('isin', $companyIsins)
             ->pluck('id', 'isin');
+    }
 
-        $existingHoldings = IndexHolding::withoutGlobalScopes()
+    private function getExistingHoldings(Index $index): array
+    {
+        return IndexHolding::withoutGlobalScopes()
             ->where('index_id', $index->id)
             ->pluck('company_id')
             ->toArray();
+    }
 
-        $newIndexHoldings = [];
+    private function buildNewHoldings(
+        Index $index,
+        Collection $companies,
+        Collection $companyIds,
+        array $existingHoldings
+    ): array {
+        $newHoldings = [];
+
         foreach ($companies as $companyData) {
             $companyId = $companyIds[$companyData->isin] ?? null;
             if ($companyId && ! in_array($companyId, $existingHoldings)) {
-                $newIndexHoldings[] = [
+                $newHoldings[] = [
                     'index_id' => $index->id,
                     'company_id' => $companyId,
                 ];
             }
         }
 
-        if (! empty($newIndexHoldings)) {
-            IndexHolding::insert($newIndexHoldings);
-        }
+        return $newHoldings;
     }
 }
