@@ -23,32 +23,11 @@ class CompanyUpsertService
     {
         Log::info('Upserting companies...');
 
-        $isins = $companies->pluck('isin')->toArray();
-        $existingCompanies = Company::withoutGlobalScopes()
-            ->whereIn('isin', $isins)
-            ->get()
-            ->keyBy('isin');
-
-        $companiesToUpsert = [];
-
-        foreach ($companies as $companyData) {
-            $existing = $existingCompanies[$companyData->isin] ?? null;
-
-            if (! $existing) {
-                $companiesToUpsert[] = $companyData->toArray();
-            } elseif ($this->hasChanged($existing, $companyData)) {
-                $companiesToUpsert[] = $companyData->toArray();
-                $this->logChanges($existing, $companyData);
-            }
-        }
+        $existingCompanies = $this->getExistingCompanies($companies);
+        $companiesToUpsert = $this->filterCompaniesForUpsert($companies, $existingCompanies);
 
         if (! empty($companiesToUpsert)) {
-            Log::info('Upserting '.count($companiesToUpsert).' companies');
-            Company::withoutGlobalScopes()->upsert(
-                $companiesToUpsert,
-                ['isin'],
-                array_merge($this->fieldsToCheck, ['updated_at'])
-            );
+            $this->performUpsert($companiesToUpsert);
         }
     }
 
@@ -74,5 +53,44 @@ class CompanyUpsertService
                 Log::info("Field $field changed for ISIN: {$new->isin} ({$existing->$field} -> {$newArray[$field]})");
             }
         }
+    }
+
+    private function getExistingCompanies(Collection $companies): Collection
+    {
+        $isins = $companies->pluck('isin')->toArray();
+
+        return Company::withoutGlobalScopes()
+            ->whereIn('isin', $isins)
+            ->get()
+            ->keyBy('isin');
+    }
+
+    private function filterCompaniesForUpsert(Collection $companies, Collection $existingCompanies): array
+    {
+        $companiesToUpsert = [];
+
+        foreach ($companies as $companyData) {
+            $existing = $existingCompanies[$companyData->isin] ?? null;
+
+            if (! $existing) {
+                $companiesToUpsert[] = $companyData->toArray();
+            } elseif ($this->hasChanged($existing, $companyData)) {
+                $companiesToUpsert[] = $companyData->toArray();
+                $this->logChanges($existing, $companyData);
+            }
+        }
+
+        return $companiesToUpsert;
+    }
+
+    private function performUpsert(array $companies): void
+    {
+        Log::info('Upserting '.count($companies).' companies');
+
+        Company::withoutGlobalScopes()->upsert(
+            $companies,
+            ['isin'],
+            array_merge($this->fieldsToCheck, ['updated_at'])
+        );
     }
 }
