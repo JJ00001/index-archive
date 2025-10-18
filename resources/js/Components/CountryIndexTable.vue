@@ -19,9 +19,9 @@ const handleRowClick = (country) => {
     <Table>
         <TableHeader>
             <TableRow>
-                <TableHead class="w-1/3">{{ $t('country.name') }}</TableHead>
-                <TableHead class="w-1/3">{{ $t('weight') }}</TableHead>
-                <TableHead class="w-1/3">{{ $t('company.count') }}</TableHead>
+              <TableHead class="w-4/6">{{ $t('country.name') }}</TableHead>
+              <TableHead class="w-1/6">{{ $t('weight') }}</TableHead>
+              <TableHead class="w-1/6">{{ $t('company.count') }}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
