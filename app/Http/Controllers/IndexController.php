@@ -22,7 +22,15 @@ class IndexController extends Controller
     {
         $index->load(['indexProvider']);
 
-        $companies = new IndexHoldingCompanyCollection($index->indexHoldings->take(100));
+        $indexHoldingsSortedByWeight = $index->latestMarketData()
+            ->with('indexHolding')
+            ->get()
+            ->sortByDesc('weight')
+            ->take(100)
+            ->map(fn ($marketData) => $marketData->indexHolding)
+            ->values();
+
+        $companies = new IndexHoldingCompanyCollection($indexHoldingsSortedByWeight);
 
         $sectors = new IndexHoldingSectorCollection($index);
 
