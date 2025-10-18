@@ -20,23 +20,13 @@ class Country extends Model
         return $this->hasMany(Company::class, 'country_id');
     }
 
-    public function scopeWithCompaniesCount(Builder $query): void
-    {
-        $query->withCount('companies');
-    }
-
-    public function scopeWithStats(Builder $query): void
-    {
-        $query->withCompaniesCount();
-    }
-
     public function scopeWithWeightInIndex(Builder $query, Index $index): void
     {
         $query->addSelect([
             'weight' => $index->latestMarketData()
-                              ->whereColumn('index_holdings.company_id', 'companies.id')
-                              ->whereColumn('companies.country_id', 'countries.id')
-                              ->selectRaw('SUM(market_data.weight)'),
+                ->whereColumn('index_holdings.company_id', 'companies.id')
+                ->whereColumn('companies.country_id', 'countries.id')
+                ->selectRaw('SUM(market_data.weight)'),
         ]);
     }
 
@@ -44,13 +34,13 @@ class Country extends Model
     {
         $query->addSelect([
             'companies_count' => Company::query()
-                                        ->whereColumn('country_id', 'countries.id')
-                                        ->whereExists(function ($subQuery) use ($index) {
-                                            $subQuery->from('index_holdings')
-                                                     ->whereColumn('index_holdings.company_id', 'companies.id')
-                                                     ->where('index_holdings.index_id', $index->id);
-                                        })
-                                        ->selectRaw('COUNT(*)'),
+                ->whereColumn('country_id', 'countries.id')
+                ->whereExists(function ($subQuery) use ($index) {
+                    $subQuery->from('index_holdings')
+                        ->whereColumn('index_holdings.company_id', 'companies.id')
+                        ->where('index_holdings.index_id', $index->id);
+                })
+                ->selectRaw('COUNT(*)'),
         ]);
     }
 

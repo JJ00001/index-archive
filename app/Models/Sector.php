@@ -9,9 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sector extends Model
 {
-
     use HasFactory;
-    
+
     protected $fillable = [
         'name',
     ];
@@ -21,23 +20,13 @@ class Sector extends Model
         return $this->hasMany(Company::class, 'sector_id');
     }
 
-    public function scopeWithCompaniesCount(Builder $query): void
-    {
-        $query->withCount('companies');
-    }
-
-    public function scopeWithStats(Builder $query): void
-    {
-        $query->withCompaniesCount();
-    }
-
     public function scopeWithWeightInIndex(Builder $query, Index $index): void
     {
         $query->addSelect([
             'weight' => $index->latestMarketData()
-                              ->whereColumn('index_holdings.company_id', 'companies.id')
-                              ->whereColumn('companies.sector_id', 'sectors.id')
-                              ->selectRaw('SUM(market_data.weight)'),
+                ->whereColumn('index_holdings.company_id', 'companies.id')
+                ->whereColumn('companies.sector_id', 'sectors.id')
+                ->selectRaw('SUM(market_data.weight)'),
         ]);
     }
 
@@ -45,13 +34,13 @@ class Sector extends Model
     {
         $query->addSelect([
             'companies_count' => Company::query()
-                                        ->whereColumn('sector_id', 'sectors.id')
-                                        ->whereExists(function ($subQuery) use ($index) {
-                                            $subQuery->from('index_holdings')
-                                                     ->whereColumn('index_holdings.company_id', 'companies.id')
-                                                     ->where('index_holdings.index_id', $index->id);
-                                        })
-                                        ->selectRaw('COUNT(*)'),
+                ->whereColumn('sector_id', 'sectors.id')
+                ->whereExists(function ($subQuery) use ($index) {
+                    $subQuery->from('index_holdings')
+                        ->whereColumn('index_holdings.company_id', 'companies.id')
+                        ->where('index_holdings.index_id', $index->id);
+                })
+                ->selectRaw('COUNT(*)'),
         ]);
     }
 
