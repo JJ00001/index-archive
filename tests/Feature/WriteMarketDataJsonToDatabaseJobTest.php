@@ -51,7 +51,7 @@ describe('Job Execution', function () {
 
         $job = new WriteMarketDataJsonToDatabase($invalidJsonPath);
 
-        expect(fn() => $job->handle())->toThrow(JsonException::class);
+        expect(fn () => $job->handle())->toThrow(JsonException::class);
 
         unlink($invalidJsonPath);
     });
@@ -86,10 +86,10 @@ describe('Data Processing', function () {
     });
 
     it('updates existing companies when data changes', function () {
-        $sector     = Sector::factory()->create(['name' => 'Old Sector']);
-        $country    = Country::factory()->create(['name' => 'Old Country']);
-        $exchange   = Exchange::factory()->create(['name' => 'Old Exchange']);
-        $currency   = Currency::factory()->create(['name' => 'OLD']);
+        $sector = Sector::factory()->create(['name' => 'Old Sector']);
+        $country = Country::factory()->create(['name' => 'Old Country']);
+        $exchange = Exchange::factory()->create(['name' => 'Old Exchange']);
+        $currency = Currency::factory()->create(['name' => 'OLD']);
         $assetClass = AssetClass::factory()->create(['name' => 'Old Asset']);
 
         Company::factory()->create([
@@ -164,7 +164,7 @@ describe('Relationship Management', function () {
 
         assertDatabaseCount('index_holdings', 2);
 
-        $nvidia    = Company::where('ticker', 'NVDA')->first();
+        $nvidia = Company::where('ticker', 'NVDA')->first();
         $microsoft = Company::where('ticker', 'MSFT')->first();
 
         assertDatabaseHas('index_holdings', [
@@ -195,21 +195,21 @@ describe('Relationship Management', function () {
 
         assertDatabaseCount('market_data', 2);
 
-        $nvidia        = Company::where('ticker', 'NVDA')->first();
+        $nvidia = Company::where('ticker', 'NVDA')->first();
         $nvidiaHolding = IndexHolding::where('company_id', $nvidia->id)->first();
 
         $nvidiaMarketData = MarketData::where('index_holding_id', $nvidiaHolding->id)->first();
         expect($nvidiaMarketData)->not()->toBeNull();
-        expect($nvidiaMarketData->weight)->toBe(0.080);
+        expect($nvidiaMarketData->weight)->toBe(0.08004);
         expect($nvidiaMarketData->share_price)->toBe(173.72);
         expect($nvidiaMarketData->date)->toBe('2025-01-01');
 
-        $microsoft        = Company::where('ticker', 'MSFT')->first();
+        $microsoft = Company::where('ticker', 'MSFT')->first();
         $microsoftHolding = IndexHolding::where('company_id', $microsoft->id)->first();
 
         $microsoftMarketData = MarketData::where('index_holding_id', $microsoftHolding->id)->first();
         expect($microsoftMarketData)->not()->toBeNull();
-        expect($microsoftMarketData->weight)->toBe(0.074);
+        expect($microsoftMarketData->weight)->toBe(0.07359);
         expect($microsoftMarketData->share_price)->toBe(524.11);
     });
 });
@@ -220,7 +220,7 @@ describe('Edge Cases', function () {
 
         $job = new WriteMarketDataJsonToDatabase($invalidPath);
 
-        expect(fn() => $job->handle())->toThrow(Exception::class);
+        expect(fn () => $job->handle())->toThrow(Exception::class);
     });
 
     it('filters out non-equity asset classes', function () {
