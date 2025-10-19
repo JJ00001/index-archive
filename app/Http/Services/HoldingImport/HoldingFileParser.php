@@ -25,8 +25,8 @@ class HoldingFileParser
     {
         [$jsonData, $fieldMappings, $date] = $this->loadFile($index, $fullFilePath);
 
-        $companies = Collection::make();
-        $marketData = Collection::make();
+        $companiesFromFile = Collection::make();
+        $marketDataFromFile = Collection::make();
 
         $this->preloadEntities();
 
@@ -39,11 +39,11 @@ class HoldingFileParser
 
             $entityIds = $this->resolveEntityIds($fields);
 
-            $companies->push($this->createCompanyData($fields, $entityIds));
-            $marketData->push($this->createMarketDataPoint($fields, $date));
+            $companiesFromFile->push($this->createCompanyData($fields, $entityIds));
+            $marketDataFromFile->push($this->createMarketDataPoint($fields, $date));
         }
 
-        return [$companies, $marketData];
+        return [$companiesFromFile, $marketDataFromFile];
     }
 
     private function preloadEntities(): void

@@ -20,12 +20,13 @@ class HoldingDataOrchestrator
     public function processHoldingFile(string $fullFilePath): void
     {
         $index = $this->extractIndexFromPath($fullFilePath);
+        [$companiesFromFile, $marketDataFromFile] = $this->parser->parse($index, $fullFilePath);
 
-        [$companies, $marketData] = $this->parser->parse($index, $fullFilePath);
+        $this->companyUpsert->upsert($companiesFromFile);
 
-        $this->companyUpsert->upsert($companies);
+        $this->indexHoldingService->createForIndex($index, $companiesFromFile);
 
-        $this->indexHoldingService->createForIndex($index, $companies);
+        $this->marketDataService->insert($index, $marketDataFromFile);
 
         $this->marketDataService->insert($index, $marketData);
     }
