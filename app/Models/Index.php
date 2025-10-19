@@ -45,7 +45,7 @@ class Index extends Model
             ->map(function ($marketDataItems, $sectorId) {
                 $sector = $marketDataItems->first()->indexHolding->company->sector;
 
-                return (object)[
+                return (object) [
                     'id' => $sector->id,
                     'name' => $sector->name,
                     'weight' => $marketDataItems->sum('weight'),
@@ -59,21 +59,21 @@ class Index extends Model
     public function countryStats(): Collection
     {
         return $this->latestMarketData()
-                    ->with('indexHolding.company.country')
-                    ->get()
-                    ->groupBy('indexHolding.company.country.id')
-                    ->map(function ($marketDataItems, $countryId) {
-                        $country = $marketDataItems->first()->indexHolding->company->country;
+            ->with('indexHolding.company.country')
+            ->get()
+            ->groupBy('indexHolding.company.country.id')
+            ->map(function ($marketDataItems, $countryId) {
+                $country = $marketDataItems->first()->indexHolding->company->country;
 
-                        return (object)[
-                            'id' => $country->id,
-                            'name' => $country->name,
-                            'weight' => $marketDataItems->sum('weight'),
-                            'companies_count' => $marketDataItems->count(),
-                        ];
-                    })
-                    ->sortByDesc('weight')
-                    ->values();
+                return (object) [
+                    'id' => $country->id,
+                    'name' => $country->name,
+                    'weight' => $marketDataItems->sum('weight'),
+                    'companies_count' => $marketDataItems->count(),
+                ];
+            })
+            ->sortByDesc('weight')
+            ->values();
     }
 
     public function latestMarketData(): HasManyThrough

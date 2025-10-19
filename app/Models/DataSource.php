@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DataSource extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -33,7 +32,7 @@ class DataSource extends Model
     protected function fieldMappings(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value ? json_decode($value, true) : self::getDefaultFieldMapping(),
+            get: fn ($value) => $value ? json_decode($value, true) : self::getDefaultFieldMapping(),
         );
     }
 
@@ -53,5 +52,4 @@ class DataSource extends Model
             'currency' => 14,
         ];
     }
-
 }

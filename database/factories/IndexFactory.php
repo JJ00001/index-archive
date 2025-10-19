@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class IndexFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -23,5 +22,4 @@ class IndexFactory extends Factory
             'currency' => 'USD',
         ];
     }
-
 }

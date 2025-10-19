@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MarketData extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -27,6 +26,6 @@ class MarketData extends Model
 
     protected function weight(): Attribute
     {
-        return Attribute::make(fn(float $value) => round($value, 5));
+        return Attribute::make(fn (float $value) => round($value, 5));
     }
 }

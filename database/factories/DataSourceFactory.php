@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class DataSourceFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -21,5 +20,4 @@ class DataSourceFactory extends Factory
             'base_url' => fake()->url(),
         ];
     }
-
 }

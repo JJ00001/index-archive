@@ -6,9 +6,7 @@ use Illuminate\Support\Collection;
 
 class WeightHistoryService
 {
-    public function __construct(protected WeightHistoryStrategy $strategy)
-    {
-    }
+    public function __construct(protected WeightHistoryStrategy $strategy) {}
 
     public function getWeightHistory(int $id): array
     {

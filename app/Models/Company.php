@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Storage;
 
 class Company extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -78,5 +77,4 @@ class Company extends Model
             }
         );
     }
-
 }

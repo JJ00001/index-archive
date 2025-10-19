@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CompanyFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -33,5 +32,4 @@ class CompanyFactory extends Factory
             'asset_class_id' => AssetClass::factory(),
         ];
     }
-
 }

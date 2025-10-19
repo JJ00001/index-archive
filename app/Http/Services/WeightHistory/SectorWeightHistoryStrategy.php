@@ -8,7 +8,7 @@ class SectorWeightHistoryStrategy extends BaseWeightHistoryStrategy
 {
     public function fetchWeightHistory(int $id): array
     {
-        $query = "
+        $query = '
             SELECT
               market_data.date,
               SUM(market_data.weight) AS weight
@@ -22,7 +22,7 @@ class SectorWeightHistoryStrategy extends BaseWeightHistoryStrategy
               market_data.date
             ORDER BY
               market_data.date
-        ";
+        ';
 
         return DB::select($query, [$id]);
     }

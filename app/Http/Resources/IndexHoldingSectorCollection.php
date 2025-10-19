@@ -8,7 +8,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class IndexHoldingSectorCollection extends ResourceCollection
 {
-
     public function __construct(public Index $index)
     {
         parent::__construct($index->sectorStats());
@@ -18,5 +17,4 @@ class IndexHoldingSectorCollection extends ResourceCollection
     {
         return $this->collection->toArray();
     }
-
 }

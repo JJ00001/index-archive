@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
-class FetchCompanyLogo implements ShouldQueue, ShouldBeUnique
+class FetchCompanyLogo implements ShouldBeUnique, ShouldQueue
 {
     use Queueable;
 

@@ -11,10 +11,10 @@ abstract class BaseWeightHistoryStrategy implements WeightHistoryStrategy
         $marketData = $this->fetchWeightHistory($id);
 
         return [
-            'labels' => array_map(fn($data) => $data->date, $marketData),
+            'labels' => array_map(fn ($data) => $data->date, $marketData),
             'datasets' => [
-                'weight' => array_map(fn($data) => $data->weight, $marketData),
-            ]
+                'weight' => array_map(fn ($data) => $data->weight, $marketData),
+            ],
         ];
     }
 
@@ -28,7 +28,7 @@ abstract class BaseWeightHistoryStrategy implements WeightHistoryStrategy
 
             $dateWeightMap = collect($marketData)
                 ->keyBy('date')
-                ->map(fn($item) => $item->weight);
+                ->map(fn ($item) => $item->weight);
 
             $dates = $dates->merge($dateWeightMap->keys());
             $weights[$model->id] = $dateWeightMap;
@@ -38,7 +38,7 @@ abstract class BaseWeightHistoryStrategy implements WeightHistoryStrategy
 
         $datasets = $models->mapWithKeys(function ($model) use ($sortedDates, $weights) {
             $weights = $sortedDates
-                ->map(fn($date) => $weights[$model->id]->get($date, 0))
+                ->map(fn ($date) => $weights[$model->id]->get($date, 0))
                 ->toArray();
 
             return [$model->name => $weights];

@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class IndexProviderFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -24,5 +23,4 @@ class IndexProviderFactory extends Factory
             'website' => fake()->url(),
         ];
     }
-
 }

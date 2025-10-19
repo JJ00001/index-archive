@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CountryFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -21,5 +20,4 @@ class CountryFactory extends Factory
             'name' => fake()->unique()->country(),
         ];
     }
-
 }

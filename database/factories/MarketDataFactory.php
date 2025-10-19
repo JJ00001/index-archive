@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class MarketDataFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -23,5 +22,4 @@ class MarketDataFactory extends Factory
             'market_capitalization' => fake()->randomFloat(2, 1, 1000000000),
         ];
     }
-
 }

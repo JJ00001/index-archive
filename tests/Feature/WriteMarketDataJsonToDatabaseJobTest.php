@@ -21,11 +21,11 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $indexProvider = IndexProvider::factory()->create();
-    $this->index   = Index::factory()->create(['id' => 1, 'index_provider_id' => $indexProvider->id]);
+    $this->index = Index::factory()->create(['id' => 1, 'index_provider_id' => $indexProvider->id]);
     DataSource::factory()->create(['index_id' => $this->index->id]);
 
     $this->compactTestFilePath = base_path('tests/Fixtures/holdingsData/1/2025-01-01.json');
-    $this->fullTestFilePath    = base_path('tests/Fixtures/holdingsData/1/2025-08-01.json');
+    $this->fullTestFilePath = base_path('tests/Fixtures/holdingsData/1/2025-08-01.json');
 });
 
 describe('Job Execution', function () {
