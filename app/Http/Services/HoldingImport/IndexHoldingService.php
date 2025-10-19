@@ -15,11 +15,12 @@ class IndexHoldingService
         Log::info('Creating Index Holdings...');
 
         $companyIds = $this->getCompanyIds($companies);
+        $newHoldings = $this->buildNewHoldings($index, $companies, $companyIds);
         $existingHoldings = $this->getExistingHoldings($index);
-        $newHoldings = $this->buildNewHoldings($index, $companies, $companyIds, $existingHoldings);
+        $filteredHoldings = $this->filterExistingHoldings($newHoldings, $existingHoldings);
 
-        if (! empty($newHoldings)) {
-            IndexHolding::insert($newHoldings);
+        if (! empty($filteredHoldings)) {
+            IndexHolding::insert($filteredHoldings);
         }
     }
 
@@ -32,25 +33,16 @@ class IndexHoldingService
             ->pluck('id', 'isin');
     }
 
-    private function getExistingHoldings(Index $index): array
-    {
-        return IndexHolding::withoutGlobalScopes()
-            ->where('index_id', $index->id)
-            ->pluck('company_id')
-            ->toArray();
-    }
-
     private function buildNewHoldings(
         Index $index,
         Collection $companies,
-        Collection $companyIds,
-        array $existingHoldings
+        Collection $companyIds
     ): array {
         $newHoldings = [];
 
         foreach ($companies as $companyData) {
             $companyId = $companyIds[$companyData->isin] ?? null;
-            if ($companyId && ! in_array($companyId, $existingHoldings)) {
+            if ($companyId) {
                 $newHoldings[] = [
                     'index_id' => $index->id,
                     'company_id' => $companyId,
@@ -59,5 +51,20 @@ class IndexHoldingService
         }
 
         return $newHoldings;
+    }
+
+    private function getExistingHoldings(Index $index): array
+    {
+        return IndexHolding::withoutGlobalScopes()
+            ->where('index_id', $index->id)
+            ->pluck('company_id')
+            ->toArray();
+    }
+
+    private function filterExistingHoldings(array $newHoldings, array $existingHoldings): array
+    {
+        return array_filter($newHoldings, function ($holding) use ($existingHoldings) {
+            return ! in_array($holding['company_id'], $existingHoldings);
+        });
     }
 }
