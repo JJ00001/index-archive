@@ -1,6 +1,6 @@
 <script setup>
 import { router } from '@inertiajs/vue3'
-import CompanyLogo from '@/Components/CompanyLogo.vue'
+import CompanyDisplay from '@/Components/CompanyDisplay.vue'
 import { ref } from 'vue'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
 
@@ -39,17 +39,7 @@ const handleRowClick = (company) => {
                         {{ company.rank }}
                     </TableCell>
                     <TableCell>
-                        <div class="flex items-center">
-                            <div class="w-20 h-8 mr-4 shrink-0">
-                                <CompanyLogo :logo-path="company.logo"
-                                             class="w-full h-full" />
-                            </div>
-                            <div>
-                                <span class="font-bold">{{ company.name }}</span>
-                                <br>
-                                <span class="text-sm text-muted-foreground">{{ company.ticker }}</span>
-                            </div>
-                        </div>
+                      <CompanyDisplay :company="company" />
                     </TableCell>
                     <TableCell>
                         {{ $n(company.weight, 'percentFine') }}
