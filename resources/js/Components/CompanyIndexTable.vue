@@ -19,7 +19,7 @@ const handleRowClick = (company) => {
 </script>
 
 <template>
-    <div class="h-[550px] overflow-auto">
+  <div class="max-h-[550px] overflow-auto">
         <Table>
             <TableHeader>
                 <TableRow>
