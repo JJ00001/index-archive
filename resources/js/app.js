@@ -69,6 +69,13 @@ createInertiaApp({
                     indexProvider: {
                         name: 'Index Provider | Index Providers',
                     },
+                    activity: {
+                        action: 'Action',
+                        dataDate: 'Date',
+                        noRecentActivity: 'No recent activity',
+                        company_added_to_index: 'Added',
+                        company_removed_from_index: 'Removed',
+                    },
                     weight: 'Weight',
                     marketCap: 'Capitalization',
                     rank: 'Rank',
