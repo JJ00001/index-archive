@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import CompanyIndexTable from '@/Components/CompanyIndexTable.vue'
 import SectorIndexTable from '@/Components/SectorIndexTable.vue'
 import CountryIndexTable from '@/Components/CountryIndexTable.vue'
+import IndexActivityLog from '@/Components/IndexActivityLog.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
 
 const props = defineProps({
@@ -27,6 +28,10 @@ const props = defineProps({
     },
   countries: {
     type: Object,
+    required: true,
+  },
+  activities: {
+    type: Array,
     required: true,
     },
 })
@@ -85,6 +90,17 @@ const companiesCount = props.companies.data.length
             </CardHeader>
             <CardContent>
               <country-index-table :country-data="countries.data" />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Activity</CardTitle>
+              <CardDescription>
+                Companies added to or removed from the {{ index.name }} index
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <index-activity-log :activities="activities" />
                 </CardContent>
             </Card>
         </div>
