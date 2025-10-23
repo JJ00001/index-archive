@@ -31,7 +31,7 @@ const props = defineProps({
     required: true,
   },
   activities: {
-    type: Array,
+    type: Object,
     required: true,
     },
 })
