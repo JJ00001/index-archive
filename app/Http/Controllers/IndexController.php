@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Resources\IndexHoldingCompanyCollection;
 use App\Http\Resources\IndexHoldingCountryCollection;
 use App\Http\Resources\IndexHoldingSectorCollection;
+use App\Models\Company;
 use App\Models\Index;
+use Carbon\Carbon;
+use Spatie\Activitylog\Models\Activity;
 
 class IndexController extends Controller
 {
@@ -36,6 +39,26 @@ class IndexController extends Controller
 
         $countries = new IndexHoldingCountryCollection($index);
 
+        $activities = Activity::query()
+            ->where('properties->index_id', $index->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(50)
+            ->get()
+            ->map(function ($activity) {
+                $companyId = $activity->properties->get('company_id');
+                $company = Company::find($companyId);
+                $dateString = $activity->properties->get('date');
+                $date = Carbon::createFromFormat('Y-m-d', $dateString)->subMonth();
+                $formattedDate = $date->format('M Y');
+
+                return [
+                    'id' => $activity->id,
+                    'description' => $activity->description,
+                    'company' => $company,
+                    'date' => $formattedDate,
+                ];
+            });
+
         $stats = [
             [
                 'title' => 'Holdings',
@@ -57,6 +80,7 @@ class IndexController extends Controller
             'companies' => $companies,
             'sectors' => $sectors,
             'countries' => $countries,
+            'activities' => $activities,
         ]);
     }
 
