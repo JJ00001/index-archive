@@ -44,17 +44,6 @@ class CompanyUpsertService
         return false;
     }
 
-    private function logChanges(Company $existing, CompanyData $new): void
-    {
-        $newArray = $new->toArray();
-
-        foreach ($this->fieldsToCheck as $field) {
-            if ($newArray[$field] !== $existing->$field) {
-                Log::info("Field $field changed for ISIN: {$new->isin} ({$existing->$field} -> {$newArray[$field]})");
-            }
-        }
-    }
-
     private function getExistingCompanies(Collection $companies): Collection
     {
         $isins = $companies->pluck('isin')->toArray();
@@ -76,7 +65,7 @@ class CompanyUpsertService
                 $companiesToUpsert[] = $companyData->toArray();
             } elseif ($this->hasChanged($existing, $companyData)) {
                 $companiesToUpsert[] = $companyData->toArray();
-                $this->logChanges($existing, $companyData);
+                CompanyActivityLogger::logChanges($existing, $companyData);
             }
         }
 
