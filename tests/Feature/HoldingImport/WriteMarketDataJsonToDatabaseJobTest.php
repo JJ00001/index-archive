@@ -223,6 +223,76 @@ describe('Edge Cases', function () {
         expect(fn () => $job->handle())->toThrow(Exception::class);
     });
 
+    it('handles duplicate ISINs in source data by keeping only first occurrence', function () {
+        $duplicateIsinData = [
+            'aaData' => [
+                [
+                    'AAPL',
+                    'APPLE INC',
+                    'Information Technology',
+                    'Equity',
+                    ['display' => '$3,000,000', 'raw' => 3000000],
+                    ['display' => '3.0', 'raw' => 3.0],
+                    ['display' => '3,000,000', 'raw' => 3000000],
+                    ['display' => '10000', 'raw' => 10000],
+                    '037833100',
+                    'US0378331005',
+                    '2046251',
+                    ['display' => '300.0', 'raw' => 300.0],
+                    'United States',
+                    'NASDAQ',
+                    'USD',
+                    '1.00',
+                    '-',
+                ],
+                [
+                    'AAPL',
+                    'APPLE INC',
+                    'Information Technology',
+                    'Equity',
+                    ['display' => '$2,500,000', 'raw' => 2500000],
+                    ['display' => '2.5', 'raw' => 2.5],
+                    ['display' => '2,500,000', 'raw' => 2500000],
+                    ['display' => '8000', 'raw' => 8000],
+                    '037833100',
+                    'US0378331005',
+                    '2046252',
+                    ['display' => '312.5', 'raw' => 312.5],
+                    'United States',
+                    'Deutsche Boerse Xetra',
+                    'USD',
+                    '0.88',
+                    '-',
+                ],
+            ],
+        ];
+
+        $duplicatePath = base_path('tests/Fixtures/holdingsData/1/duplicate-isin.json');
+        file_put_contents($duplicatePath, json_encode($duplicateIsinData));
+
+        $job = new WriteMarketDataJsonToDatabase($duplicatePath);
+        $job->handle();
+
+        assertDatabaseCount('companies', 1);
+        assertDatabaseCount('index_holdings', 1);
+        assertDatabaseCount('market_data', 1);
+
+        $apple = Company::where('isin', 'US0378331005')->first();
+        expect($apple)->not()->toBeNull();
+        expect($apple->ticker)->toBe('AAPL');
+        expect($apple->exchange->name)->toBe('NASDAQ');
+
+        expect(Company::where('name', 'APPLE INC')->count())->toBe(1);
+
+        $marketData = MarketData::whereHas('indexHolding', function ($query) use ($apple) {
+            $query->where('company_id', $apple->id);
+        })->first();
+        expect($marketData->weight)->toBe(0.03);
+        expect($marketData->share_price)->toBe(300.0);
+
+        unlink($duplicatePath);
+    });
+
     it('filters out non-equity asset classes', function () {
         $nonEquityData = [
             'aaData' => [
