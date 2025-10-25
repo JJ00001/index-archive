@@ -16,6 +16,8 @@ use JsonException;
 
 class HoldingFileParser
 {
+    private array $seenIsins = [];
+
     public function __construct(private EntityResolver $entityResolver) {}
 
     /**
@@ -23,6 +25,8 @@ class HoldingFileParser
      */
     public function parse(Index $index, string $fullFilePath): array
     {
+        $this->seenIsins = [];
+
         [$jsonData, $fieldMappings, $date] = $this->loadFile($index, $fullFilePath);
 
         $companiesFromFile = Collection::make();
@@ -36,6 +40,8 @@ class HoldingFileParser
             if ($this->shouldSkipHolding($fields)) {
                 continue;
             }
+
+            $this->seenIsins[$fields['isin']] = true;
 
             $entityIds = $this->resolveEntityIds($fields);
 
@@ -90,6 +96,12 @@ class HoldingFileParser
 
         if (empty($fields['isin']) || $fields['isin'] === '-') {
             Log::info("Skipping company '{$fields['companyName']}' - no ISIN provided");
+
+            return true;
+        }
+
+        if (isset($this->seenIsins[$fields['isin']])) {
+            Log::info("Skipping duplicate ISIN '{$fields['isin']}' for company '{$fields['companyName']}'");
 
             return true;
         }
