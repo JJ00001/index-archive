@@ -1,66 +1,61 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Index Archive
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Live at [indexarchive.org](https://indexarchive.org)**
 
-## About Laravel
+## The Problem
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Index funds are fascinating because they're constantly changing. They follow formulas that automatically rebalance
+holdings based on market cap, and these shifts tell a story about how global markets evolve. Which countries are gaining
+ground? Which sectors are getting rewarded? Which companies are rising or falling in dominance?
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Most platforms show you the price chart—the aggregate result. I wanted to see under the hood.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## What It Does
 
-## Learning Laravel
+Index Archive tracks the historical composition of index funds over time. Instead of just watching a line go up or down,
+you can explore:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Country allocations** – How market share shifts between nations
+- **Sector breakdowns** – Which industries the index favors or reduces
+- **Company holdings** – The specific constituents driving the index
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+The goal is to understand not just *how much* the market changed, but *what* changed within it.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## The Challenge
 
-## Laravel Sponsors
+The project started as a tracker for a single index (MSCI World). When I decided to expand it to support multiple
+indices, I faced a significant architectural problem. The entire database schema and application structure was built
+around one index.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+I had to refactor the system from the ground up: redesigning models, reworking relationships, updating queries, and
+ensuring the data pipeline could handle the complexity of managing many indices simultaneously. It forced me to think
+carefully about schema design, normalization, and scalability in a way I hadn't before.
 
-### Premium Partners
+## How It Works
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+The data comes from a major international ETF provider's publicly available resources. I built a scraping and processing
+pipeline that:
 
-## Contributing
+1. Collects holding data regularly
+2. Normalizes and stores it in a relational database
+3. Surfaces historical comparisons and trends through a web interface
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Handling large volumes of holding data across multiple indices presented its own challenges—both in terms of storage
+strategy and query performance.
 
-## Code of Conduct
+## Tech Stack
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Built with:
 
-## Security Vulnerabilities
+- **Laravel** – Backend API and business logic
+- **Vue.js + Inertia.js** – Frontend SPA experience
+- **Tailwind CSS** – UI styling
+- **MySQL** – Relational data storage
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Why I Built This
 
-## License
+I'm deeply interested in finance and capital markets, and I couldn't find anything out there that tracked index
+composition changes over time in an accessible way. So I built it myself.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The project pushed me to solve real-world architectural problems—especially around refactoring a system that wasn't
+designed for the scale I eventually needed. It's live, functional, and something I'm continuing to develop.
