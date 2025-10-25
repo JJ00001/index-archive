@@ -9,9 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sector extends Model
 {
-
     use HasFactory;
-    
+
     protected $fillable = [
         'name',
     ];
@@ -21,31 +20,34 @@ class Sector extends Model
         return $this->hasMany(Company::class, 'sector_id');
     }
 
-    public function scopeWithCompaniesCount(Builder $query): void
-    {
-        $query->withCount('companies');
-    }
-
-    public function scopeWithWeight(Builder $query): void
+    public function scopeWithWeightInIndex(Builder $query, Index $index): void
     {
         $query->addSelect([
-            'weight' => function ($query) {
-                $query->selectRaw('SUM(market_data.weight)')
-                    ->from('companies')
-                    ->join('index_holdings', 'index_holdings.company_id', '=', 'companies.id')
-                    ->join('market_data', function ($join) {
-                        $join->on('index_holdings.id', '=', 'market_data.index_holding_id')
-                            ->where('market_data.date', MarketData::maxDate());
-                    })
-                    ->whereColumn('companies.sector_id', 'sectors.id');
-            },
+            'weight' => $index->latestMarketData()
+                ->whereColumn('index_holdings.company_id', 'companies.id')
+                ->whereColumn('companies.sector_id', 'sectors.id')
+                ->selectRaw('SUM(market_data.weight)'),
         ]);
     }
 
-    public function scopeWithStats(Builder $query): void
+    public function scopeWithCompaniesCountInIndex(Builder $query, Index $index): void
+    {
+        $query->addSelect([
+            'companies_count' => Company::query()
+                ->whereColumn('sector_id', 'sectors.id')
+                ->whereExists(function ($subQuery) use ($index) {
+                    $subQuery->from('index_holdings')
+                        ->whereColumn('index_holdings.company_id', 'companies.id')
+                        ->where('index_holdings.index_id', $index->id);
+                })
+                ->selectRaw('COUNT(*)'),
+        ]);
+    }
+
+    public function scopeWithStatsInIndex(Builder $query, Index $index): void
     {
         $query
-            ->withCompaniesCount()
-            ->withWeight();
+            ->withWeightInIndex($index)
+            ->withCompaniesCountInIndex($index);
     }
 }

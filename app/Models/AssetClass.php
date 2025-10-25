@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AssetClass extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [

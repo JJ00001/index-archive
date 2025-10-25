@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ExchangeFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -21,5 +20,4 @@ class ExchangeFactory extends Factory
             'name' => fake()->unique()->safari(),
         ];
     }
-
 }

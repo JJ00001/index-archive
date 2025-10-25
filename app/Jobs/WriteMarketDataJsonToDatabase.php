@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Http\Services\HoldingDataService;
+use App\Http\Services\HoldingImport\HoldingDataOrchestrator;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -10,7 +10,6 @@ use JsonException;
 
 class WriteMarketDataJsonToDatabase implements ShouldQueue
 {
-
     use Queueable;
 
     /**
@@ -31,10 +30,9 @@ class WriteMarketDataJsonToDatabase implements ShouldQueue
     {
         Log::info('Starting write market data job for file: '.$this->fullFilePath);
 
-        $service = new HoldingDataService();
-        $service->writeHoldingDataToDB($this->fullFilePath);
+        $orchestrator = app(HoldingDataOrchestrator::class);
+        $orchestrator->processHoldingFile($this->fullFilePath);
 
         Log::info('Write market data job completed for file: '.$this->fullFilePath);
     }
-
 }

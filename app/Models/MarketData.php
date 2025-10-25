@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MarketData extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -25,14 +24,8 @@ class MarketData extends Model
         return $this->belongsTo(IndexHolding::class);
     }
 
-    // TODO remove and refactor raw SQL statements to use eloquent
     protected function weight(): Attribute
     {
-        return Attribute::make(fn(float $value) => round($value, 3));
-    }
-
-    public static function maxDate(): mixed
-    {
-        return self::max('date');
+        return Attribute::make(fn (float $value) => round($value, 5));
     }
 }

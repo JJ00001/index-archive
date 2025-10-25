@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('ticker');
             $table->string('isin');
-            $table->string('logo')->nullable();
             $table->foreignIdFor(Sector::class)->constrained();
             $table->foreignIdFor(Country::class)->constrained();
             $table->foreignIdFor(Exchange::class)->constrained();

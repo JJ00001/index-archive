@@ -9,28 +9,13 @@ use Inertia\Inertia;
 
 class CountryController extends Controller
 {
-    public function index()
-    {
-        $countries = Country::withStats()
-            ->orderByDesc('weight')
-            ->get();
-
-        $weightHistoryStrategy = new WeightHistoryService(new CountryWeightHistoryStrategy());
-        $multipleWeightHistory = $weightHistoryStrategy->getMultipleWeightHistory($countries);
-
-        return inertia('Country/CountryIndex', [
-            'countries' => $countries,
-            'multipleWeightHistory' => $multipleWeightHistory,
-        ]);
-    }
-
     public function show(Country $country)
     {
         $country = Country::withStats()
             ->where('id', $country->id)
             ->firstOrFail();
 
-        $weightHistoryService = new WeightHistoryService(new CountryWeightHistoryStrategy());
+        $weightHistoryService = new WeightHistoryService(new CountryWeightHistoryStrategy);
         $weightHistory = $weightHistoryService->getWeightHistory($country->id);
 
         $countryCompanies = $country

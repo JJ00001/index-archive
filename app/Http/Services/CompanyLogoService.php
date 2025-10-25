@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class CompanyLogoService
 {
     protected string $logoUrl;
+
     protected Company $company;
 
     public function __construct(Company $company)
@@ -42,6 +43,7 @@ class CompanyLogoService
 
     protected function makeApiRequest($params): array
     {
+        // TODO change env call to config
         $response = Http::withHeader('X-Api-Key', env('API_NINJA_API_KEY'))
             ->accept('application/json')
             ->get('https://api.api-ninjas.com/v1/logo?', $params);
@@ -57,14 +59,14 @@ class CompanyLogoService
 
         foreach ($results as $company) {
             if ($this->compareTickers($company) || $this->compareNames($company)) {
-                Log::info("Result confirmed");
+                Log::info('Result confirmed');
 
                 $this->logoUrl = $company['image'];
 
                 return true;
             }
 
-            Log::warning("Result rejected");
+            Log::warning('Result rejected');
         }
 
         return false;
@@ -148,7 +150,7 @@ class CompanyLogoService
         $suffixes = $this->getCommonCompanySuffixes();
 
         foreach ($suffixes as $suffix) {
-            $name = str_replace(' ' . $suffix, '', $name);
+            $name = str_replace(' '.$suffix, '', $name);
         }
 
         return trim($name);
@@ -179,11 +181,11 @@ class CompanyLogoService
     {
         $exchangeCode = $this->findExchangeCode($this->company->exchange->name);
 
-        if (!$exchangeCode) {
+        if (! $exchangeCode) {
             return false;
         }
 
-        $tickerWithExchange = $this->company->ticker . $exchangeCode;
+        $tickerWithExchange = $this->company->ticker.$exchangeCode;
 
         $results = $this->makeApiRequest(['ticker' => $tickerWithExchange]);
 
@@ -223,9 +225,8 @@ class CompanyLogoService
     {
         $response = Http::get($this->logoUrl);
         $logo = $response->body();
-        $logoPathInStorage = 'logos/' . $this->company->isin . '.png';
+        $logoPathInStorage = 'logos/'.$this->company->isin.'.png';
         Storage::disk('public')->put($logoPathInStorage, $logo);
-        $this->company->update(['logo' => $logoPathInStorage]);
 
         Log::info("Logo stored for: {$this->company->name} ({$this->company->ticker})");
     }

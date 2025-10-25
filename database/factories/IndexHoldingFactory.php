@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class IndexHoldingFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -21,5 +20,4 @@ class IndexHoldingFactory extends Factory
             //
         ];
     }
-
 }

@@ -446,3 +446,7 @@ it('has emails', function (string $email) {
 
 - Always use Tailwind CSS v3 - verify you're using only classes supported by this version.
   </laravel-boost-guidelines>
+
+## Other Memory
+
+- Only ever run vendor/bin/pint --dirty. don't ever run it without the --dirty flag

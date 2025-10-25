@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class IndexProvider extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [

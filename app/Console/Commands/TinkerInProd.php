@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Bus;
 
 class TinkerInProd extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -37,5 +36,4 @@ class TinkerInProd extends Command
 
         Bus::chain($jobs)->dispatch();
     }
-
 }

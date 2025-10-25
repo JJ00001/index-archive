@@ -11,17 +11,17 @@ use Tests\TestCase;
 uses(TestCase::class, RefreshDatabase::class);
 
 it('filters index holdings to only show active ones based on market data max date', function () {
-    $activeCompany   = Company::factory()->create();
+    $activeCompany = Company::factory()->create();
     $inactiveCompany = Company::factory()->create();
 
     $indexProvider = IndexProvider::factory()->create();
 
     $index = Index::factory()->create(['index_provider_id' => $indexProvider->id]);
 
-    $activeIndexHolding   = IndexHolding::create(['company_id' => $activeCompany->id, 'index_id' => $index->id]);
+    $activeIndexHolding = IndexHolding::create(['company_id' => $activeCompany->id, 'index_id' => $index->id]);
     $inactiveIndexHolding = IndexHolding::create(['company_id' => $inactiveCompany->id, 'index_id' => $index->id]);
 
-    $maxDate   = '2024-01-15';
+    $maxDate = '2024-01-15';
     $olderDate = '2024-01-10';
 
     MarketData::factory()->create([

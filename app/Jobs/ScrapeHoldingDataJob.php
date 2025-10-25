@@ -15,7 +15,6 @@ use Random\RandomException;
 
 class ScrapeHoldingDataJob implements ShouldQueue
 {
-
     use Queueable;
 
     /**
@@ -46,5 +45,4 @@ class ScrapeHoldingDataJob implements ShouldQueue
 
         Log::info('Scrape job completed for index: '.$this->index->name);
     }
-
 }

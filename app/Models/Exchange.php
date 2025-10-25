@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Exchange extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [

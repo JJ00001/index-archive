@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[ScopedBy([ActiveIndexHoldingScope::class])]
 class IndexHolding extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -34,5 +33,4 @@ class IndexHolding extends Model
     {
         return $this->hasMany(MarketData::class);
     }
-
 }

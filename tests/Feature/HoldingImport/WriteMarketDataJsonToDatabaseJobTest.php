@@ -21,11 +21,11 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $indexProvider = IndexProvider::factory()->create();
-    $this->index   = Index::factory()->create(['id' => 1, 'index_provider_id' => $indexProvider->id]);
+    $this->index = Index::factory()->create(['id' => 1, 'index_provider_id' => $indexProvider->id]);
     DataSource::factory()->create(['index_id' => $this->index->id]);
 
     $this->compactTestFilePath = base_path('tests/Fixtures/holdingsData/1/2025-01-01.json');
-    $this->fullTestFilePath    = base_path('tests/Fixtures/holdingsData/1/2025-08-01.json');
+    $this->fullTestFilePath = base_path('tests/Fixtures/holdingsData/1/2025-08-01.json');
 });
 
 describe('Job Execution', function () {
@@ -51,7 +51,7 @@ describe('Job Execution', function () {
 
         $job = new WriteMarketDataJsonToDatabase($invalidJsonPath);
 
-        expect(fn() => $job->handle())->toThrow(JsonException::class);
+        expect(fn () => $job->handle())->toThrow(JsonException::class);
 
         unlink($invalidJsonPath);
     });
@@ -86,10 +86,10 @@ describe('Data Processing', function () {
     });
 
     it('updates existing companies when data changes', function () {
-        $sector     = Sector::factory()->create(['name' => 'Old Sector']);
-        $country    = Country::factory()->create(['name' => 'Old Country']);
-        $exchange   = Exchange::factory()->create(['name' => 'Old Exchange']);
-        $currency   = Currency::factory()->create(['name' => 'OLD']);
+        $sector = Sector::factory()->create(['name' => 'Old Sector']);
+        $country = Country::factory()->create(['name' => 'Old Country']);
+        $exchange = Exchange::factory()->create(['name' => 'Old Exchange']);
+        $currency = Currency::factory()->create(['name' => 'OLD']);
         $assetClass = AssetClass::factory()->create(['name' => 'Old Asset']);
 
         Company::factory()->create([
@@ -164,7 +164,7 @@ describe('Relationship Management', function () {
 
         assertDatabaseCount('index_holdings', 2);
 
-        $nvidia    = Company::where('ticker', 'NVDA')->first();
+        $nvidia = Company::where('ticker', 'NVDA')->first();
         $microsoft = Company::where('ticker', 'MSFT')->first();
 
         assertDatabaseHas('index_holdings', [
@@ -195,21 +195,21 @@ describe('Relationship Management', function () {
 
         assertDatabaseCount('market_data', 2);
 
-        $nvidia        = Company::where('ticker', 'NVDA')->first();
+        $nvidia = Company::where('ticker', 'NVDA')->first();
         $nvidiaHolding = IndexHolding::where('company_id', $nvidia->id)->first();
 
         $nvidiaMarketData = MarketData::where('index_holding_id', $nvidiaHolding->id)->first();
         expect($nvidiaMarketData)->not()->toBeNull();
-        expect($nvidiaMarketData->weight)->toBe(0.080);
+        expect($nvidiaMarketData->weight)->toBe(0.08004);
         expect($nvidiaMarketData->share_price)->toBe(173.72);
         expect($nvidiaMarketData->date)->toBe('2025-01-01');
 
-        $microsoft        = Company::where('ticker', 'MSFT')->first();
+        $microsoft = Company::where('ticker', 'MSFT')->first();
         $microsoftHolding = IndexHolding::where('company_id', $microsoft->id)->first();
 
         $microsoftMarketData = MarketData::where('index_holding_id', $microsoftHolding->id)->first();
         expect($microsoftMarketData)->not()->toBeNull();
-        expect($microsoftMarketData->weight)->toBe(0.074);
+        expect($microsoftMarketData->weight)->toBe(0.07359);
         expect($microsoftMarketData->share_price)->toBe(524.11);
     });
 });
@@ -220,7 +220,77 @@ describe('Edge Cases', function () {
 
         $job = new WriteMarketDataJsonToDatabase($invalidPath);
 
-        expect(fn() => $job->handle())->toThrow(Exception::class);
+        expect(fn () => $job->handle())->toThrow(Exception::class);
+    });
+
+    it('handles duplicate ISINs in source data by keeping only first occurrence', function () {
+        $duplicateIsinData = [
+            'aaData' => [
+                [
+                    'AAPL',
+                    'APPLE INC',
+                    'Information Technology',
+                    'Equity',
+                    ['display' => '$3,000,000', 'raw' => 3000000],
+                    ['display' => '3.0', 'raw' => 3.0],
+                    ['display' => '3,000,000', 'raw' => 3000000],
+                    ['display' => '10000', 'raw' => 10000],
+                    '037833100',
+                    'US0378331005',
+                    '2046251',
+                    ['display' => '300.0', 'raw' => 300.0],
+                    'United States',
+                    'NASDAQ',
+                    'USD',
+                    '1.00',
+                    '-',
+                ],
+                [
+                    'AAPL',
+                    'APPLE INC',
+                    'Information Technology',
+                    'Equity',
+                    ['display' => '$2,500,000', 'raw' => 2500000],
+                    ['display' => '2.5', 'raw' => 2.5],
+                    ['display' => '2,500,000', 'raw' => 2500000],
+                    ['display' => '8000', 'raw' => 8000],
+                    '037833100',
+                    'US0378331005',
+                    '2046252',
+                    ['display' => '312.5', 'raw' => 312.5],
+                    'United States',
+                    'Deutsche Boerse Xetra',
+                    'USD',
+                    '0.88',
+                    '-',
+                ],
+            ],
+        ];
+
+        $duplicatePath = base_path('tests/Fixtures/holdingsData/1/duplicate-isin.json');
+        file_put_contents($duplicatePath, json_encode($duplicateIsinData));
+
+        $job = new WriteMarketDataJsonToDatabase($duplicatePath);
+        $job->handle();
+
+        assertDatabaseCount('companies', 1);
+        assertDatabaseCount('index_holdings', 1);
+        assertDatabaseCount('market_data', 1);
+
+        $apple = Company::where('isin', 'US0378331005')->first();
+        expect($apple)->not()->toBeNull();
+        expect($apple->ticker)->toBe('AAPL');
+        expect($apple->exchange->name)->toBe('NASDAQ');
+
+        expect(Company::where('name', 'APPLE INC')->count())->toBe(1);
+
+        $marketData = MarketData::whereHas('indexHolding', function ($query) use ($apple) {
+            $query->where('company_id', $apple->id);
+        })->first();
+        expect($marketData->weight)->toBe(0.03);
+        expect($marketData->share_price)->toBe(300.0);
+
+        unlink($duplicatePath);
     });
 
     it('filters out non-equity asset classes', function () {

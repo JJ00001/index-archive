@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 class Index extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -35,4 +36,60 @@ class Index extends Model
         return $this->belongsTo(IndexProvider::class);
     }
 
+    public function sectorStats(): Collection
+    {
+        return $this->latestMarketData()
+            ->with('indexHolding.company.sector')
+            ->get()
+            ->groupBy('indexHolding.company.sector.id')
+            ->map(function ($marketDataItems, $sectorId) {
+                $sector = $marketDataItems->first()->indexHolding->company->sector;
+
+                return (object) [
+                    'id' => $sector->id,
+                    'name' => $sector->name,
+                    'weight' => $marketDataItems->sum('weight'),
+                    'companies_count' => $marketDataItems->count(),
+                ];
+            })
+            ->sortByDesc('weight')
+            ->values();
+    }
+
+    public function countryStats(): Collection
+    {
+        return $this->latestMarketData()
+            ->with('indexHolding.company.country')
+            ->get()
+            ->groupBy('indexHolding.company.country.id')
+            ->map(function ($marketDataItems, $countryId) {
+                $country = $marketDataItems->first()->indexHolding->company->country;
+
+                return (object) [
+                    'id' => $country->id,
+                    'name' => $country->name,
+                    'weight' => $marketDataItems->sum('weight'),
+                    'companies_count' => $marketDataItems->count(),
+                ];
+            })
+            ->sortByDesc('weight')
+            ->values();
+    }
+
+    public function latestMarketData(): HasManyThrough
+    {
+        return $this
+            ->hasManyThrough(MarketData::class, IndexHolding::class)
+            ->where('date', $this->latestMarketDataDate());
+    }
+
+    public function latestMarketDataDate(): ?string
+    {
+        return $this->marketData()->max('date');
+    }
+
+    public function marketData(): HasManyThrough
+    {
+        return $this->hasManyThrough(MarketData::class, IndexHolding::class);
+    }
 }
