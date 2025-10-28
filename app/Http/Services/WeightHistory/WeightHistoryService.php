@@ -6,8 +6,8 @@ class WeightHistoryService
 {
     public function __construct(protected WeightHistoryStrategy $strategy) {}
 
-    public function getWeightHistory(int $id): array
+    public function getWeightHistory(int $id, int $indexId): array
     {
-        return $this->strategy->getWeightHistory($id);
+        return $this->strategy->getWeightHistory($id, $indexId);
     }
 }
