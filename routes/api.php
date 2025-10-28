@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\IndexController;
 use App\Http\Controllers\Api\IndexHoldingController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\IndexController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('api.')->group(function () {
