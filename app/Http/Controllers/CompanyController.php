@@ -40,12 +40,4 @@ class CompanyController extends Controller
             'weightHistory' => $weightHistory,
         ]);
     }
-
-    public function top()
-    {
-        $companies = Company::limit(5)
-                            ->get(['id', 'name', 'ticker']);
-
-        return response()->json($companies);
-    }
 }
