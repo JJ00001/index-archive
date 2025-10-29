@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\DB;
 
 class SectorWeightHistoryStrategy extends BaseWeightHistoryStrategy
 {
-    public function fetchWeightHistory(int $id): array
+
+    public function fetchWeightHistory(int $id, int $indexId): array
     {
         $query = '
             SELECT
@@ -18,12 +19,13 @@ class SectorWeightHistoryStrategy extends BaseWeightHistoryStrategy
               JOIN companies ON companies.id = index_holdings.company_id
             WHERE
               companies.sector_id = ?
+              AND index_holdings.index_id = ?
             GROUP BY
               market_data.date
             ORDER BY
               market_data.date
         ';
 
-        return DB::select($query, [$id]);
+        return DB::select($query, [$id, $indexId]);
     }
 }
