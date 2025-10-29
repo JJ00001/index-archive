@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Services\WeightHistory\CompanyWeightHistoryStrategy;
+use App\Http\Services\WeightHistory\IndexHoldingWeightHistoryStrategy;
 use App\Http\Services\WeightHistory\WeightHistoryService;
 use App\Models\IndexHolding;
 
@@ -18,7 +18,7 @@ class IndexHoldingController extends Controller
             'company.sector',
         ]);
 
-        $weightHistoryService = new WeightHistoryService(new CompanyWeightHistoryStrategy());
+        $weightHistoryService = new WeightHistoryService(new IndexHoldingWeightHistoryStrategy());
         $weightHistory        = $weightHistoryService->getWeightHistory($indexHolding->company_id,
             $indexHolding->index_id);
 

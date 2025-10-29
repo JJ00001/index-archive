@@ -4,7 +4,7 @@ namespace App\Http\Services\WeightHistory;
 
 use Illuminate\Support\Facades\DB;
 
-class CompanyWeightHistoryStrategy extends BaseWeightHistoryStrategy
+class IndexHoldingWeightHistoryStrategy extends BaseWeightHistoryStrategy
 {
     public function fetchWeightHistory(int $id, int $indexId): array
     {
