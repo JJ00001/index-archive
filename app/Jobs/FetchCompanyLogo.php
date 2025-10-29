@@ -33,6 +33,7 @@ class FetchCompanyLogo implements ShouldBeUnique, ShouldQueue
     {
         $companyLogoService = new CompanyLogoService($this->company);
 
+        Log::info('--------------------------------------');
         Log::info("Starting logo fetch: {$this->company->name} ({$this->company->ticker})");
 
         $logoUrl = $companyLogoService->fetchLogo();
@@ -44,5 +45,7 @@ class FetchCompanyLogo implements ShouldBeUnique, ShouldQueue
         } else {
             Log::warning("Finished logo fetch: None found {$this->company->name} ({$this->company->ticker})");
         }
+
+        Log::info('---------------------------------------');
     }
 }
