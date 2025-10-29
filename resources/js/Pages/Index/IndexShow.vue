@@ -82,7 +82,7 @@ const handleIndexHoldingRowClick = async (company) => {
             <StatCardGroup :stats="stats" />
             <Card>
                 <CardHeader>
-                    <CardTitle>{{ t('index.holding', 2) + ' (Top ' + companiesCount + ')' }}</CardTitle>
+                    <CardTitle>{{ t('indexHolding.name', 2) + ' (Top ' + companiesCount + ')' }}</CardTitle>
                     <CardDescription>
                         Companies currently held in the {{ index.name }} index
                     </CardDescription>

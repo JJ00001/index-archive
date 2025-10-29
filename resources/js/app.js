@@ -64,8 +64,10 @@ createInertiaApp({
                     index: {
                         name: 'Index | Indices',
                         count: 'Indices (Count)',
-                      indexHolding: 'Constituent | Constituents',
                     },
+                  indexHolding: {
+                    name: 'Constituent | Constituents',
+                  },
                     indexProvider: {
                         name: 'Index Provider | Index Providers',
                     },
