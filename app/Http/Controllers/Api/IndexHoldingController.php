@@ -9,24 +9,26 @@ use App\Models\IndexHolding;
 
 class IndexHoldingController extends Controller
 {
+
     public function show(IndexHolding $indexHolding)
     {
-        $company = $indexHolding->company;
-        $company->load([
-            'country',
-            'exchange',
-            'sector',
+        $indexHolding->load([
+            'company.country',
+            'company.exchange',
+            'company.sector',
         ]);
 
-        $weightHistoryService = new WeightHistoryService(new CompanyWeightHistoryStrategy);
-        $weightHistory = $weightHistoryService->getWeightHistory($company->id, $indexHolding->index_id);
+        $weightHistoryService = new WeightHistoryService(new CompanyWeightHistoryStrategy());
+        $weightHistory        = $weightHistoryService->getWeightHistory($indexHolding->company_id,
+            $indexHolding->index_id);
+
+        $indexHolding->weight_history = $weightHistory;
 
         return response()->json([
             'props' => [
-                'index' => $indexHolding->index,
-                'company' => $company,
-                'weightHistory' => $weightHistory,
+                'indexHolding' => $indexHolding,
             ],
         ]);
     }
+
 }
