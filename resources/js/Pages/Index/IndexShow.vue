@@ -10,7 +10,8 @@ import CountryIndexTable from '@/Components/CountryIndexTable.vue'
 import IndexActivityLog from '@/Components/IndexActivityLog.vue'
 import HoldingDataShow from '@/Pages/HoldingData/HoldingDataShow.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
-import { Dialog, DialogContent } from '@/Components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/Components/ui/dialog'
+import { VisuallyHidden } from 'reka-ui'
 
 const props = defineProps({
     index: {
@@ -129,6 +130,10 @@ const handleIndexHoldingRowClick = async (company) => {
         <Dialog :open="showIndexHoldingDialog"
                 @update:open="showIndexHoldingDialog = $event">
             <DialogContent class="max-w-5xl max-h-[80vh] overflow-y-auto">
+                <VisuallyHidden>
+                    <DialogTitle>Index Holding Details</DialogTitle>
+                </VisuallyHidden>
+                <DialogDescription class="hidden" />
                 <HoldingDataShow v-if="selectedIndexHolding"
                                  :indexHolding="selectedIndexHolding" />
             </DialogContent>
