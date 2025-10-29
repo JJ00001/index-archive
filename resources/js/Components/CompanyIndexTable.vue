@@ -9,12 +9,20 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+  onRowClick: {
+    type: Function,
+    default: null,
+  },
 })
 
 const companyData = ref([...props.companies.data])
 
 const handleRowClick = (company) => {
+  if (props.onRowClick) {
+    props.onRowClick(company)
+  } else {
     router.get(route('companies.show', company.id))
+  }
 }
 </script>
 
