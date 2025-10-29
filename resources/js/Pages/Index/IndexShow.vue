@@ -9,6 +9,7 @@ import SectorIndexTable from '@/Components/SectorIndexTable.vue'
 import CountryIndexTable from '@/Components/CountryIndexTable.vue'
 import IndexActivityLog from '@/Components/IndexActivityLog.vue'
 import HoldingDataShow from '@/Pages/HoldingData/HoldingDataShow.vue'
+import HoldingDataShowSkeleton from '@/Components/skeletons/HoldingDataShowSkeleton.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/Components/ui/dialog'
 import { VisuallyHidden } from 'reka-ui'
@@ -60,12 +61,12 @@ const selectedIndexHolding = ref(null)
 const isLoading = ref(false)
 
 const handleIndexHoldingRowClick = async (company) => {
+    showIndexHoldingDialog.value = true
     isLoading.value = true
     try {
         const response = await fetch(route('api.index-holdings.show', { indexHolding: company.index_holding_id }))
         const data = await response.json()
         selectedIndexHolding.value = data.props.indexHolding
-        showIndexHoldingDialog.value = true
     } catch (error) {
         console.error('Error fetching IndexHolding details:', error)
     } finally {
@@ -134,7 +135,8 @@ const handleIndexHoldingRowClick = async (company) => {
                     <DialogTitle>Index Holding Details</DialogTitle>
                 </VisuallyHidden>
                 <DialogDescription class="hidden" />
-                <HoldingDataShow v-if="selectedIndexHolding"
+                <HoldingDataShowSkeleton v-if="isLoading" />
+                <HoldingDataShow v-else-if="selectedIndexHolding"
                                  :indexHolding="selectedIndexHolding" />
             </DialogContent>
         </Dialog>
