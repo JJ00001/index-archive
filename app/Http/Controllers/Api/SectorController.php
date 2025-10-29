@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Services\WeightHistory\SectorWeightHistoryStrategy;
+use App\Http\Services\WeightHistory\WeightHistoryService;
+use App\Models\Index;
+use App\Models\Sector;
+
+class SectorController extends Controller
+{
+
+    public function show(Index $index, Sector $sector)
+    {
+        $sector->load(['companies']);
+
+        $weightHistoryService = new WeightHistoryService(new SectorWeightHistoryStrategy());
+        $weightHistory        = $weightHistoryService->getWeightHistory($sector->id, $index->id);
+
+        $sector->weight_history = $weightHistory;
+
+        return response()->json([
+            'props' => [
+                'sector' => $sector,
+            ],
+        ]);
+    }
+
+}
