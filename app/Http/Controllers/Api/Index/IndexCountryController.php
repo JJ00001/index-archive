@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\WeightHistory\CountryWeightHistoryStrategy;
@@ -8,7 +8,7 @@ use App\Http\Services\WeightHistory\WeightHistoryService;
 use App\Models\Country;
 use App\Models\Index;
 
-class CountryController extends Controller
+class IndexCountryController extends Controller
 {
 
     public function show(Index $index, Country $country)
