@@ -8,7 +8,7 @@ import CompanyIndexTable from '@/Components/CompanyIndexTable.vue'
 import SectorIndexTable from '@/Components/SectorIndexTable.vue'
 import CountryIndexTable from '@/Components/CountryIndexTable.vue'
 import IndexActivityLog from '@/Components/IndexActivityLog.vue'
-import HoldingDataShow from '@/Pages/HoldingData/HoldingDataShow.vue'
+import IndexHoldingShow from '@/Pages/IndexHolding/IndexHoldingShow.vue'
 import HoldingDataShowSkeleton from '@/Components/skeletons/HoldingDataShowSkeleton.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/Components/ui/dialog'
@@ -136,7 +136,7 @@ const handleIndexHoldingRowClick = async (company) => {
                 </VisuallyHidden>
                 <DialogDescription class="hidden" />
                 <HoldingDataShowSkeleton v-if="isLoading" />
-                <HoldingDataShow v-else-if="selectedIndexHolding"
+                <IndexHoldingShow v-else-if="selectedIndexHolding"
                                  :indexHolding="selectedIndexHolding" />
             </DialogContent>
         </Dialog>
