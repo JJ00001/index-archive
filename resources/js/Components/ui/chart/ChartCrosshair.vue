@@ -9,6 +9,7 @@ const props = defineProps({
     index: { type: String, required: true },
     items: { type: Array, required: true },
     customTooltip: { type: null, required: false },
+    valueFormatter: { type: Function, required: false },
 })
 
 // Use weakmap to store reference to each datapoint for Tooltip
@@ -22,7 +23,7 @@ function template (d) {
         const omittedData = Object.entries(omit(d, [props.index])).map(
             ([key, value]) => {
                 const legendReference = props.items.find((i) => i.name === key)
-                return { ...legendReference, value }
+                return { ...legendReference, value: props.valueFormatter?.(value) ?? value }
             },
         )
         const TooltipComponent = props.customTooltip ?? ChartTooltip
