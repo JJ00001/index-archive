@@ -8,11 +8,10 @@ import CompanyIndexTable from '@/Components/CompanyIndexTable.vue'
 import SectorIndexTable from '@/Components/SectorIndexTable.vue'
 import CountryIndexTable from '@/Components/CountryIndexTable.vue'
 import IndexActivityLog from '@/Components/IndexActivityLog.vue'
-import IndexHoldingShow from '@/Pages/IndexHolding/IndexHoldingShow.vue'
-import HoldingDataShowSkeleton from '@/Components/skeletons/HoldingDataShowSkeleton.vue'
+import IndexHoldingDialog from '@/Components/Dialogs/IndexHoldingDialog.vue'
+import IndexSectorDialog from '@/Components/Dialogs/IndexSectorDialog.vue'
+import IndexCountryDialog from '@/Components/Dialogs/IndexCountryDialog.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/Components/ui/dialog'
-import { VisuallyHidden } from 'reka-ui'
 
 const props = defineProps({
     index: {
@@ -56,23 +55,22 @@ const breadcrumbItems = [
 
 const companiesCount = props.companies.data.length
 
-const showIndexHoldingDialog = ref(false)
-const selectedIndexHolding = ref(null)
-const isLoading = ref(false)
+const holdingDialogRef = ref(null)
+const sectorDialogRef = ref(null)
+const countryDialogRef = ref(null)
 
-const handleIndexHoldingRowClick = async (company) => {
-    showIndexHoldingDialog.value = true
-    isLoading.value = true
-    try {
-        const response = await fetch(route('api.index-holdings.show', { indexHolding: company.index_holding_id }))
-        const data = await response.json()
-        selectedIndexHolding.value = data.props.indexHolding
-    } catch (error) {
-        console.error('Error fetching IndexHolding details:', error)
-    } finally {
-        isLoading.value = false
-    }
+const handleIndexHoldingRowClick = (company) => {
+    holdingDialogRef.value?.open(company.index_holding_id)
 }
+
+const handleSectorRowClick = (sector) => {
+    sectorDialogRef.value?.open(sector.id)
+}
+
+const handleCountryRowClick = (country) => {
+    countryDialogRef.value?.open(country.id)
+}
+
 </script>
 
 <template>
@@ -102,7 +100,8 @@ const handleIndexHoldingRowClick = async (company) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <sector-index-table :sector-data="sectors.data" />
+                    <sector-index-table :on-row-click="handleSectorRowClick"
+                                        :sector-data="sectors.data" />
                 </CardContent>
             </Card>
             <Card>
@@ -113,7 +112,8 @@ const handleIndexHoldingRowClick = async (company) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <country-index-table :country-data="countries.data" />
+                    <country-index-table :country-data="countries.data"
+                                         :on-row-click="handleCountryRowClick" />
                 </CardContent>
             </Card>
             <Card>
@@ -128,17 +128,12 @@ const handleIndexHoldingRowClick = async (company) => {
                 </CardContent>
             </Card>
         </div>
-        <Dialog :open="showIndexHoldingDialog"
-                @update:open="showIndexHoldingDialog = $event">
-            <DialogContent class="max-w-5xl max-h-[80vh] overflow-y-auto">
-                <VisuallyHidden>
-                    <DialogTitle>Index Holding Details</DialogTitle>
-                </VisuallyHidden>
-                <DialogDescription class="hidden" />
-                <HoldingDataShowSkeleton v-if="isLoading" />
-                <IndexHoldingShow v-else-if="selectedIndexHolding"
-                                 :indexHolding="selectedIndexHolding" />
-            </DialogContent>
-        </Dialog>
+        <IndexHoldingDialog ref="holdingDialogRef" />
+
+        <IndexSectorDialog ref="sectorDialogRef"
+                           :index-id="index.id" />
+
+        <IndexCountryDialog ref="countryDialogRef"
+                            :index-id="index.id" />
     </layout-main>
 </template>
