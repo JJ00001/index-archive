@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\WeightHistory\CountryWeightHistoryStrategy;
 use App\Models\Country;
 use Inertia\Inertia;
 
@@ -10,9 +9,7 @@ class CountryController extends Controller
 {
     public function show(Country $country)
     {
-        $country = Country::withStats()
-            ->where('id', $country->id)
-            ->firstOrFail();
+        $country = Country::where('id', $country->id)->firstOrFail();
 
         // TODO: CountryWeightHistoryStrategy needs index context. For now, return empty data.
         $weightHistory = ['labels' => [], 'datasets' => []];

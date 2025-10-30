@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\WeightHistory\SectorWeightHistoryStrategy;
 use App\Models\Sector;
 use Inertia\Inertia;
 
@@ -10,9 +9,7 @@ class SectorController extends Controller
 {
     public function show(Sector $sector)
     {
-        $sector = Sector::withStats()
-            ->where('id', $sector->id)
-            ->firstOrFail();
+        $sector = Sector::where('id', $sector->id)->firstOrFail();
 
         // TODO: SectorWeightHistoryStrategy needs index context. For now, return empty data.
         $weightHistory = ['labels' => [], 'datasets' => []];
