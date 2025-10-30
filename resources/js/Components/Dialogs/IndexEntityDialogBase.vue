@@ -41,8 +41,7 @@ const handleOpenUpdate = (value) => {
                 </p>
             </div>
 
-            <slot v-else-if="state.entity.value"
-                  :entity="state.entity.value" />
+            <slot v-else />
         </DialogContent>
     </Dialog>
 </template>
