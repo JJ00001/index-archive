@@ -24,7 +24,7 @@ class Country extends Model
     {
         $query->addSelect([
             'weight' => $index->latestMarketData()
-                ->whereColumn('index_holdings.company_id', 'companies.id')
+                ->join('companies', 'companies.id', '=', 'index_holdings.company_id')
                 ->whereColumn('companies.country_id', 'countries.id')
                 ->selectRaw('SUM(market_data.weight)'),
         ]);
@@ -33,14 +33,10 @@ class Country extends Model
     public function scopeWithCompaniesCountInIndex(Builder $query, Index $index): void
     {
         $query->addSelect([
-            'companies_count' => Company::query()
-                ->whereColumn('country_id', 'countries.id')
-                ->whereExists(function ($subQuery) use ($index) {
-                    $subQuery->from('index_holdings')
-                        ->whereColumn('index_holdings.company_id', 'companies.id')
-                        ->where('index_holdings.index_id', $index->id);
-                })
-                ->selectRaw('COUNT(*)'),
+            'companies_count' => $index->latestMarketData()
+                                       ->join('companies', 'companies.id', '=', 'index_holdings.company_id')
+                                       ->whereColumn('companies.country_id', 'countries.id')
+                                       ->selectRaw('COUNT(DISTINCT companies.id)'),
         ]);
     }
 
