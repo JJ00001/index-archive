@@ -1,0 +1,158 @@
+<script setup>
+import { computed, ref, watch } from 'vue'
+import { FlexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
+import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+
+const props = defineProps({
+    columns: {
+        type: Array,
+        required: true,
+    },
+    data: {
+        type: Array,
+        required: true,
+    },
+    enableSearch: {
+        type: Boolean,
+        default: false,
+    },
+    searchColumnKey: {
+        type: String,
+        default: null,
+    },
+    searchPlaceholder: {
+        type: String,
+        default: 'Search...',
+    },
+    emptyStateMessage: {
+        type: String,
+        default: 'No results found.',
+    },
+    onRowClick: {
+        type: Function,
+        default: null,
+    },
+    maxHeight: {
+        type: String,
+        default: '550px',
+    },
+})
+
+const searchTerm = ref('')
+
+const columns = computed(() => props.columns ?? [])
+const tableData = computed(() => props.data ?? [])
+
+const table = useVueTable({
+    get data () {
+        return tableData.value
+    },
+    get columns () {
+        return columns.value
+    },
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+})
+
+watch(
+    searchTerm,
+    (value) => {
+        if (!props.enableSearch || !props.searchColumnKey) {
+            return
+        }
+
+        const column = table.getColumn(props.searchColumnKey)
+        const filterValue = typeof value === 'string' ? value.trim() : ''
+        column?.setFilterValue(filterValue)
+    },
+    { immediate: true },
+)
+
+const containerStyle = computed(() => ({
+    maxHeight: props.maxHeight,
+}))
+
+const rowClasses = computed(() =>
+    props.onRowClick ? 'cursor-pointer hover:bg-muted/50' : '',
+)
+
+const handleRowClick = (row) => {
+    if (props.onRowClick) {
+        props.onRowClick(row.original)
+    }
+}
+</script>
+
+<template>
+    <div class="space-y-3">
+        <div
+            v-if="enableSearch && searchColumnKey"
+            class="flex items-center justify-between gap-3"
+        >
+            <input
+                v-model="searchTerm"
+                :placeholder="searchPlaceholder"
+                autocapitalize="none"
+                autocomplete="off"
+                class="bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-ring/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 block w-full max-w-sm rounded-md border border-input px-3 py-2 text-sm shadow-xs ring-offset-background transition"
+                data-1p-ignore="true"
+                data-lpignore="true"
+                spellcheck="false"
+                type="search"
+            />
+        </div>
+
+        <div
+            :style="containerStyle"
+            class="overflow-auto rounded-md border border-border"
+        >
+            <Table>
+                <TableHeader>
+                    <TableRow
+                        v-for="headerGroup in table.getHeaderGroups()"
+                        :key="headerGroup.id"
+                    >
+                        <TableHead
+                            v-for="header in headerGroup.headers"
+                            :key="header.id"
+                            :class="header.column.columnDef.meta?.headerClass"
+                        >
+                            <template v-if="!header.isPlaceholder">
+                                <FlexRender
+                                    :props="header.getContext()"
+                                    :render="header.column.columnDef.header"
+                                />
+                            </template>
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    <template v-if="table.getRowModel().rows.length">
+                        <TableRow
+                            v-for="row in table.getRowModel().rows"
+                            :key="row.id"
+                            :class="rowClasses"
+                            @click="handleRowClick(row)"
+                        >
+                            <TableCell
+                                v-for="cell in row.getVisibleCells()"
+                                :key="cell.id"
+                                :class="cell.column.columnDef.meta?.cellClass"
+                            >
+                                <FlexRender
+                                    :props="cell.getContext()"
+                                    :render="cell.column.columnDef.cell"
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </template>
+                    <TableEmpty v-else
+                                :colspan="table.getAllColumns().length">
+                        {{ emptyStateMessage }}
+                    </TableEmpty>
+                </TableBody>
+            </Table>
+        </div>
+    </div>
+</template>
