@@ -12,6 +12,7 @@ class IndexHoldingCompanyCollection extends ResourceCollection
     {
         $rankedCompanies = $this->collection
             ->map(fn (IndexHolding $holding) => [
+                'holding' => $holding,
                 'company' => $holding->company,
                 'weight' => $this->getCurrentWeight($holding),
             ])
@@ -24,6 +25,7 @@ class IndexHoldingCompanyCollection extends ResourceCollection
                 'logo' => $item['company']->logo,
                 'weight' => $item['weight'],
                 'rank' => $index + 1,
+                'index_holding_id' => $item['holding']->id,
             ]);
 
         return $rankedCompanies->toArray();

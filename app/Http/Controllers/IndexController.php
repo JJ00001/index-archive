@@ -70,11 +70,4 @@ class IndexController extends Controller
             'activities' => $activities,
         ]);
     }
-
-    public function top()
-    {
-        $indices = Index::limit(5)->get(['id', 'name']);
-
-        return response()->json($indices);
-    }
 }

@@ -3,15 +3,23 @@ import { router } from '@inertiajs/vue3'
 import { Progress } from '@/Components/ui/progress'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
 
-defineProps({
-  sectorData: {
-    type: Array,
-    required: true,
-  },
+const props = defineProps({
+    sectorData: {
+        type: Array,
+        required: true,
+    },
+    onRowClick: {
+        type: Function,
+        default: null,
+    },
 })
 
 const handleRowClick = (sector) => {
-  router.get(route('sectors.show', sector.id))
+    if (props.onRowClick) {
+        props.onRowClick(sector)
+    } else {
+        router.get(route('sectors.show', sector.id))
+    }
 }
 </script>
 

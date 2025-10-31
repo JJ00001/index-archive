@@ -24,7 +24,7 @@ class Sector extends Model
     {
         $query->addSelect([
             'weight' => $index->latestMarketData()
-                ->whereColumn('index_holdings.company_id', 'companies.id')
+                ->join('companies', 'companies.id', '=', 'index_holdings.company_id')
                 ->whereColumn('companies.sector_id', 'sectors.id')
                 ->selectRaw('SUM(market_data.weight)'),
         ]);
@@ -33,14 +33,10 @@ class Sector extends Model
     public function scopeWithCompaniesCountInIndex(Builder $query, Index $index): void
     {
         $query->addSelect([
-            'companies_count' => Company::query()
-                ->whereColumn('sector_id', 'sectors.id')
-                ->whereExists(function ($subQuery) use ($index) {
-                    $subQuery->from('index_holdings')
-                        ->whereColumn('index_holdings.company_id', 'companies.id')
-                        ->where('index_holdings.index_id', $index->id);
-                })
-                ->selectRaw('COUNT(*)'),
+            'companies_count' => $index->latestMarketData()
+                                       ->join('companies', 'companies.id', '=', 'index_holdings.company_id')
+                                       ->whereColumn('companies.sector_id', 'sectors.id')
+                                       ->selectRaw('COUNT(DISTINCT companies.id)'),
         ]);
     }
 

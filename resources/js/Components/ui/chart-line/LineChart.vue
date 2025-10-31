@@ -71,6 +71,7 @@ function handleLegendItemClick (d, i) {
                 :custom-tooltip="customTooltip"
                 :index="index"
                 :items="legendItems"
+                :value-formatter="yFormatter"
             />
 
             <template v-for="(category, i) in categories"

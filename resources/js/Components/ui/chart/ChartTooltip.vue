@@ -8,14 +8,14 @@ defineProps({
 </script>
 
 <template>
-    <Card class="text-sm">
+    <Card class="text-sm !py-0 !gap-0">
         <CardHeader v-if="title"
-                    class="p-3 border-b">
+                    class="border-b !px-4 !py-2">
             <CardTitle>
                 {{ title }}
             </CardTitle>
         </CardHeader>
-        <CardContent class="p-3 min-w-[180px] flex flex-col gap-1">
+        <CardContent class="min-w-[180px] flex flex-col gap-1 !px-4 !py-2">
             <div v-for="(item, key) in data"
                  :key="key"
                  class="flex justify-between">

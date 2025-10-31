@@ -24,12 +24,10 @@ const companyStats = [
     {
         title: t('sector.name'),
         value: company.sector.name,
-        route: route('sectors.show', {sector: company.sector.id})
     },
     {
         title: t('country.name'),
         value: company.country.name,
-        route: route('countries.show', {country: company.country.id})
     },
     {
         title: t('exchange'),

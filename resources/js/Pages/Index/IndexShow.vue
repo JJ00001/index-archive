@@ -1,13 +1,17 @@
 <script setup>
+import { ref } from 'vue'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
 import { useI18n } from 'vue-i18n'
-import CompanyIndexTable from '@/Components/CompanyIndexTable.vue'
 import SectorIndexTable from '@/Components/SectorIndexTable.vue'
 import CountryIndexTable from '@/Components/CountryIndexTable.vue'
 import IndexActivityLog from '@/Components/IndexActivityLog.vue'
+import IndexHoldingDialog from '@/Components/Dialogs/IndexHoldingDialog.vue'
+import IndexSectorDialog from '@/Components/Dialogs/IndexSectorDialog.vue'
+import IndexCountryDialog from '@/Components/Dialogs/IndexCountryDialog.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
+import IndexHoldingTable from '@/Components/IndexHoldingTable.vue'
 
 const props = defineProps({
     index: {
@@ -26,13 +30,13 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-  countries: {
-    type: Object,
-    required: true,
-  },
-  activities: {
-    type: Object,
-    required: true,
+    countries: {
+        type: Object,
+        required: true,
+    },
+    activities: {
+        type: Object,
+        required: true,
     },
 })
 
@@ -50,6 +54,23 @@ const breadcrumbItems = [
 ]
 
 const companiesCount = props.companies.data.length
+
+const holdingDialogRef = ref(null)
+const sectorDialogRef = ref(null)
+const countryDialogRef = ref(null)
+
+const handleIndexHoldingRowClick = (company) => {
+    holdingDialogRef.value?.open(company.index_holding_id)
+}
+
+const handleSectorRowClick = (sector) => {
+    sectorDialogRef.value?.open(sector.id)
+}
+
+const handleCountryRowClick = (country) => {
+    countryDialogRef.value?.open(country.id)
+}
+
 </script>
 
 <template>
@@ -61,13 +82,14 @@ const companiesCount = props.companies.data.length
             <StatCardGroup :stats="stats" />
             <Card>
                 <CardHeader>
-                    <CardTitle>{{ t('index.holding', 2) + ' (Top ' + companiesCount + ')' }}</CardTitle>
+                    <CardTitle>{{ t('indexHolding.name', 2) + ' (Top ' + companiesCount + ')' }}</CardTitle>
                     <CardDescription>
                         Companies currently held in the {{ index.name }} index
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <company-index-table :companies="companies" />
+                    <index-holding-table :companies="companies"
+                                         :on-row-click="handleIndexHoldingRowClick" />
                 </CardContent>
             </Card>
             <Card>
@@ -78,31 +100,40 @@ const companiesCount = props.companies.data.length
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <sector-index-table :sector-data="sectors.data" />
+                    <sector-index-table :on-row-click="handleSectorRowClick"
+                                        :sector-data="sectors.data" />
                 </CardContent>
             </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>{{ t('country.name', 2) }}</CardTitle>
-              <CardDescription>
-                Country allocation for the {{ index.name }} index
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <country-index-table :country-data="countries.data" />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Activity</CardTitle>
-              <CardDescription>
-                Companies added to or removed from the {{ index.name }} index
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <index-activity-log :activities="activities" />
+            <Card>
+                <CardHeader>
+                    <CardTitle>{{ t('country.name', 2) }}</CardTitle>
+                    <CardDescription>
+                        Country allocation for the {{ index.name }} index
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <country-index-table :country-data="countries.data"
+                                         :on-row-click="handleCountryRowClick" />
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Recent Activity</CardTitle>
+                    <CardDescription>
+                        Companies added to or removed from the {{ index.name }} index
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <index-activity-log :activities="activities" />
                 </CardContent>
             </Card>
         </div>
+        <IndexHoldingDialog ref="holdingDialogRef" />
+
+        <IndexSectorDialog ref="sectorDialogRef"
+                           :index-id="index.id" />
+
+        <IndexCountryDialog ref="countryDialogRef"
+                            :index-id="index.id" />
     </layout-main>
 </template>

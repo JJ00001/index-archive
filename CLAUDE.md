@@ -11,16 +11,21 @@ should be followed closely to enhance the user's satisfaction building Laravel a
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an
 expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.3.24
+- php - 8.3.25
 - inertiajs/inertia-laravel (INERTIA) - v2
-- laravel/framework (LARAVEL) - v11
+- laravel/framework (LARAVEL) - v12
 - laravel/nightwatch (NIGHTWATCH) - v1
 - laravel/prompts (PROMPTS) - v0
+- laravel/sanctum (SANCTUM) - v4
 - tightenco/ziggy (ZIGGY) - v2
+- laravel/breeze (BREEZE) - v2
+- laravel/mcp (MCP) - v0
 - laravel/pint (PINT) - v1
-- pestphp/pest (PEST) - v2
+- laravel/sail (SAIL) - v1
+- pestphp/pest (PEST) - v4
+- phpunit/phpunit (PHPUNIT) - v12
 - @inertiajs/vue3 (INERTIA) - v2
-- tailwindcss (TAILWINDCSS) - v3
+- tailwindcss (TAILWINDCSS) - v4
 - vue (VUE) - v3
 
 ## Conventions
@@ -156,6 +161,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - Inertia.js components should be placed in the `resources/js/Pages` directory unless specified differently in the JS
   bundler (vite.config.js).
 - Use `Inertia::render()` for server-side routing instead of traditional Blade views.
+- Use `search-docs` for accurate guidance on all things Inertia.
 
 <code-snippet lang="php" name="Inertia::render Example">
 // routes/web.php example
@@ -185,6 +191,15 @@ Route::get('/users', function () {
 ### Deferred Props & Empty States
 
 - When using deferred props on the frontend, you should add a nice empty state with pulsing / animated skeleton.
+
+### Inertia Form General Guidance
+
+- The recommended way to build forms when using Inertia is with the `<Form>` component - a useful example is below. Use
+  `search-docs` with a query of `form component` for guidance.
+- Forms can also be built using the `useForm` helper for more programmatic control, or to follow existing conventions.
+  Use `search-docs` with a query of `useForm helper` for guidance.
+- `resetOnError`, `resetOnSuccess`, and `setDefaultsOnSuccess` are available on the `<Form>` component. Use
+  `search-docs` with a query of 'form component resetting' for guidance.
 
 === laravel/core rules ===
 
@@ -253,14 +268,14 @@ Route::get('/users', function () {
 - If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run
   `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
 
-=== laravel/v11 rules ===
+=== laravel/v12 rules ===
 
-## Laravel 11
+## Laravel 12
 
 - Use the `search-docs` tool to get version specific documentation.
-- Laravel 11 brought a new streamlined file structure which this project now uses.
+- Since Laravel 11, Laravel has a new streamlined file structure which this project uses.
 
-### Laravel 11 Structure
+### Laravel 12 Structure
 
 - No middleware files in `app/Http/Middleware/`.
 - `bootstrap/app.php` is the file to register middleware, exceptions, and routing files.
@@ -279,13 +294,6 @@ Route::get('/users', function () {
 
 - Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing
   conventions from other models.
-
-### New Artisan Commands
-
-- List Artisan commands using Boost's MCP tool, if available. New commands available in Laravel 11:
-    - `php artisan make:enum`
-    - `php artisan make:class`
-    - `php artisan make:interface`
 
 === pint/core rules ===
 
@@ -361,6 +369,55 @@ it('has emails', function (string $email) {
 </code-snippet>
 
 
+=== pest/v4 rules ===
+
+## Pest 4
+
+- Pest v4 is a huge upgrade to Pest and offers: browser testing, smoke testing, visual regression testing, test
+  sharding, and faster type coverage.
+- Browser testing is incredibly powerful and useful for this project.
+- Browser tests should live in `tests/Browser/`.
+- Use the `search-docs` tool for detailed guidance on utilizing these features.
+
+### Browser Testing
+
+- You can use Laravel features like `Event::fake()`, `assertAuthenticated()`, and model factories within Pest v4 browser
+  tests, as well as `RefreshDatabase` (when needed) to ensure a clean state for each test.
+- Interact with the page (click, type, scroll, select, submit, drag-and-drop, touch gestures, etc.) when appropriate to
+  complete the test.
+- If requested, test on multiple browsers (Chrome, Firefox, Safari).
+- If requested, test on different devices and viewports (like iPhone 14 Pro, tablets, or custom breakpoints).
+- Switch color schemes (light/dark mode) when appropriate.
+- Take screenshots or pause tests for debugging when appropriate.
+
+### Example Tests
+
+<code-snippet name="Pest Browser Test Example" lang="php">
+it('may reset the password', function () {
+    Notification::fake();
+
+    $this->actingAs(User::factory()->create());
+
+    $page = visit('/sign-in'); // Visit on a real browser...
+
+    $page->assertSee('Sign In')
+        ->assertNoJavascriptErrors() // or ->assertNoConsoleLogs()
+        ->click('Forgot Password?')
+        ->fill('email', 'nuno@laravel.com')
+        ->click('Send Reset Link')
+        ->assertSee('We have emailed your password reset link!')
+
+    Notification::assertSent(ResetPassword::class);
+
+});
+</code-snippet>
+
+<code-snippet name="Pest Smoke Testing Example" lang="php">
+$pages = visit(['/', '/about', '/contact']);
+
+$pages->assertNoJavascriptErrors()->assertNoConsoleLogs();
+</code-snippet>
+
 === inertia-vue/core rules ===
 
 ## Inertia + Vue
@@ -368,46 +425,53 @@ it('has emails', function (string $email) {
 - Vue components must have a single root element.
 - Use `router.visit()` or `<Link>` for navigation instead of traditional links.
 
-<code-snippet lang="vue" name="Inertia Client Navigation">
-    import { Link } from '@inertiajs/vue3'
+<code-snippet name="Inertia Client Navigation" lang="vue">
 
+    import { Link } from '@inertiajs/vue3'
     <Link href="/">Home</Link>
 
 </code-snippet>
 
-- For form handling, use `router.post` and related methods. Do not use regular forms.
 
-<code-snippet lang="vue" name="Inertia Vue Form Example">
-    <script setup>
-    import { reactive } from 'vue'
-    import { router } from '@inertiajs/vue3'
-    import { usePage } from '@inertiajs/vue3'
+=== inertia-vue/v2/forms rules ===
 
-    const page = usePage()
+## Inertia + Vue Forms
 
-    const form = reactive({
-      first_name: null,
-      last_name: null,
-      email: null,
-    })
+<code-snippet name="`<Form>` Component Example" lang="vue">
 
-    function submit() {
-      router.post('/users', form)
-    }
-    </script>
+<Form
+action="/users"
+method="post"
+#default="{
+errors,
+hasErrors,
+processing,
+progress,
+wasSuccessful,
+recentlySuccessful,
+setError,
+clearErrors,
+resetAndClearErrors,
+defaults,
+isDirty,
+reset,
+submit,
+}"
+>
 
-    <template>
-        <h1>Create {{ page.modelName }}</h1>
-        <form @submit.prevent="submit">
-            <label for="first_name">First name:</label>
-            <input id="first_name" v-model="form.first_name" />
-            <label for="last_name">Last name:</label>
-            <input id="last_name" v-model="form.last_name" />
-            <label for="email">Email:</label>
-            <input id="email" v-model="form.email" />
-            <button type="submit">Submit</button>
-        </form>
-    </template>
+    <input type="text" name="name" />
+
+    <div v-if="errors.name">
+        {{ errors.name }}
+    </div>
+
+    <button type="submit" :disabled="processing">
+        {{ processing ? 'Creating...' : 'Create User' }}
+    </button>
+
+    <div v-if="wasSuccessful">User created successfully!</div>
+
+</Form>
 
 </code-snippet>
 
@@ -440,11 +504,49 @@ it('has emails', function (string $email) {
 - If existing pages and components support dark mode, new pages and components must support dark mode in a similar way,
   typically using `dark:`.
 
-=== tailwindcss/v3 rules ===
+=== tailwindcss/v4 rules ===
 
-## Tailwind 3
+## Tailwind 4
 
-- Always use Tailwind CSS v3 - verify you're using only classes supported by this version.
+- Always use Tailwind CSS v4 - do not use the deprecated utilities.
+- `corePlugins` is not supported in Tailwind v4.
+- In Tailwind v4, you import Tailwind using a regular CSS `@import` statement, not using the `@tailwind` directives used
+  in v3:
+
+<code-snippet name="Tailwind v4 Import Tailwind Diff" lang="diff">
+   - @tailwind base;
+   - @tailwind components;
+   - @tailwind utilities;
+   + @import "tailwindcss";
+</code-snippet>
+
+### Replaced Utilities
+
+- Tailwind v4 removed deprecated utilities. Do not use the deprecated option - use the replacement.
+- Opacity values are still numeric.
+
+| Deprecated | Replacement |
+|------------+--------------|
+| bg-opacity-* | bg-black/* |
+| text-opacity-* | text-black/* |
+| border-opacity-* | border-black/* |
+| divide-opacity-* | divide-black/* |
+| ring-opacity-* | ring-black/* |
+| placeholder-opacity-* | placeholder-black/* |
+| flex-shrink-* | shrink-* |
+| flex-grow-* | grow-* |
+| overflow-ellipsis | text-ellipsis |
+| decoration-slice | box-decoration-slice |
+| decoration-clone | box-decoration-clone |
+
+=== tests rules ===
+
+## Test Enforcement
+
+- Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests
+  to make sure they pass.
+- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test` with a specific
+  filename or filter.
   </laravel-boost-guidelines>
 
 ## Other Memory
