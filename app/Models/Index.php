@@ -92,4 +92,24 @@ class Index extends Model
     {
         return $this->hasManyThrough(MarketData::class, IndexHolding::class);
     }
+
+    public function stats(): array
+    {
+        $this->loadMissing('indexProvider');
+
+        return [
+            [
+                'title' => 'Holdings',
+                'value' => $this->indexHoldings()->count(),
+            ],
+            [
+                'title' => 'Provider',
+                'value' => $this->indexProvider->name,
+            ],
+            [
+                'title' => 'Currency',
+                'value' => $this->currency,
+            ],
+        ];
+    }
 }

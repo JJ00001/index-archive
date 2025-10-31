@@ -46,24 +46,9 @@ class IndexController extends Controller
                 ->get()
         );
 
-        $stats = [
-            [
-                'title' => 'Holdings',
-                'value' => $index->indexHoldings()->count(),
-            ],
-            [
-                'title' => 'Provider',
-                'value' => $index->indexProvider->name,
-            ],
-            [
-                'title' => 'Currency',
-                'value' => $index->currency,
-            ],
-        ];
-
         return inertia('Index/IndexShow', [
             'index' => $index,
-            'stats' => $stats,
+            'stats' => $index->stats(),
             'companies' => $companies,
             'sectors' => $sectors,
             'countries' => $countries,
