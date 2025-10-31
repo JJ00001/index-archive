@@ -24,7 +24,7 @@ const handleRowClick = (index) => {
                 <TableRow>
                     <TableHead class="w-6/12">{{ $t('index.name') }}</TableHead>
                     <TableHead class="w-3/12">{{ $t('indexProvider.name') }}</TableHead>
-                    <TableHead class="w-1/12">{{ $t('index.holding', 2) }}</TableHead>
+                    <TableHead class="w-1/12">{{ $t('indexHolding.name', 2) }}</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
