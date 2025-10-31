@@ -88,7 +88,7 @@ const handleCountryRowClick = (country) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <index-holding-table companies="companies"
+                    <index-holding-table :companies="companies"
                                          :on-row-click="handleIndexHoldingRowClick" />
                 </CardContent>
             </Card>
