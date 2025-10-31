@@ -4,7 +4,6 @@ import LayoutMain from '@/Layouts/LayoutMain.vue'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
 import { useI18n } from 'vue-i18n'
-import CompanyIndexTable from '@/Components/CompanyIndexTable.vue'
 import SectorIndexTable from '@/Components/SectorIndexTable.vue'
 import CountryIndexTable from '@/Components/CountryIndexTable.vue'
 import IndexActivityLog from '@/Components/IndexActivityLog.vue'
@@ -12,6 +11,7 @@ import IndexHoldingDialog from '@/Components/Dialogs/IndexHoldingDialog.vue'
 import IndexSectorDialog from '@/Components/Dialogs/IndexSectorDialog.vue'
 import IndexCountryDialog from '@/Components/Dialogs/IndexCountryDialog.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
+import IndexHoldingTable from '@/Components/IndexHoldingTable.vue'
 
 const props = defineProps({
     index: {
@@ -88,7 +88,7 @@ const handleCountryRowClick = (country) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <company-index-table :companies="companies"
+                    <index-holding-table companies="companies"
                                          :on-row-click="handleIndexHoldingRowClick" />
                 </CardContent>
             </Card>
