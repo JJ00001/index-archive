@@ -13,7 +13,10 @@ class IndexCountryController extends Controller
 
     public function show(Index $index, Country $country)
     {
-        $country->load(['companies']);
+        $country = Country::query()
+                          ->with('companies')
+                          ->withStatsInIndex($index)
+                          ->findOrFail($country->id);
 
         $weightHistoryService = new WeightHistoryService(new CountryWeightHistoryStrategy());
         $weightHistory        = $weightHistoryService->getWeightHistory($country->id, $index->id);

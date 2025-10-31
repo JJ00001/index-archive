@@ -13,7 +13,10 @@ class IndexSectorController extends Controller
 
     public function show(Index $index, Sector $sector)
     {
-        $sector->load(['companies']);
+        $sector = Sector::query()
+                        ->with('companies')
+                        ->withStatsInIndex($index)
+                        ->findOrFail($sector->id);
 
         $weightHistoryService = new WeightHistoryService(new SectorWeightHistoryStrategy());
         $weightHistory        = $weightHistoryService->getWeightHistory($sector->id, $index->id);
