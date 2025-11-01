@@ -1,6 +1,6 @@
 <script setup>
 import LayoutMain from '@/Layouts/LayoutMain.vue'
-import IndexIndexTable from '@/Components/IndexIndexTable.vue'
+import IndexIndexTable from '@/Components/tables/IndexIndexTable.vue'
 import { Card, CardContent } from '@/Components/ui/card'
 
 const props = defineProps({
