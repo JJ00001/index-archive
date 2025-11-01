@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { FlexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
+import { InfiniteScroll } from '@inertiajs/vue3'
 import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
 
 const props = defineProps({
@@ -9,7 +10,7 @@ const props = defineProps({
         required: true,
     },
     data: {
-        type: Array,
+        type: Object,
         required: true,
     },
     enableSearch: {
@@ -30,22 +31,34 @@ const props = defineProps({
     },
     onRowClick: {
         type: Function,
+        required: true,
+    },
+    maxHeightClass: {
+        type: String,
+        default: 'max-h-[550px]',
+    },
+    infiniteScrollKey: {
+        type: String,
         default: null,
     },
-    maxHeight: {
+    infiniteScrollBuffer: {
+        type: Number,
+        default: 500,
+    },
+    bodyId: {
         type: String,
-        default: '550px',
+        required: true,
     },
 })
 
 const searchTerm = ref('')
 
 const columns = computed(() => props.columns ?? [])
-const tableData = computed(() => props.data ?? [])
+const rows = computed(() => props.data?.data ?? [])
 
 const table = useVueTable({
     get data () {
-        return tableData.value
+        return rows.value
     },
     get columns () {
         return columns.value
@@ -69,18 +82,12 @@ watch(
     { immediate: true },
 )
 
-const containerStyle = computed(() => ({
-    maxHeight: props.maxHeight,
-}))
-
 const rowClasses = computed(() =>
     props.onRowClick ? 'cursor-pointer hover:bg-muted/50' : '',
 )
 
 const handleRowClick = (row) => {
-    if (props.onRowClick) {
-        props.onRowClick(row.original)
-    }
+    props.onRowClick(row.original)
 }
 </script>
 
@@ -103,56 +110,60 @@ const handleRowClick = (row) => {
             />
         </div>
 
-        <div
-            :style="containerStyle"
-            class="overflow-auto rounded-md border border-border"
-        >
-            <Table>
-                <TableHeader>
-                    <TableRow
-                        v-for="headerGroup in table.getHeaderGroups()"
-                        :key="headerGroup.id"
-                    >
-                        <TableHead
-                            v-for="header in headerGroup.headers"
-                            :key="header.id"
-                            :class="header.column.columnDef.meta?.headerClass"
-                        >
-                            <template v-if="!header.isPlaceholder">
-                                <FlexRender
-                                    :props="header.getContext()"
-                                    :render="header.column.columnDef.header"
-                                />
-                            </template>
-                        </TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <template v-if="table.getRowModel().rows.length">
+        <div :class="['overflow-y-auto rounded-md border border-border', maxHeightClass]">
+            <InfiniteScroll
+                :auto-scroll="true"
+                :buffer="infiniteScrollBuffer"
+                :data="infiniteScrollKey"
+                :items-element="'#' + bodyId"
+            >
+                <Table>
+                    <TableHeader>
                         <TableRow
-                            v-for="row in table.getRowModel().rows"
-                            :key="row.id"
-                            :class="rowClasses"
-                            @click="handleRowClick(row)"
+                            v-for="headerGroup in table.getHeaderGroups()"
+                            :key="headerGroup.id"
                         >
-                            <TableCell
-                                v-for="cell in row.getVisibleCells()"
-                                :key="cell.id"
-                                :class="cell.column.columnDef.meta?.cellClass"
+                            <TableHead
+                                v-for="header in headerGroup.headers"
+                                :key="header.id"
+                                :class="header.column.columnDef.meta?.headerClass"
                             >
-                                <FlexRender
-                                    :props="cell.getContext()"
-                                    :render="cell.column.columnDef.cell"
-                                />
-                            </TableCell>
+                                <template v-if="!header.isPlaceholder">
+                                    <FlexRender
+                                        :props="header.getContext()"
+                                        :render="header.column.columnDef.header"
+                                    />
+                                </template>
+                            </TableHead>
                         </TableRow>
-                    </template>
-                    <TableEmpty v-else
-                                :colspan="table.getAllColumns().length">
-                        {{ emptyStateMessage }}
-                    </TableEmpty>
-                </TableBody>
-            </Table>
+                    </TableHeader>
+                    <TableBody :id="bodyId">
+                        <template v-if="table.getRowModel().rows.length">
+                            <TableRow
+                                v-for="row in table.getRowModel().rows"
+                                :key="row.id"
+                                :class="rowClasses"
+                                @click="handleRowClick(row)"
+                            >
+                                <TableCell
+                                    v-for="cell in row.getVisibleCells()"
+                                    :key="cell.id"
+                                    :class="cell.column.columnDef.meta?.cellClass"
+                                >
+                                    <FlexRender
+                                        :props="cell.getContext()"
+                                        :render="cell.column.columnDef.cell"
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </template>
+                        <TableEmpty v-else
+                                    :colspan="table.getAllColumns().length">
+                            {{ emptyStateMessage }}
+                        </TableEmpty>
+                    </TableBody>
+                </Table>
+            </InfiniteScroll>
         </div>
     </div>
 </template>
