@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { FlexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
 import { InfiniteScroll } from '@inertiajs/vue3'
 import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+import useRememberedScroll from '@/composables/useRememberedScroll'
 
 const props = defineProps({
     columns: {
@@ -49,6 +50,10 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    rememberScrollKey: {
+        type: String,
+        required: true,
+    },
 })
 
 const searchTerm = ref('')
@@ -86,6 +91,10 @@ const rowClasses = computed(() =>
     props.onRowClick ? 'cursor-pointer hover:bg-muted/50' : '',
 )
 
+const { scrollContainer, handleScroll } = useRememberedScroll(
+    props.rememberScrollKey,
+)
+
 const handleRowClick = (row) => {
     props.onRowClick(row.original)
 }
@@ -110,12 +119,16 @@ const handleRowClick = (row) => {
             />
         </div>
 
-        <div :class="['overflow-y-auto rounded-md border border-border', maxHeightClass]">
+        <div
+            ref="scrollContainer"
+            :class="['overflow-y-auto rounded-md border border-border', maxHeightClass]"
+            @scroll="handleScroll"
+        >
             <InfiniteScroll
-                :auto-scroll="true"
                 :buffer="infiniteScrollBuffer"
                 :data="infiniteScrollKey"
                 :items-element="'#' + bodyId"
+                preserve-url
             >
                 <Table>
                     <TableHeader>
