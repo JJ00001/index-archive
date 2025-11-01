@@ -45,5 +45,6 @@ const handleRowClick = (company) => {
         :on-row-click="handleRowClick"
         body-id="company-index-table-body"
         infinite-scroll-key="companies"
+        remember-scroll-key="CompanyIndexTable"
     />
 </template>

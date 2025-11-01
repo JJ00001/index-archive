@@ -12,10 +12,10 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::paginate(200);
+        $companies = Company::paginate(10);
 
         return inertia('Company/CompanyIndex', [
-            'companies' => Inertia::merge($companies),
+            'companies' => Inertia::scroll($companies),
         ]);
     }
 
