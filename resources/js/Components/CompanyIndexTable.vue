@@ -1,8 +1,10 @@
 <script setup>
 import { router } from '@inertiajs/vue3'
+import { createColumnHelper } from '@tanstack/vue-table'
+import { h } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CompanyDisplay from '@/Components/CompanyDisplay.vue'
-import { ref } from 'vue'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+import DataTable from '@/Components/ui/data-table/DataTable.vue'
 
 const props = defineProps({
     companies: {
@@ -15,7 +17,16 @@ const props = defineProps({
     },
 })
 
-const companyData = ref([...props.companies.data])
+const { t } = useI18n()
+const columnHelper = createColumnHelper()
+
+const columns = [
+    columnHelper.display({
+        id: 'company',
+        header: () => t('company.name'),
+        cell: ({ row }) => h(CompanyDisplay, { company: row.original }),
+    }),
+]
 
 const handleRowClick = (company) => {
     if (props.onRowClick) {
@@ -27,25 +38,12 @@ const handleRowClick = (company) => {
 </script>
 
 <template>
-    <div class="max-h-[550px] overflow-auto">
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>{{ $t('company.name') }}</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                <TableRow
-                    v-for="company in companyData"
-                    :key="company.id"
-                    class="cursor-pointer hover:bg-muted/50"
-                    @click="handleRowClick(company)"
-                >
-                    <TableCell>
-                        <CompanyDisplay :company="company" />
-                    </TableCell>
-                </TableRow>
-            </TableBody>
-        </Table>
-    </div>
+    <DataTable
+        :columns="columns"
+        :data="companies"
+        :infinite-scroll-buffer="500"
+        :on-row-click="handleRowClick"
+        body-id="company-index-table-body"
+        infinite-scroll-key="companies"
+    />
 </template>
