@@ -2,7 +2,7 @@
 import { BulletLegend } from '@unovis/ts'
 import { VisBulletLegend } from '@unovis/vue'
 import { nextTick, onMounted, ref } from 'vue'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/Components/ui/button'
 
 const props = defineProps({
     items: { type: Array, required: true, default: () => [] },
