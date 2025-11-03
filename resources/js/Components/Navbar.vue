@@ -38,11 +38,11 @@ onMounted(fetchData)
 
 <template>
     <div class="border-b">
-        <div class="px-6 py-1">
+        <div class="max-lg:px-2 px-0 py-1">
             <div class="flex items-center justify-between lg:w-10/12 mx-auto max-w-(--breakpoint-xl)">
                 <Link class="hover:opacity-80 transition-opacity"
                       href="/">
-                    <h1 class="font-apple-garamond sm:text-5xl text-4xl">IndexArchive</h1>
+                    <h1 class="font-apple-garamond text-5xl max-lg:text-4xl">IndexArchive</h1>
                 </Link>
                 <NavigationMenu>
                     <NavigationMenuList class="gap-2">
