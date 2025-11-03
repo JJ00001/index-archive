@@ -178,6 +178,11 @@ it('does not report same removal multiple times after market data is updated', f
     expect($changes1['removals'])->toHaveCount(1);
     expect($changes1['removals']->first()->id)->toBe($companyC->id);
 
+    IndexHolding::withoutGlobalScopes()
+                ->where('index_id', $this->index->id)
+                ->where('company_id', $companyC->id)
+                ->update(['is_active' => false]);
+
     foreach ([$companyA, $companyB] as $company) {
         $holding = IndexHolding::withoutGlobalScopes()
             ->where('index_id', $this->index->id)
