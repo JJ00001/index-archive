@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\IndexProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,6 +21,7 @@ class IndexFactory extends Factory
             'name' => fake()->words(3, true),
             'description' => fake()->paragraph(),
             'currency' => 'USD',
+            'index_provider_id' => IndexProvider::factory(),
         ];
     }
 }
