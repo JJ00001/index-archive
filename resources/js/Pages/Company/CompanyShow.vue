@@ -1,4 +1,5 @@
 <script setup>
+import { Head } from '@inertiajs/vue3'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import CompanyInfoHeader from '@/Components/CompanyInfoHeader.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
@@ -27,6 +28,7 @@ const breadcrumbItems = [
 
 <template>
     <layout-main>
+        <Head :title="company.name" />
         <breadcrumbs :items="breadcrumbItems"/>
         <div class="space-y-10">
             <CompanyInfoHeader :company="company"/>
