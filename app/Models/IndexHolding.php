@@ -12,11 +12,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[ScopedBy([ActiveIndexHoldingScope::class])]
 class IndexHolding extends Model
 {
+
     use HasFactory;
 
     protected $fillable = [
         'index_id',
         'company_id',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     public function index(): BelongsTo
@@ -33,4 +39,5 @@ class IndexHolding extends Model
     {
         return $this->hasMany(MarketData::class);
     }
+
 }
