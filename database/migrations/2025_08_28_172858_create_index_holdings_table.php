@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Index::class)->constrained();
             $table->foreignIdFor(Company::class)->constrained();
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active');
             $table->timestamps();
 
             $table->unique(['index_id', 'company_id']);
