@@ -63,7 +63,7 @@ describe('Data Processing', function () {
         $job->handle();
 
         assertDatabaseCount('index_holdings', 2);
-        assertDatabaseHas('index_holdings', ['index_id' => $this->index->id]);
+        assertDatabaseHas('index_holdings', ['index_id' => $this->index->id, 'is_active' => true]);
     });
 
     it('creates new companies from JSON data', function () {
@@ -170,11 +170,13 @@ describe('Relationship Management', function () {
         assertDatabaseHas('index_holdings', [
             'index_id' => $this->index->id,
             'company_id' => $nvidia->id,
+            'is_active' => true,
         ]);
 
         assertDatabaseHas('index_holdings', [
             'index_id' => $this->index->id,
             'company_id' => $microsoft->id,
+            'is_active' => true,
         ]);
     });
 

@@ -23,6 +23,7 @@ it('detects no changes when companies remain the same', function () {
         $holding = IndexHolding::withoutGlobalScopes()->create([
             'index_id' => $this->index->id,
             'company_id' => $company->id,
+            'is_active' => true,
         ]);
 
         MarketData::factory()->create([
@@ -44,6 +45,7 @@ it('detects additions when new companies are added', function () {
         $holding = IndexHolding::withoutGlobalScopes()->create([
             'index_id' => $this->index->id,
             'company_id' => $company->id,
+            'is_active' => true,
         ]);
 
         MarketData::factory()->create([
@@ -70,6 +72,7 @@ it('detects removals when companies are removed from index', function () {
         $holding = IndexHolding::withoutGlobalScopes()->create([
             'index_id' => $this->index->id,
             'company_id' => $company->id,
+            'is_active' => true,
         ]);
 
         MarketData::factory()->create([
@@ -96,6 +99,7 @@ it('detects both additions and removals simultaneously', function () {
         $holding = IndexHolding::withoutGlobalScopes()->create([
             'index_id' => $this->index->id,
             'company_id' => $company->id,
+            'is_active' => true,
         ]);
 
         MarketData::factory()->create([
@@ -129,6 +133,7 @@ it('correctly detects changes when comparing file against all historical holding
         $holding = IndexHolding::withoutGlobalScopes()->create([
             'index_id' => $this->index->id,
             'company_id' => $company->id,
+            'is_active' => true,
         ]);
 
         MarketData::factory()->create([
@@ -158,6 +163,7 @@ it('does not report same removal multiple times after market data is updated', f
         $holding = IndexHolding::withoutGlobalScopes()->create([
             'index_id' => $this->index->id,
             'company_id' => $company->id,
+            'is_active' => true,
         ]);
 
         MarketData::factory()->create([
