@@ -2,12 +2,12 @@
 import { onMounted, ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
 } from '@/Components/ui/navigation-menu'
 import { useI18n } from 'vue-i18n'
 
@@ -40,7 +40,10 @@ onMounted(fetchData)
     <div class="border-b">
         <div class="px-6 py-1">
             <div class="flex items-center justify-between">
-                <h1 class="font-apple-garamond text-5xl">IndexArchive</h1>
+                <Link class="hover:opacity-80 transition-opacity"
+                      href="/">
+                    <h1 class="font-apple-garamond text-5xl">IndexArchive</h1>
+                </Link>
                 <NavigationMenu>
                     <NavigationMenuList class="gap-2">
                         <!-- Indices Dropdown -->
