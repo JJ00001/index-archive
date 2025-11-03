@@ -42,7 +42,7 @@ onMounted(fetchData)
             <div class="flex items-center justify-between">
                 <Link class="hover:opacity-80 transition-opacity"
                       href="/">
-                    <h1 class="font-apple-garamond text-5xl">IndexArchive</h1>
+                    <h1 class="font-apple-garamond sm:text-5xl text-4xl">IndexArchive</h1>
                 </Link>
                 <NavigationMenu>
                     <NavigationMenuList class="gap-2">
