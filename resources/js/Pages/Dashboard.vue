@@ -1,9 +1,10 @@
 <script setup>
-import LayoutWrapper from "@/Layouts/LayoutWrapper.vue";
+import DashboardHero from '@/Components/DashboardHero.vue'
+import LayoutMain from '@/Layouts/LayoutMain.vue'
 </script>
 
 <template>
-    <layout-wrapper>
-
-    </layout-wrapper>
+    <layout-main>
+        <DashboardHero />
+    </layout-main>
 </template>
