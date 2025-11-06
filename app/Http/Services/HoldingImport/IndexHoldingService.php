@@ -15,9 +15,10 @@ class IndexHoldingService
         Log::info('Creating Index Holdings...');
 
         $companyIds = $this->getCompanyIds($companies);
-        $newHoldings = $this->buildNewHoldings($index, $companies, $companyIds);
         $existingHoldings = $this->getExistingHoldings($index);
-        $filteredHoldings = $this->filterExistingHoldings($newHoldings, $existingHoldings);
+        $newHoldings = $this->buildNewHoldings($index, $companies, $companyIds);
+        $existingCompanyIds = $existingHoldings->pluck('company_id')->all();
+        $filteredHoldings = $this->filterExistingHoldings($newHoldings, $existingCompanyIds);
 
         if (! empty($filteredHoldings)) {
             IndexHolding::insert($filteredHoldings);
@@ -53,12 +54,12 @@ class IndexHoldingService
         return $newHoldings;
     }
 
-    private function getExistingHoldings(Index $index): array
+    private function getExistingHoldings(Index $index): Collection
     {
         return IndexHolding::withoutGlobalScopes()
             ->where('index_id', $index->id)
-            ->pluck('company_id')
-            ->toArray();
+            ->get(['id', 'company_id', 'is_active']);
+    }
     }
 
     private function filterExistingHoldings(array $newHoldings, array $existingHoldings): array
