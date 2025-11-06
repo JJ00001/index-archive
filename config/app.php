@@ -126,6 +126,7 @@ return [
     // Custom config
 
     'api_ninja_api_key' => env('api_ninja_api_key'),
+    'brandfetch_api_key' => env('brandfetch_client_id'),
     'msci_world_scraping_url' => env('MSCI_WORLD_SCRAPING_URL'),
     'msci_em_scraping_url' => env('MSCI_EM_SCRAPING_URL'),
     'sp_500_scraping_url' => env('SP_500_SCRAPING_URL'),

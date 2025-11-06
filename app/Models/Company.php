@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Company extends Model
 {
+
     use HasFactory;
 
     protected $fillable = [
@@ -65,16 +66,32 @@ class Company extends Model
 
     public function logo(): Attribute
     {
-        $filePath = 'logos/'.$this->isin.'.png';
-
         return Attribute::make(
-            get: function () use ($filePath) {
-                if (Storage::disk('public')->exists($filePath)) {
-                    return $filePath;
-                }
-
-                return null;
-            }
+            get: fn(): ?string => $this->localLogoPath() ?? $this->brandfetchLogoUrl()
         );
     }
+
+    protected function localLogoPath(): ?string
+    {
+        $filePath = 'logos/'.$this->isin.'.png';
+
+        if (Storage::disk('public')->exists($filePath)) {
+            return '../storage/'.$filePath;
+        }
+
+        return null;
+    }
+
+    protected function brandfetchLogoUrl(): ?string
+    {
+        $clientId = config('app.brandfetch_api_key');
+
+        $identifier = $this->isin;
+
+        $encodedIdentifier = rawurlencode($identifier);
+        $query             = http_build_query(['c' => $clientId]);
+
+        return 'https://cdn.brandfetch.io/'.$encodedIdentifier.'/fallback/404?'.$query;
+    }
+
 }
