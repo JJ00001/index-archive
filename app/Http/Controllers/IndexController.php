@@ -30,7 +30,7 @@ class IndexController extends Controller
             ->with('indexHolding')
             ->get()
             ->sortByDesc('weight')
-            ->take(100)
+            ->take(50)
             ->map(fn ($marketData) => $marketData->indexHolding)
             ->values();
 
