@@ -8,10 +8,13 @@ const props = defineProps({
     },
 })
 
+const emit = defineEmits(['hidden'])
+
 const showLogo = ref(!!props.logoPath)
 
 const hideOnError = () => {
     showLogo.value = false
+    emit('hidden')
 }
 </script>
 
