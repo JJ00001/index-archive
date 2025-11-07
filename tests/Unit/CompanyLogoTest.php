@@ -16,7 +16,7 @@ it('returns the stored logo when a matching file exists', function () {
         'isin' => 'US1234567890',
     ]);
 
-    expect($company->logo)->toBe('../storage/logos/US1234567890.png');
+    expect($company->logo)->toBe(Storage::disk('public')->url('logos/US1234567890.png'));
 });
 
 it('returns the brandfetch logo url when no stored logo exists', function () {
