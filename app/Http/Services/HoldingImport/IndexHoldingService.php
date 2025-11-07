@@ -15,9 +15,15 @@ class IndexHoldingService
         Log::info('Creating Index Holdings...');
 
         $companyIds = $this->getCompanyIds($companies);
-        $newHoldings = $this->buildNewHoldings($index, $companies, $companyIds);
+        $companyIdsInFile = $this->collectCompanyIdsInFile($companies, $companyIds);
         $existingHoldings = $this->getExistingHoldings($index);
-        $filteredHoldings = $this->filterExistingHoldings($newHoldings, $existingHoldings);
+
+        $this->deactivateMissingHoldings($existingHoldings, $companyIdsInFile);
+        $this->reactivateReturningHoldings($existingHoldings, $companyIdsInFile);
+
+        $newHoldings = $this->buildNewHoldings($index, $companies, $companyIds);
+        $existingCompanyIds = $existingHoldings->pluck('company_id')->all();
+        $filteredHoldings = $this->filterExistingHoldings($newHoldings, $existingCompanyIds);
 
         if (! empty($filteredHoldings)) {
             IndexHolding::insert($filteredHoldings);
@@ -46,6 +52,7 @@ class IndexHoldingService
                 $newHoldings[] = [
                     'index_id' => $index->id,
                     'company_id' => $companyId,
+                    'is_active' => true,
                 ];
             }
         }
@@ -53,12 +60,59 @@ class IndexHoldingService
         return $newHoldings;
     }
 
-    private function getExistingHoldings(Index $index): array
+    private function collectCompanyIdsInFile(Collection $companies, Collection $companyIds): array
+    {
+        $companyIdsInFile = [];
+
+        foreach ($companies as $companyData) {
+            $companyId = $companyIds[$companyData->isin] ?? null;
+            if ($companyId) {
+                $companyIdsInFile[] = $companyId;
+            }
+        }
+
+        return array_values(array_unique($companyIdsInFile));
+    }
+
+    private function getExistingHoldings(Index $index): Collection
     {
         return IndexHolding::withoutGlobalScopes()
             ->where('index_id', $index->id)
-            ->pluck('company_id')
-            ->toArray();
+            ->get(['id', 'company_id', 'is_active']);
+    }
+
+    private function deactivateMissingHoldings(Collection $existingHoldings, array $companyIdsInFile): void
+    {
+        $idsToDeactivate = $existingHoldings
+            ->filter(fn(IndexHolding $holding) => $holding->is_active && ! in_array($holding->company_id,
+                    $companyIdsInFile, true))
+            ->pluck('id')
+            ->all();
+
+        if ( ! empty($idsToDeactivate)) {
+            IndexHolding::withoutGlobalScopes()
+                        ->whereIn('id', $idsToDeactivate)
+                        ->update(['is_active' => false]);
+        }
+    }
+
+    private function reactivateReturningHoldings(Collection $existingHoldings, array $companyIdsInFile): void
+    {
+        if (empty($companyIdsInFile)) {
+            return;
+        }
+
+        $idsToActivate = $existingHoldings
+            ->filter(fn(IndexHolding $holding) => ! $holding->is_active && in_array($holding->company_id,
+                    $companyIdsInFile, true))
+            ->pluck('id')
+            ->all();
+
+        if ( ! empty($idsToActivate)) {
+            IndexHolding::withoutGlobalScopes()
+                        ->whereIn('id', $idsToActivate)
+                        ->update(['is_active' => true]);
+        }
     }
 
     private function filterExistingHoldings(array $newHoldings, array $existingHoldings): array

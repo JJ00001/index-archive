@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import CompanyLogo from '@/Components/CompanyLogo.vue'
 import { Badge } from '@/Components/ui/badge'
 import { useI18n } from 'vue-i18n'
@@ -14,6 +15,10 @@ const props = defineProps({
 const { t } = useI18n()
 
 const company = props.company;
+const isLogoVisible = ref(true)
+const handleLogoHidden = () => {
+    isLogoVisible.value = false
+}
 
 const companyTags = {
     "Ticker": company.ticker,
@@ -38,7 +43,11 @@ const companyStats = [
 
 <template>
     <div class="flex space-x-16">
-        <company-logo :logo-path="company.logo" class="max-w-[20%] max-h-24"/>
+        <div v-if="isLogoVisible"
+             class="max-w-[20%] max-h-24">
+            <company-logo :logo-path="company.logo"
+                          @hidden="handleLogoHidden" />
+        </div>
         <div>
             <h1 class="text-4xl font-bold">{{ company.name }}</h1>
             <div class="flex space-x-3 mt-2">

@@ -95,10 +95,11 @@ function createIndexHoldingWithWeights(
                       ->for($country)
                       ->create();
 
-    $indexHolding = IndexHolding::factory()
-                                ->for($index)
-                                ->for($company)
-                                ->create();
+    $indexHolding = IndexHolding::factory()->create([
+        'is_active' => true,
+        'index_id' => $index->id,
+        'company_id' => $company->id,
+    ]);
 
     foreach ($weightsByDate as $date => $weight) {
         MarketData::factory()

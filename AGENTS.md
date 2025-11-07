@@ -34,6 +34,10 @@
 
 - Do not commit changes on your own.
 
+## Code Design Guidelines
+
+- Write as much code as necessary, but as little as possible to promote maintainability and readability
+
 ===
 
 <laravel-boost-guidelines>
@@ -367,9 +371,6 @@ Route::get('/users', function () {
 
 - Run the minimal number of tests using an appropriate filter before finalizing code edits.
 - To run all tests: `php artisan test`.
-- To run all tests in a file: `php artisan test tests/Feature/ExampleTest.php`.
-- To filter on a particular test name: `php artisan test --filter=testName` (recommended after making a change to a
-  related file).
 - When the tests relating to your changes are passing, ask the user if they would like to run the entire test suite to
   ensure everything is still passing.
 
@@ -581,7 +582,7 @@ submit,
 
 ## Test Enforcement
 
-- Do not write tests unless prompted to.
-- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test` with a specific
-  filename or filter.
+- Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests
+  to make sure they pass.
+- Run all tests after making any changes
   </laravel-boost-guidelines>

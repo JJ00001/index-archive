@@ -13,7 +13,9 @@ class IndexController extends Controller
 {
     public function index()
     {
-        $indices = Index::withCount('indexHoldings')->get();
+        $indices = Index::withCount('indexHoldings')
+                        ->with('indexProvider:id,name')
+                        ->get();
 
         return inertia('Index/IndexIndex', [
             'indices' => $indices,
@@ -28,7 +30,7 @@ class IndexController extends Controller
             ->with('indexHolding')
             ->get()
             ->sortByDesc('weight')
-            ->take(100)
+            ->take(50)
             ->map(fn ($marketData) => $marketData->indexHolding)
             ->values();
 

@@ -6,9 +6,9 @@ import Navbar from '@/Components/Navbar.vue'
 <template>
     <layout-wrapper>
         <div class="space-y-10">
-            <navbar class="w-full"/>
-          <div class="lg:w-10/12 mx-auto max-w-(--breakpoint-xl)">
-                <slot/>
+            <navbar class="w-full" />
+            <div class="max-lg:px-2 px-0 lg:w-10/12 mx-auto max-w-(--breakpoint-xl)">
+                <slot />
             </div>
         </div>
     </layout-wrapper>

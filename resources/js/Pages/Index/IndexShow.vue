@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { Head } from '@inertiajs/vue3'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
@@ -75,6 +76,7 @@ const handleCountryRowClick = (country) => {
 
 <template>
     <layout-main>
+        <Head :title="index.name" />
         <breadcrumbs :items="breadcrumbItems" />
 
         <div class="space-y-10">

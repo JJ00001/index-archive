@@ -22,8 +22,16 @@ it('calculates correct country weights from market data', function () {
     $usCompany = Company::factory()->create(['country_id' => $usCountry->id]);
     $jpCompany = Company::factory()->create(['country_id' => $jpCountry->id]);
 
-    $usHolding = IndexHolding::create(['index_id' => $index->id, 'company_id' => $usCompany->id]);
-    $jpHolding = IndexHolding::create(['index_id' => $index->id, 'company_id' => $jpCompany->id]);
+    $usHolding = IndexHolding::create([
+        'index_id' => $index->id,
+        'company_id' => $usCompany->id,
+        'is_active' => true,
+    ]);
+    $jpHolding = IndexHolding::create([
+        'index_id' => $index->id,
+        'company_id' => $jpCompany->id,
+        'is_active' => true,
+    ]);
 
     $date = '2025-01-15';
     MarketData::factory()->create(['index_holding_id' => $usHolding->id, 'date' => $date, 'weight' => 0.45]);
@@ -48,8 +56,16 @@ it('counts companies per country correctly', function () {
     $usCompany1 = Company::factory()->create(['country_id' => $usCountry->id]);
     $usCompany2 = Company::factory()->create(['country_id' => $usCountry->id]);
 
-    $holding1 = IndexHolding::create(['index_id' => $index->id, 'company_id' => $usCompany1->id]);
-    $holding2 = IndexHolding::create(['index_id' => $index->id, 'company_id' => $usCompany2->id]);
+    $holding1 = IndexHolding::create([
+        'index_id' => $index->id,
+        'company_id' => $usCompany1->id,
+        'is_active' => true,
+    ]);
+    $holding2 = IndexHolding::create([
+        'index_id' => $index->id,
+        'company_id' => $usCompany2->id,
+        'is_active' => true,
+    ]);
 
     $date = '2025-01-15';
     MarketData::factory()->create(['index_holding_id' => $holding1->id, 'date' => $date, 'weight' => 0.25]);
@@ -73,9 +89,21 @@ it('returns countries sorted by weight descending', function () {
     $company2 = Company::factory()->create(['country_id' => $country2->id]);
     $company3 = Company::factory()->create(['country_id' => $country3->id]);
 
-    $holding1 = IndexHolding::create(['index_id' => $index->id, 'company_id' => $company1->id]);
-    $holding2 = IndexHolding::create(['index_id' => $index->id, 'company_id' => $company2->id]);
-    $holding3 = IndexHolding::create(['index_id' => $index->id, 'company_id' => $company3->id]);
+    $holding1 = IndexHolding::create([
+        'index_id' => $index->id,
+        'company_id' => $company1->id,
+        'is_active' => true,
+    ]);
+    $holding2 = IndexHolding::create([
+        'index_id' => $index->id,
+        'company_id' => $company2->id,
+        'is_active' => true,
+    ]);
+    $holding3 = IndexHolding::create([
+        'index_id' => $index->id,
+        'company_id' => $company3->id,
+        'is_active' => true,
+    ]);
 
     $date = '2025-01-15';
     MarketData::factory()->create(['index_holding_id' => $holding1->id, 'date' => $date, 'weight' => 0.10]);
@@ -101,8 +129,16 @@ it('handles multiple companies per country with multiple market data points', fu
     $company1 = Company::factory()->create(['country_id' => $country->id]);
     $company2 = Company::factory()->create(['country_id' => $country->id]);
 
-    $holding1 = IndexHolding::create(['index_id' => $index->id, 'company_id' => $company1->id]);
-    $holding2 = IndexHolding::create(['index_id' => $index->id, 'company_id' => $company2->id]);
+    $holding1 = IndexHolding::create([
+        'index_id' => $index->id,
+        'company_id' => $company1->id,
+        'is_active' => true,
+    ]);
+    $holding2 = IndexHolding::create([
+        'index_id' => $index->id,
+        'company_id' => $company2->id,
+        'is_active' => true,
+    ]);
 
     $date = '2025-01-15';
     MarketData::factory()->create(['index_holding_id' => $holding1->id, 'date' => $date, 'weight' => 0.35]);

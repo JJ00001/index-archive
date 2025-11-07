@@ -1,15 +1,27 @@
 <script setup>
+import { ref } from 'vue'
+
 const props = defineProps({
     logoPath: {
         type: [String, null],
-        required: true,
-        default: null
-    }
+        default: null,
+    },
 })
 
-const logoPathInStorage = '../storage/' + props.logoPath;
+const emit = defineEmits(['hidden'])
+
+const showLogo = ref(!!props.logoPath)
+
+const hideOnError = () => {
+    showLogo.value = false
+    emit('hidden')
+}
 </script>
 
 <template>
-    <img v-if="logoPath" :src="logoPathInStorage" class="object-contain" alt=""/>
+    <img v-if="showLogo"
+         :src="props.logoPath"
+         alt=""
+         class="w-full h-full object-contain"
+         @error="hideOnError" />
 </template>

@@ -1,9 +1,21 @@
 <script setup>
-import LayoutWrapper from "@/Layouts/LayoutWrapper.vue";
+import { Head } from '@inertiajs/vue3'
+import DashboardHero from '@/Components/DashboardHero.vue'
+import LayoutMain from '@/Layouts/LayoutMain.vue'
+import IndexIndexTable from '@/Components/IndexIndexTable.vue'
+
+const props = defineProps({
+    indices: {
+        type: Object,
+        required: true,
+    },
+})
 </script>
 
 <template>
-    <layout-wrapper>
-
-    </layout-wrapper>
+    <layout-main>
+        <Head title="Dashboard" />
+        <DashboardHero />
+        <index-index-table :indices="indices" />
+    </layout-main>
 </template>
