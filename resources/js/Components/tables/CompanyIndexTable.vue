@@ -1,11 +1,12 @@
 <script setup>
 import { router } from '@inertiajs/vue3'
 import { createColumnHelper } from '@tanstack/vue-table'
-import { h, ref, watch } from 'vue'
+import { computed, h } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CompanyDisplay from '@/Components/CompanyDisplay.vue'
 import DataTable from '@/Components/ui/data-table/DataTable.vue'
 import DataTableColumnHeader from '@/Components/ui/data-table/DataTableColumnHeader.vue'
+import useDataTableSorting from '@/composables/useDataTableSorting'
 
 const props = defineProps({
     companies: {
@@ -24,19 +25,22 @@ const props = defineProps({
 
 const { t } = useI18n()
 const columnHelper = createColumnHelper()
-const sorting = ref([])
 
-watch(
-    () => props.sort,
-    (value) => {
-        sorting.value = [
-            {
-                id: value.column,
-                desc: value.direction === 'desc',
-            },
-        ]
-    },
-)
+const visitCompaniesIndex = (params = {}) => {
+    router.get(
+        route('companies.index'),
+        params,
+        {
+            reset: ['companies'],
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+        },
+    )
+}
+
+const sort = computed(() => props.sort)
+const { sorting, handleSortingChange } = useDataTableSorting(sort, visitCompaniesIndex)
 
 const columns = [
     columnHelper.accessor('name', {
@@ -56,49 +60,6 @@ const handleRowClick = (company) => {
     } else {
         router.get(route('companies.show', company.id))
     }
-}
-
-const resolveNextSorting = (updater) => {
-    const previousSorting = sorting.value
-    const updatedSorting = updater(previousSorting)
-
-    return updatedSorting ?? []
-}
-
-const visitCompaniesIndex = (params = {}) => {
-    router.get(
-        route('companies.index'),
-        params,
-        {
-            reset: ['companies'],
-            preserveState: true,
-            preserveScroll: true,
-            replace: true,
-        },
-    )
-}
-
-const requestSorting = (columnSort) => {
-    const sortParam = columnSort.desc ? `-${columnSort.id}` : columnSort.id
-
-    visitCompaniesIndex({ sort: sortParam })
-}
-
-const requestDefaultSorting = () => {
-    visitCompaniesIndex()
-}
-
-const handleSortingChange = (updater) => {
-    sorting.value = resolveNextSorting(updater)
-
-    const columnSort = sorting.value[0]
-
-    if (!columnSort?.id) {
-        requestDefaultSorting()
-        return
-    }
-
-    requestSorting(columnSort)
 }
 </script>
 
