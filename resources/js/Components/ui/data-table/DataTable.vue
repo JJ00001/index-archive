@@ -78,17 +78,19 @@ const table = useVueTable({
     getFilteredRowModel: getFilteredRowModel(),
 })
 
+const applySearchFilter = (value) => {
+    if (!props.enableSearch || !props.searchColumnKey) {
+        return
+    }
+
+    const column = table.getColumn(props.searchColumnKey)
+    const filterValue = typeof value === 'string' ? value.trim() : ''
+    column?.setFilterValue(filterValue)
+}
+
 watch(
     searchTerm,
-    (value) => {
-        if (!props.enableSearch || !props.searchColumnKey) {
-            return
-        }
-
-        const column = table.getColumn(props.searchColumnKey)
-        const filterValue = typeof value === 'string' ? value.trim() : ''
-        column?.setFilterValue(filterValue)
-    },
+    applySearchFilter,
     { immediate: true },
 )
 
