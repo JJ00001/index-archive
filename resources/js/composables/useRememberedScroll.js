@@ -20,6 +20,14 @@ export default function useRememberedScroll (key) {
     scrollContainer.value.scrollTop = parsedTop
   }
 
+  const resetScrollPosition = () => {
+    state.top = 0
+
+    storage.setItem(rememberKey, '0')
+
+    scrollContainer.value.scrollTop = 0
+  }
+
   onMounted(() => {
     void restore()
   })
@@ -35,5 +43,6 @@ export default function useRememberedScroll (key) {
   return {
     scrollContainer,
     handleScroll,
+    resetScrollPosition,
   }
 }
