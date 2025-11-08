@@ -10,6 +10,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    sort: {
+        type: Object,
+        required: true,
+    },
 })
 
 const { t } = useI18n()
@@ -20,7 +24,10 @@ const { t } = useI18n()
         <Head :title="t('company.name', 2)" />
         <Card>
             <CardContent>
-                <company-index-table :companies="companies" />
+                <company-index-table
+                    :companies="companies"
+                    :sort="sort"
+                />
             </CardContent>
         </Card>
     </layout-main>
