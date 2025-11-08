@@ -59,6 +59,15 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    // Sorting
+    sorting: {
+        type: Array,
+        default: () => [],
+    },
+    onSortingChange: {
+        type: Function,
+        default: null,
+    },
 })
 
 const searchTerm = ref('')
@@ -73,6 +82,13 @@ const table = useVueTable({
     get columns () {
         return columns.value
     },
+    state: {
+        get sorting () {
+            return props.sorting
+        },
+    },
+    manualSorting: true,
+    onSortingChange: props.onSortingChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -103,7 +119,9 @@ const { scrollContainer, handleScroll } = useRememberedScroll(
 )
 
 const handleRowClick = (row) => {
-    props.onRowClick(row.original)
+    const entity = row.original
+
+    props.onRowClick(entity)
 }
 </script>
 
