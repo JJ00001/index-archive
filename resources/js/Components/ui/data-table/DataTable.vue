@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableR
 import useRememberedScroll from '@/composables/useRememberedScroll'
 
 const props = defineProps({
+    // Data
     columns: {
         type: Array,
         required: true,
@@ -14,6 +15,12 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    // Behavior
+    onRowClick: {
+        type: Function,
+        required: true,
+    },
+    // Search
     enableSearch: {
         type: Boolean,
         default: false,
@@ -26,18 +33,16 @@ const props = defineProps({
         type: String,
         default: 'Search...',
     },
+    // State
     emptyStateMessage: {
         type: String,
         default: 'No results found.',
-    },
-    onRowClick: {
-        type: Function,
-        required: true,
     },
     maxHeightClass: {
         type: String,
         default: 'max-h-[550px]',
     },
+    // Infinite Scroll
     infiniteScrollKey: {
         type: String,
         default: null,
@@ -46,11 +51,11 @@ const props = defineProps({
         type: Number,
         default: 500,
     },
-    bodyId: {
+    rememberScrollKey: {
         type: String,
         required: true,
     },
-    rememberScrollKey: {
+    bodyId: {
         type: String,
         required: true,
     },
