@@ -75,6 +75,16 @@ const searchTerm = ref('')
 const columns = computed(() => props.columns ?? [])
 const rows = computed(() => props.data?.data ?? [])
 
+const { scrollContainer, handleScroll, resetScrollPosition } = useRememberedScroll(
+    props.rememberScrollKey,
+)
+
+const handleSortingChange = (updater) => {
+    resetScrollPosition()
+
+    props.onSortingChange?.(updater)
+}
+
 const table = useVueTable({
     get data () {
         return rows.value
@@ -88,7 +98,7 @@ const table = useVueTable({
         },
     },
     manualSorting: true,
-    onSortingChange: props.onSortingChange,
+    onSortingChange: handleSortingChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -112,10 +122,6 @@ watch(
 
 const rowClasses = computed(() =>
     props.onRowClick ? 'cursor-pointer hover:bg-muted/50' : '',
-)
-
-const { scrollContainer, handleScroll } = useRememberedScroll(
-    props.rememberScrollKey,
 )
 
 const handleRowClick = (row) => {
