@@ -70,6 +70,7 @@ const visitCompaniesIndex = (params = {}) => {
         route('companies.index'),
         params,
         {
+            reset: ['companies'],
             preserveState: true,
             preserveScroll: true,
             replace: true,
