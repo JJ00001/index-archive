@@ -39,9 +39,13 @@ watch(
 )
 
 const columns = [
-    columnHelper.display({
-        id: 'company',
-        header: () => t('company.name'),
+    columnHelper.accessor('name', {
+        id: 'name',
+        header: ({ column }) =>
+            h(DataTableColumnHeader, {
+                column,
+                title: t('company.name'),
+            }),
         cell: ({ row }) => h(CompanyDisplay, { company: row.original }),
     }),
 ]
@@ -56,23 +60,15 @@ const handleRowClick = (company) => {
 
 const resolveNextSorting = (updater) => {
     const previousSorting = sorting.value
-    const updatedSorting = typeof updater === 'function' ? updater(previousSorting) : updater
+    const updatedSorting = updater(previousSorting)
 
     return updatedSorting ?? []
 }
 
-const pushSortingToServer = (columnSort) => {
-    if (!columnSort?.id) {
-        return
-    }
-
-    const columnName = columnSort.id
-
-    const sortParam = columnSort.desc ? `-${columnName}` : columnName
-
+const visitCompaniesIndex = (params = {}) => {
     router.get(
         route('companies.index'),
-        { sort: sortParam },
+        params,
         {
             preserveState: true,
             preserveScroll: true,
@@ -81,12 +77,27 @@ const pushSortingToServer = (columnSort) => {
     )
 }
 
+const requestSorting = (columnSort) => {
+    const sortParam = columnSort.desc ? `-${columnSort.id}` : columnSort.id
+
+    visitCompaniesIndex({ sort: sortParam })
+}
+
+const requestDefaultSorting = () => {
+    visitCompaniesIndex()
+}
+
 const handleSortingChange = (updater) => {
-    const nextSorting = resolveNextSorting(updater)
+    sorting.value = resolveNextSorting(updater)
 
-    sorting.value = nextSorting
+    const columnSort = sorting.value[0]
 
-    pushSortingToServer(nextSorting[0])
+    if (!columnSort?.id) {
+        requestDefaultSorting()
+        return
+    }
+
+    requestSorting(columnSort)
 }
 </script>
 
