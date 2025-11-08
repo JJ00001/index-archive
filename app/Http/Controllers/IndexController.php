@@ -43,7 +43,7 @@ class IndexController extends Controller
         $activities = ActivityResource::collection(
             Activity::query()
                 ->where('properties->index_id', $index->id)
-                ->orderBy('created_at', 'desc')
+                ->orderBy('properties->date', 'desc')
                 ->limit(50)
                 ->get()
         );
