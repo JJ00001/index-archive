@@ -40,7 +40,7 @@ const props = defineProps({
     },
     maxHeightClass: {
         type: String,
-        default: 'max-h-[550px]',
+        default: 'max-h-[50vh]',
     },
     // Infinite Scroll
     infiniteScrollKey: {
