@@ -24,7 +24,7 @@ const handleRowClick = (country) => {
 </script>
 
 <template>
-  <div class="max-h-[550px] overflow-auto">
+    <div class="max-h-[50vh] overflow-auto">
     <Table>
       <TableHeader>
         <TableRow>
