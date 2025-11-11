@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ActivityResource;
-use App\Http\Resources\IndexHoldingCompanyCollection;
 use App\Http\Resources\IndexHoldingCountryCollection;
 use App\Http\Resources\IndexHoldingSectorCollection;
+use App\Models\CurrentIHMarketData;
 use App\Models\Index;
+use Inertia\Inertia;
 use Spatie\Activitylog\Models\Activity;
 
 class IndexController extends Controller
@@ -24,17 +25,14 @@ class IndexController extends Controller
 
     public function show(Index $index)
     {
-        $index->load(['indexProvider']);
+        $index->load(['indexProvider'])->loadCount('indexHoldings');
 
-        $indexHoldingsSortedByWeight = $index->latestMarketData()
-            ->with('indexHolding')
-            ->get()
-            ->sortByDesc('weight')
-            ->take(50)
-            ->map(fn ($marketData) => $marketData->indexHolding)
-            ->values();
-
-        $companies = new IndexHoldingCompanyCollection($indexHoldingsSortedByWeight);
+        $currentIndexHoldings = CurrentIHMarketData::query()
+                                                   ->forIndex($index->id)
+                                                   ->with('company')
+                                                   ->orderByDesc('weight')
+                                                   ->paginate(20, pageName: 'companies')
+                                                   ->withQueryString();
 
         $sectors = new IndexHoldingSectorCollection($index);
 
@@ -51,7 +49,7 @@ class IndexController extends Controller
         return inertia('Index/IndexShow', [
             'index' => $index,
             'stats' => $index->stats(),
-            'companies' => $companies,
+            'companies' => Inertia::scroll($currentIndexHoldings),
             'sectors' => $sectors,
             'countries' => $countries,
             'activities' => $activities,
