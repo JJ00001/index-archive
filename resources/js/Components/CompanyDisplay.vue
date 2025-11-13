@@ -11,7 +11,7 @@ defineProps({
 
 <template>
   <div class="flex items-center">
-    <div class="w-20 h-8 mr-4 shrink-0">
+      <div class="w-16 h-8 mr-4 shrink-0">
       <CompanyLogo :logo-path="company.logo"
                    class="w-full h-full" />
     </div>
