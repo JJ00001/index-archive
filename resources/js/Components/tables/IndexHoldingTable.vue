@@ -50,12 +50,8 @@ const columns = [
     }),
 ]
 
-const handleRowClick = (company) => {
-    if (props.onRowClick) {
-        props.onRowClick(company)
-    } else {
-        router.get(route('companies.show', company.id))
-    }
+const handleRowClick = (holding) => {
+    props.onRowClick(holding)
 }
 </script>
 
