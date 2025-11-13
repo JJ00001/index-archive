@@ -54,7 +54,7 @@ const breadcrumbItems = [
     },
 ]
 
-const companiesCount = props.companies.data.length
+const companiesCount = props.index.index_holdings_count
 
 const holdingDialogRef = ref(null)
 const sectorDialogRef = ref(null)
@@ -84,7 +84,7 @@ const handleCountryRowClick = (country) => {
             <StatCardGroup :stats="stats" />
             <Card>
                 <CardHeader>
-                    <CardTitle>{{ t('indexHolding.name', 2) + ' (Top ' + companiesCount + ')' }}</CardTitle>
+                    <CardTitle>{{ t('indexHolding.name', 2) + ' (' + companiesCount + ')' }}</CardTitle>
                     <CardDescription>
                         Companies currently held in the {{ index.name }} index
                     </CardDescription>
