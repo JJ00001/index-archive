@@ -60,8 +60,8 @@ const holdingDialogRef = ref(null)
 const sectorDialogRef = ref(null)
 const countryDialogRef = ref(null)
 
-const handleIndexHoldingRowClick = (company) => {
-    holdingDialogRef.value?.open(company.index_holding_id)
+const handleIndexHoldingRowClick = (holding) => {
+    holdingDialogRef.value?.open(holding.index_holding_id)
 }
 
 const handleSectorRowClick = (sector) => {
