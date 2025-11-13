@@ -1,5 +1,4 @@
 <script setup>
-import { router } from '@inertiajs/vue3'
 import { createColumnHelper } from '@tanstack/vue-table'
 import { h } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -21,22 +20,13 @@ const { t, n } = useI18n()
 const columnHelper = createColumnHelper()
 
 const columns = [
-    columnHelper.accessor('rank', {
-        id: 'rank',
-        header: () => t('rank'),
-        cell: ({ getValue }) => getValue(),
-        meta: {
-            headerClass: 'w-1/12',
-            cellClass: 'w-1/12 font-mono',
-        },
-    }),
-    columnHelper.accessor('name', {
-        id: 'name',
+    columnHelper.accessor(row => row.company.name, {
+        id: 'company',
         header: () => t('company.name'),
-        cell: ({ row }) => h(CompanyDisplay, { company: row.original }),
+        cell: ({ row }) => h(CompanyDisplay, { company: row.original.company }),
         meta: {
-            headerClass: 'w-10/12',
-            cellClass: 'w-10/12',
+            headerClass: 'w-11/12',
+            cellClass: 'w-11/12',
         },
     }),
     columnHelper.accessor('weight', {
