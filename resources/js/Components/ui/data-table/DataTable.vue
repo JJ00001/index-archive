@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { FlexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
 import { InfiniteScroll } from '@inertiajs/vue3'
 import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
@@ -129,6 +129,10 @@ const handleRowClick = (row) => {
 
     props.onRowClick(entity)
 }
+
+onMounted(() => {
+    resetScrollPosition()
+})
 </script>
 
 <template>
