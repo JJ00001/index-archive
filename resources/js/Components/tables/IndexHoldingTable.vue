@@ -20,15 +20,6 @@ const { t, n } = useI18n()
 const columnHelper = createColumnHelper()
 
 const columns = [
-    columnHelper.accessor(row => row.company.name, {
-        id: 'company',
-        header: () => t('company.name'),
-        cell: ({ row }) => h(CompanyDisplay, { company: row.original.company }),
-        meta: {
-            headerClass: 'w-11/12',
-            cellClass: 'w-11/12',
-        },
-    }),
     columnHelper.accessor('weight', {
         id: 'weight',
         header: () => t('weight'),
@@ -36,6 +27,15 @@ const columns = [
         meta: {
             headerClass: 'w-1/12 text-right',
             cellClass: 'w-1/12 text-right',
+        },
+    }),
+    columnHelper.accessor(row => row.company.name, {
+        id: 'company',
+        header: () => t('company.name'),
+        cell: ({ row }) => h(CompanyDisplay, { company: row.original.company }),
+        meta: {
+            headerClass: 'pl-10 w-11/12',
+            cellClass: 'pl-10 w-11/12',
         },
     }),
 ]
