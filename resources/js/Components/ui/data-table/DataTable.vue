@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { FlexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
 import { InfiniteScroll } from '@inertiajs/vue3'
+import DataTableRowSkeleton from '@/Components/ui/data-table/DataTableRowSkeleton.vue'
 import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
 import useRememberedScroll from '@/composables/useRememberedScroll'
 
@@ -58,6 +59,11 @@ const props = defineProps({
     bodyId: {
         type: String,
         required: true,
+    },
+    // Loading/Skeleton
+    skeletonRowCount: {
+        type: Number,
+        default: 5,
     },
     // Sorting
     sorting: {
@@ -164,6 +170,7 @@ onMounted(() => {
                 :data="infiniteScrollKey"
                 :items-element="'#' + bodyId"
                 preserve-url
+                v-slot="{ loading }"
             >
                 <Table>
                     <TableHeader>
@@ -205,10 +212,15 @@ onMounted(() => {
                                 </TableCell>
                             </TableRow>
                         </template>
-                        <TableEmpty v-else
+                        <TableEmpty v-else-if="!loading"
                                     :colspan="table.getAllColumns().length">
                             {{ emptyStateMessage }}
                         </TableEmpty>
+                        <DataTableRowSkeleton
+                            v-if="loading"
+                            :columns="table.getAllLeafColumns()"
+                            :row-count="skeletonRowCount"
+                        />
                     </TableBody>
                 </Table>
             </InfiniteScroll>
