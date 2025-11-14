@@ -25,8 +25,8 @@ const columns = [
         header: () => t('weight'),
         cell: ({ getValue }) => n(getValue(), 'percentFine'),
         meta: {
-            headerClass: 'w-1/12 text-right',
-            cellClass: 'w-1/12 text-right',
+            headerClass: 'w-1/12 text-center',
+            cellClass: 'w-1/12 text-center',
         },
     }),
     columnHelper.accessor(row => row.company.name, {
