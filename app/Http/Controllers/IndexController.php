@@ -9,9 +9,11 @@ use App\Models\CurrentIHMarketData;
 use App\Models\Index;
 use Inertia\Inertia;
 use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class IndexController extends Controller
 {
+
     public function index()
     {
         $indices = Index::withCount('indexHoldings')
@@ -27,12 +29,28 @@ class IndexController extends Controller
     {
         $index->load(['indexProvider'])->loadCount('indexHoldings');
 
-        $currentIndexHoldings = CurrentIHMarketData::query()
-                                                   ->forIndex($index->id)
-                                                   ->with('company')
-                                                   ->orderByDesc('weight')
-                                                   ->paginate(20, pageName: 'companies')
-                                                   ->withQueryString();
+        $currentIndexHoldings = QueryBuilder::for(
+            CurrentIHMarketData::query()
+                               ->forIndex($index->id)
+                               ->with('company')
+                               ->leftJoin('companies', 'companies.id', '=',
+                                   'current_index_holding_market_data.company_id')
+                               ->select('current_index_holding_market_data.*'))
+                                            ->defaultSort('-weight')
+                                            ->allowedSorts([
+                                                'weight',
+                                                'companies.name',
+                                            ])
+                                            ->paginate(20, pageName: 'companies')
+                                            ->withQueryString();
+
+        $sort         = request('sort');
+        $resolvedSort = $sort ?? '-weight';
+
+        $currentSort = [
+            'column' => ltrim($resolvedSort, '-'),
+            'direction' => str_starts_with($resolvedSort, '-') ? 'desc' : 'asc',
+        ];
 
         $sectors = new IndexHoldingSectorCollection($index);
 
@@ -50,9 +68,11 @@ class IndexController extends Controller
             'index' => $index,
             'stats' => $index->stats(),
             'companies' => Inertia::scroll($currentIndexHoldings),
+            'sort' => $currentSort,
             'sectors' => $sectors,
             'countries' => $countries,
             'activities' => $activities,
         ]);
     }
+
 }
