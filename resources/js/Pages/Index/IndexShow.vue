@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
@@ -39,6 +39,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    sort: {
+        type: Object,
+        required: true,
+    },
 })
 
 const { t } = useI18n()
@@ -72,6 +76,18 @@ const handleCountryRowClick = (country) => {
     countryDialogRef.value?.open(country.id)
 }
 
+const visitIndexShow = (params = {}) => {
+    router.get(
+        route('indices.show', props.index.id),
+        params,
+        {
+            reset: ['companies'],
+            preserveState: true,
+            preserveScroll: true,
+        },
+    )
+}
+
 </script>
 
 <template>
@@ -90,8 +106,12 @@ const handleCountryRowClick = (country) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <index-holding-table :companies="companies"
-                                         :on-row-click="handleIndexHoldingRowClick" />
+                    <index-holding-table
+                        :companies="companies"
+                        :on-request-sort="visitIndexShow"
+                        :on-row-click="handleIndexHoldingRowClick"
+                        :sort="sort"
+                    />
                 </CardContent>
             </Card>
             <Card>
