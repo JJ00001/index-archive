@@ -48,7 +48,7 @@ const columns = [
         },
     }),
     columnHelper.accessor(row => row.company.name, {
-        id: 'company',
+        id: 'companies.name',
         header: ({ column }) =>
             h(DataTableColumnHeader, {
                 column,
