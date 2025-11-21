@@ -1,9 +1,8 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { FlexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
+import { getCoreRowModel, getFilteredRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
 import { InfiniteScroll } from '@inertiajs/vue3'
-import DataTableRowSkeleton from '@/Components/ui/data-table/DataTableRowSkeleton.vue'
-import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+import DataTableContent from '@/Components/ui/data-table/DataTableContent.vue'
 import useRememberedScroll from '@/composables/useRememberedScroll'
 
 const props = defineProps({
@@ -174,59 +173,18 @@ onMounted(() => {
                 :data="infiniteScrollKey"
                 :items-element="'#' + bodyId"
                 preserve-url
-                v-slot="{ loading: loadingInfiniteScroll }"
+                v-slot="{ loading: loadingInfiniteScroll = false }"
             >
-                <Table>
-                    <TableHeader>
-                        <TableRow
-                            v-for="headerGroup in table.getHeaderGroups()"
-                            :key="headerGroup.id"
-                        >
-                            <TableHead
-                                v-for="header in headerGroup.headers"
-                                :key="header.id"
-                                :class="header.column.columnDef.meta?.headerClass"
-                            >
-                                <template v-if="!header.isPlaceholder">
-                                    <FlexRender
-                                        :props="header.getContext()"
-                                        :render="header.column.columnDef.header"
-                                    />
-                                </template>
-                            </TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody :id="bodyId">
-                        <template v-if="table.getRowModel().rows.length && !loading">
-                            <TableRow
-                                v-for="row in table.getRowModel().rows"
-                                :key="row.id"
-                                :class="rowClasses"
-                                @click="handleRowClick(row)"
-                            >
-                                <TableCell
-                                    v-for="cell in row.getVisibleCells()"
-                                    :key="cell.id"
-                                    :class="cell.column.columnDef.meta?.cellClass"
-                                >
-                                    <FlexRender
-                                        :props="cell.getContext()"
-                                        :render="cell.column.columnDef.cell"
-                                    />
-                                </TableCell>
-                            </TableRow>
-                        </template>
-                        <TableEmpty v-else-if="!(loading || loadingInfiniteScroll)"
-                                    :colspan="table.getAllColumns().length">
-                            {{ emptyStateMessage }}
-                        </TableEmpty>
-                        <DataTableRowSkeleton
-                            v-if="loading || loadingInfiniteScroll"
-                            :columns="table.getAllLeafColumns()"
-                            :row-count="skeletonRowCount"
-                        />
-                    </TableBody>
-                </Table>
+                <DataTableContent
+                    :body-id="bodyId"
+                    :empty-state-message="emptyStateMessage"
+                    :handle-row-click="handleRowClick"
+                    :loading="loading"
+                    :loading-infinite-scroll="loadingInfiniteScroll"
+                    :row-classes="rowClasses"
+                    :skeleton-row-count="skeletonRowCount"
+                    :table="table"
+                />
             </InfiniteScroll>
         </div>
     </div>
