@@ -76,7 +76,7 @@ const handleCountryRowClick = (country) => {
     countryDialogRef.value?.open(country.id)
 }
 
-const visitIndexShow = (params = {}) => {
+const visitIndexShow = (params = {}, options = {}) => {
     router.get(
         route('indices.show', props.index.id),
         params,
@@ -84,6 +84,7 @@ const visitIndexShow = (params = {}) => {
             reset: ['companies'],
             preserveState: true,
             preserveScroll: true,
+            ...options,
         },
     )
 }
