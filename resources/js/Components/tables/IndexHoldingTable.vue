@@ -60,8 +60,8 @@ const columns = [
             }),
         cell: ({ row }) => h(CompanyDisplay, { company: row.original.company }),
         meta: {
-            headerClass: 'pl-10 w-11/12',
-            cellClass: 'pl-10 w-11/12',
+            headerClass: 'w-11/12',
+            cellClass: 'w-11/12',
         },
     }),
 ]
