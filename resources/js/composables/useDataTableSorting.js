@@ -1,7 +1,17 @@
 import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
 
 export default function useDataTableSorting (sort, visitRoute) {
     const sorting = ref([])
+    const isSorting = ref(false)
+
+    router.on('start', () => {
+        isSorting.value = true
+    })
+
+    router.on('finish', () => {
+        isSorting.value = false
+    })
 
     const resolveNextSorting = (updater) => {
         const previousSorting = sorting.value
@@ -35,6 +45,7 @@ export default function useDataTableSorting (sort, visitRoute) {
 
     return {
         sorting,
+        isSorting,
         handleSortingChange,
     }
 }
