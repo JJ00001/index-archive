@@ -74,6 +74,10 @@ const props = defineProps({
         type: Function,
         default: null,
     },
+    loading: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 const searchTerm = ref('')
@@ -170,7 +174,7 @@ onMounted(() => {
                 :data="infiniteScrollKey"
                 :items-element="'#' + bodyId"
                 preserve-url
-                v-slot="{ loading }"
+                v-slot="{ loading: loadingInfiniteScroll }"
             >
                 <Table>
                     <TableHeader>
@@ -193,7 +197,7 @@ onMounted(() => {
                         </TableRow>
                     </TableHeader>
                     <TableBody :id="bodyId">
-                        <template v-if="table.getRowModel().rows.length">
+                        <template v-if="table.getRowModel().rows.length && !loading">
                             <TableRow
                                 v-for="row in table.getRowModel().rows"
                                 :key="row.id"
@@ -212,12 +216,12 @@ onMounted(() => {
                                 </TableCell>
                             </TableRow>
                         </template>
-                        <TableEmpty v-else-if="!loading"
+                        <TableEmpty v-else-if="!(loading || loadingInfiniteScroll)"
                                     :colspan="table.getAllColumns().length">
                             {{ emptyStateMessage }}
                         </TableEmpty>
                         <DataTableRowSkeleton
-                            v-if="loading"
+                            v-if="loading || loadingInfiniteScroll"
                             :columns="table.getAllLeafColumns()"
                             :row-count="skeletonRowCount"
                         />
