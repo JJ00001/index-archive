@@ -12,6 +12,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    loading: {
+        type: Boolean,
+        default: false,
+    },
     onRowClick: {
         type: Function,
         default: null,
@@ -71,6 +75,7 @@ const handleRowClick = (holding) => {
     <DataTable
         :columns="columns"
         :data="companies"
+        :loading="loading"
         :on-row-click="handleRowClick"
         :on-sorting-change="handleSortingChange"
         :sorting="sorting"
