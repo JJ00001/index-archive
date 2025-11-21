@@ -82,5 +82,6 @@ const handleRowClick = (holding) => {
         body-id="index-holding-table-body"
         infinite-scroll-key="companies"
         remember-scroll-key="IndexHoldingTable"
+        :enable-infinite-scroll="true"
     />
 </template>

@@ -43,6 +43,10 @@ const props = defineProps({
         default: 'max-h-[50vh]',
     },
     // Infinite Scroll
+    enableInfiniteScroll: {
+        type: Boolean,
+        default: false,
+    },
     infiniteScrollKey: {
         type: String,
         default: null,
@@ -169,6 +173,7 @@ onMounted(() => {
             @scroll="handleScroll"
         >
             <InfiniteScroll
+                v-if="enableInfiniteScroll"
                 :buffer="infiniteScrollBuffer"
                 :data="infiniteScrollKey"
                 :items-element="'#' + bodyId"
@@ -186,6 +191,17 @@ onMounted(() => {
                     :table="table"
                 />
             </InfiniteScroll>
+            <DataTableContent
+                v-else
+                :body-id="bodyId"
+                :empty-state-message="emptyStateMessage"
+                :handle-row-click="handleRowClick"
+                :loading="loading"
+                :loading-infinite-scroll="false"
+                :row-classes="rowClasses"
+                :skeleton-row-count="skeletonRowCount"
+                :table="table"
+            />
         </div>
     </div>
 </template>
