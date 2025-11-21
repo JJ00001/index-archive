@@ -35,7 +35,7 @@ const { t, n } = useI18n()
 const columnHelper = createColumnHelper()
 
 const sort = computed(() => props.sort)
-const { sorting, handleSortingChange } = useDataTableSorting(sort, props.onRequestSort)
+const { sorting, isSorting, handleSortingChange } = useDataTableSorting(sort, props.onRequestSort)
 
 const columns = [
     columnHelper.accessor('weight', {
@@ -75,7 +75,7 @@ const handleRowClick = (holding) => {
     <DataTable
         :columns="columns"
         :data="companies"
-        :loading="loading"
+        :loading="isSorting"
         :on-row-click="handleRowClick"
         :on-sorting-change="handleSortingChange"
         :sorting="sorting"
