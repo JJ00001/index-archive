@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <section class="space-y-12 my-20">
+    <section class="mx-auto my-20 max-w-3xl space-y-12 text-center">
         <h1 class="text-5xl font-semibold tracking-tight text-slate-900 sm:text-6xl md:text-7xl">
             Explore how global markets evolve
         </h1>

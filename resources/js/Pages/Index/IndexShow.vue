@@ -1,18 +1,18 @@
 <script setup>
 import { ref } from 'vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
 import { useI18n } from 'vue-i18n'
-import SectorIndexTable from '@/Components/SectorIndexTable.vue'
-import CountryIndexTable from '@/Components/CountryIndexTable.vue'
+import SectorIndexTable from '@/Components/tables/SectorIndexTable.vue'
+import CountryIndexTable from '@/Components/tables/CountryIndexTable.vue'
 import IndexActivityLog from '@/Components/IndexActivityLog.vue'
 import IndexHoldingDialog from '@/Components/Dialogs/IndexHoldingDialog.vue'
 import IndexSectorDialog from '@/Components/Dialogs/IndexSectorDialog.vue'
 import IndexCountryDialog from '@/Components/Dialogs/IndexCountryDialog.vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
-import IndexHoldingTable from '@/Components/IndexHoldingTable.vue'
+import IndexHoldingTable from '@/Components/tables/IndexHoldingTable.vue'
 
 const props = defineProps({
     index: {
@@ -39,6 +39,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    sort: {
+        type: Object,
+        required: true,
+    },
 })
 
 const { t } = useI18n()
@@ -54,14 +58,14 @@ const breadcrumbItems = [
     },
 ]
 
-const companiesCount = props.companies.data.length
+const companiesCount = props.index.index_holdings_count
 
 const holdingDialogRef = ref(null)
 const sectorDialogRef = ref(null)
 const countryDialogRef = ref(null)
 
-const handleIndexHoldingRowClick = (company) => {
-    holdingDialogRef.value?.open(company.index_holding_id)
+const handleIndexHoldingRowClick = (holding) => {
+    holdingDialogRef.value?.open(holding.index_holding_id)
 }
 
 const handleSectorRowClick = (sector) => {
@@ -70,6 +74,19 @@ const handleSectorRowClick = (sector) => {
 
 const handleCountryRowClick = (country) => {
     countryDialogRef.value?.open(country.id)
+}
+
+const visitIndexShow = (params = {}, options = {}) => {
+    router.get(
+        route('indices.show', props.index.id),
+        params,
+        {
+            reset: ['companies'],
+            preserveState: true,
+            preserveScroll: true,
+            ...options,
+        },
+    )
 }
 
 </script>
@@ -84,14 +101,18 @@ const handleCountryRowClick = (country) => {
             <StatCardGroup :stats="stats" />
             <Card>
                 <CardHeader>
-                    <CardTitle>{{ t('indexHolding.name', 2) + ' (Top ' + companiesCount + ')' }}</CardTitle>
+                    <CardTitle>{{ t('indexHolding.name', 2) + ' (' + companiesCount + ')' }}</CardTitle>
                     <CardDescription>
                         Companies currently held in the {{ index.name }} index
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <index-holding-table :companies="companies"
-                                         :on-row-click="handleIndexHoldingRowClick" />
+                    <index-holding-table
+                        :companies="companies"
+                        :on-request-sort="visitIndexShow"
+                        :on-row-click="handleIndexHoldingRowClick"
+                        :sort="sort"
+                    />
                 </CardContent>
             </Card>
             <Card>

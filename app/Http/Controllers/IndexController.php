@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ActivityResource;
-use App\Http\Resources\IndexHoldingCompanyCollection;
 use App\Http\Resources\IndexHoldingCountryCollection;
 use App\Http\Resources\IndexHoldingSectorCollection;
+use App\Models\CurrentIHMarketData;
 use App\Models\Index;
+use Inertia\Inertia;
 use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class IndexController extends Controller
 {
+
     public function index()
     {
         $indices = Index::withCount('indexHoldings')
@@ -24,17 +27,30 @@ class IndexController extends Controller
 
     public function show(Index $index)
     {
-        $index->load(['indexProvider']);
+        $index->load(['indexProvider'])->loadCount('indexHoldings');
 
-        $indexHoldingsSortedByWeight = $index->latestMarketData()
-            ->with('indexHolding')
-            ->get()
-            ->sortByDesc('weight')
-            ->take(50)
-            ->map(fn ($marketData) => $marketData->indexHolding)
-            ->values();
+        $currentIndexHoldings = QueryBuilder::for(
+            CurrentIHMarketData::query()
+                               ->forIndex($index->id)
+                               ->with('company')
+                               ->leftJoin('companies', 'companies.id', '=',
+                                   'current_index_holding_market_data.company_id')
+                               ->select('current_index_holding_market_data.*'))
+                                            ->defaultSort('-weight')
+                                            ->allowedSorts([
+                                                'weight',
+                                                'companies.name',
+                                            ])
+                                            ->paginate(20, pageName: 'companies')
+                                            ->withQueryString();
 
-        $companies = new IndexHoldingCompanyCollection($indexHoldingsSortedByWeight);
+        $sort         = request('sort');
+        $resolvedSort = $sort ?? '-weight';
+
+        $currentSort = [
+            'column' => ltrim($resolvedSort, '-'),
+            'direction' => str_starts_with($resolvedSort, '-') ? 'desc' : 'asc',
+        ];
 
         $sectors = new IndexHoldingSectorCollection($index);
 
@@ -43,33 +59,20 @@ class IndexController extends Controller
         $activities = ActivityResource::collection(
             Activity::query()
                 ->where('properties->index_id', $index->id)
-                ->orderBy('created_at', 'desc')
+                ->orderBy('properties->date', 'desc')
                 ->limit(50)
                 ->get()
         );
 
-        $stats = [
-            [
-                'title' => 'Holdings',
-                'value' => $index->indexHoldings()->count(),
-            ],
-            [
-                'title' => 'Provider',
-                'value' => $index->indexProvider->name,
-            ],
-            [
-                'title' => 'Currency',
-                'value' => $index->currency,
-            ],
-        ];
-
         return inertia('Index/IndexShow', [
             'index' => $index,
-            'stats' => $stats,
-            'companies' => $companies,
+            'stats' => $index->stats(),
+            'companies' => Inertia::scroll($currentIndexHoldings),
+            'sort' => $currentSort,
             'sectors' => $sectors,
             'countries' => $countries,
             'activities' => $activities,
         ]);
     }
+
 }

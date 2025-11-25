@@ -2,7 +2,7 @@
 import { Head } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
-import IndexIndexTable from '@/Components/IndexIndexTable.vue'
+import IndexIndexTable from '@/Components/tables/IndexIndexTable.vue'
 import { Card, CardContent } from '@/Components/ui/card'
 
 const props = defineProps({

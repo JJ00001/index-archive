@@ -84,6 +84,10 @@ class Company extends Model
 
     protected function brandfetchLogoUrl(): ?string
     {
+        if (config('app.env') === 'local') {
+            return null;
+        }
+
         $clientId = config('app.brandfetch_api_key');
 
         $identifier = $this->isin;

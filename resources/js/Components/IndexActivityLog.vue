@@ -48,7 +48,7 @@ const getActivityLabel = (description) => {
     {{ $t('activity.noRecentActivity') }}
   </div>
   <div v-else
-       class="max-h-[550px] overflow-auto">
+       class="max-h-[50vh] overflow-auto">
     <Table>
       <TableHeader>
         <TableRow>

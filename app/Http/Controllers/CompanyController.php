@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyController extends Controller
 {
@@ -12,10 +13,21 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::paginate(200);
+        $companies = QueryBuilder::for(Company::query())
+                                 ->allowedSorts('name')
+                                 ->paginate(10)
+                                 ->withQueryString();
+
+        $sort = request('sort');
+
+        $currentSort = [
+            'column' => ltrim($sort, '-'),
+            'direction' => str_starts_with($sort, '-') ? 'desc' : 'asc',
+        ];
 
         return inertia('Company/CompanyIndex', [
-            'companies' => Inertia::merge($companies),
+            'companies' => Inertia::scroll($companies),
+            'sort' => $currentSort,
         ]);
     }
 
