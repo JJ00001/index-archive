@@ -7,8 +7,10 @@
             Explore how global markets evolve
         </h1>
         <h2 class="font-apple-garamond text-2xl leading-relaxed text-slate-600">
+            The composition of major market indices constantly changes.
             <br>
-            Explore shifts across countries, sectors, and companies to understand what’s really driving the market.
-        </p>
+            IndexArchive uncovers shifts across countries, sectors, and companies to understand what’s really driving
+            the market.
+        </h2>
     </section>
 </template>
