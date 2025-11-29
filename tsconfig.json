@@ -1,4 +1,5 @@
 {
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
@@ -6,5 +7,12 @@
             "ziggy-js": ["./vendor/tightenco/ziggy"]
         }
     },
+  "include": [
+    "resources/js/**/*.ts",
+    "resources/js/**/*.tsx",
+    "resources/js/**/*.vue",
+    "env.d.ts",
+    "vite.config.*"
+  ],
     "exclude": ["node_modules", "public"]
 }
