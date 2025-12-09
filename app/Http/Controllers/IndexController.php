@@ -62,7 +62,7 @@ class IndexController extends Controller
                 ->orderBy('properties->date', 'desc')
                 ->limit(50)
                 ->get()
-        );
+        )->resolve();
 
         return inertia('Index/IndexShow', [
             'index' => $index,

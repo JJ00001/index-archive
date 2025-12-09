@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   activities: {
-    type: Object,
+      type: Array,
     required: true,
   },
 })
@@ -43,7 +43,7 @@ const getActivityLabel = (description) => {
 </script>
 
 <template>
-  <div v-if="activities.data.length === 0"
+    <div v-if="activities.length === 0"
        class="text-sm text-muted-foreground">
     {{ $t('activity.noRecentActivity') }}
   </div>
@@ -59,7 +59,7 @@ const getActivityLabel = (description) => {
       </TableHeader>
       <TableBody>
         <TableRow
-            v-for="activity in activities.data"
+            v-for="activity in activities"
             :key="activity.id"
             :class="getActivityStyle(activity.description).row"
         >

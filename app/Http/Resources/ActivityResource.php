@@ -9,6 +9,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ActivityResource extends JsonResource
 {
+
+    public static $wrap = null;
+
     public function toArray(Request $request): array
     {
         $companyId = $this->properties->get('company_id');
