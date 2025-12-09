@@ -124,7 +124,7 @@ const visitIndexShow = (params = {}, options = {}) => {
                 </CardHeader>
                 <CardContent>
                     <sector-index-table :on-row-click="handleSectorRowClick"
-                                        :sector-data="sectors.data" />
+                                        :sector-data="sectors" />
                 </CardContent>
             </Card>
             <Card>
@@ -135,7 +135,7 @@ const visitIndexShow = (params = {}, options = {}) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <country-index-table :country-data="countries.data"
+                    <country-index-table :country-data="countries"
                                          :on-row-click="handleCountryRowClick" />
                 </CardContent>
             </Card>
