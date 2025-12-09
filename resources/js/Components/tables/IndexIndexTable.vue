@@ -1,18 +1,17 @@
-<script setup>
-import { ref } from 'vue'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
-import { router } from '@inertiajs/vue3'
+<script lang="ts"
+        setup>
+import {ref} from 'vue'
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/Components/ui/table'
+import {router} from '@inertiajs/vue3'
+import type {Index} from "@/interfaces";
 
-const props = defineProps({
-    indices: {
-        type: Array,
-        required: true,
-    },
-})
+const props = defineProps<{
+    indices: Index[],
+}>()
 
-const indexData = ref([...props.indices])
+const indexData = ref<Index[]>([...props.indices])
 
-const handleRowClick = (index) => {
+const handleRowClick = (index: Index): void => {
     router.get(route('indices.show', index.id))
 }
 </script>
