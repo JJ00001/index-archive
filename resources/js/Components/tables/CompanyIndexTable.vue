@@ -1,27 +1,21 @@
-<script setup>
-import { router } from '@inertiajs/vue3'
-import { createColumnHelper } from '@tanstack/vue-table'
-import { computed, h } from 'vue'
-import { useI18n } from 'vue-i18n'
+<script lang="ts"
+        setup>
+import {router} from '@inertiajs/vue3'
+import {createColumnHelper} from '@tanstack/vue-table'
+import {computed, h} from 'vue'
+import {useI18n} from 'vue-i18n'
 import CompanyDisplay from '@/Components/CompanyDisplay.vue'
 import DataTable from '@/Components/ui/data-table/DataTable.vue'
 import DataTableColumnHeader from '@/Components/ui/data-table/DataTableColumnHeader.vue'
 import useDataTableSorting from '@/composables/useDataTableSorting'
+import type {Company} from "@/interfaces/company.ts";
+import type {Paginated} from "@/interfaces/Paginated.ts";
 
-const props = defineProps({
-    companies: {
-        type: Object,
-        required: true,
-    },
-    sort: {
-        type: Object,
-        required: true,
-    },
-    onRowClick: {
-        type: Function,
-        default: null,
-    },
-})
+const props = defineProps<{
+    companies: Paginated<Company>,
+    sort: Object,
+    onRowClick?: ((company: Company) => void) | null,
+}>()
 
 const { t } = useI18n()
 const columnHelper = createColumnHelper()
@@ -54,7 +48,7 @@ const columns = [
     }),
 ]
 
-const handleRowClick = (company) => {
+const handleRowClick = (company: Company) => {
     if (props.onRowClick) {
         props.onRowClick(company)
     } else {

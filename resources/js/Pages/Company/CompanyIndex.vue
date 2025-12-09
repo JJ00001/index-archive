@@ -1,20 +1,17 @@
-<script setup>
-import { Head } from '@inertiajs/vue3'
-import { useI18n } from 'vue-i18n'
+<script lang="ts"
+        setup>
+import {Head} from '@inertiajs/vue3'
+import {useI18n} from 'vue-i18n'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import CompanyIndexTable from '@/Components/tables/CompanyIndexTable.vue'
-import { Card, CardContent } from '@/Components/ui/card'
+import {Card, CardContent} from '@/Components/ui/card'
+import type {Company} from "@/interfaces/company.ts";
+import type {Paginated} from "@/interfaces/Paginated.ts";
 
-const props = defineProps({
-    companies: {
-        type: Object,
-        required: true,
-    },
-    sort: {
-        type: Object,
-        required: true,
-    },
-})
+defineProps<{
+    companies: Paginated<Company>,
+    sort: Object,
+}>()
 
 const { t } = useI18n()
 </script>
