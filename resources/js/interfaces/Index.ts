@@ -1,4 +1,4 @@
-import type {IndexProvider} from "@/interfaces/indexProvider.ts";
+import type {IndexProvider} from "@/interfaces/IndexProvider.ts";
 
 export interface Index {
     id: number
