@@ -1,15 +1,14 @@
-<script setup>
-import { Minus, Plus } from 'lucide-vue-next'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+<script lang="ts"
+        setup>
+import {Minus, Plus} from 'lucide-vue-next'
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/Components/ui/table'
 import CompanyDisplay from '@/Components/CompanyDisplay.vue'
-import { useI18n } from 'vue-i18n'
+import {useI18n} from 'vue-i18n'
+import type {IndexActivity} from "@/interfaces/IndexActivity.ts";
 
-const props = defineProps({
-    activities: {
-        type: Array,
-        required: true,
-    },
-})
+defineProps<{
+    activities: IndexActivity[]
+}>()
 
 const { t } = useI18n()
 
