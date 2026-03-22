@@ -5,7 +5,7 @@ import {useI18n} from 'vue-i18n'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import IndexIndexTable from '@/Components/tables/IndexIndexTable.vue'
 import {Card, CardContent} from '@/Components/ui/card'
-import type {Index} from "@/interfaces";
+import type {Index} from "@/interfaces/Index.ts";
 
 defineProps<{
     indices: Index[]
