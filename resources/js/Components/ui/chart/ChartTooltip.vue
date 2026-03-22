@@ -1,21 +1,26 @@
-<script setup>
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card'
+<script lang="ts"
+        setup>
+import {Card, CardContent, CardHeader, CardTitle} from '@/Components/ui/card'
 
-defineProps({
-    title: { type: String, required: false },
-    data: { type: Array, required: true },
-})
+defineProps<{
+    title?: string
+    data: {
+        name: string
+        color: string
+        value: any
+    }[]
+}>()
 </script>
 
 <template>
     <Card class="text-sm !py-0 !gap-0">
         <CardHeader v-if="title"
-                    class="border-b !px-4 !py-2">
+                    class="!px-4 !py-2 border-b">
             <CardTitle>
                 {{ title }}
             </CardTitle>
         </CardHeader>
-        <CardContent class="min-w-[180px] flex flex-col gap-1 !px-4 !py-2">
+        <CardContent class="!px-4 !py-2 min-w-[180px] flex flex-col gap-1">
             <div v-for="(item, key) in data"
                  :key="key"
                  class="flex justify-between">
@@ -25,9 +30,9 @@ defineProps({
                  viewBox="0 0 30 30"
                  width="100%">
               <path
+                  d=" M 15 15 m -14, 0 a 14,14 0 1,1 28,0 a 14,14 0 1,1 -28,0"
                   :fill="item.color"
                   :stroke="item.color"
-                  d=" M 15 15 m -14, 0 a 14,14 0 1,1 28,0 a 14,14 0 1,1 -28,0"
                   stroke-width="1"
               />
             </svg>

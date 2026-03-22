@@ -1,43 +1,43 @@
-<script setup>
-import { omit } from '@unovis/ts'
-import { VisCrosshair, VisTooltip } from '@unovis/vue'
-import { createApp } from 'vue'
-import { ChartTooltip } from '.'
+<script lang="ts"
+        setup>
+import type {BulletLegendItemInterface} from "@unovis/ts"
+import {omit} from "@unovis/ts"
+import type {Component} from "vue"
+import {createApp} from "vue"
+import {VisCrosshair, VisTooltip} from "@unovis/vue"
+import {ChartTooltip} from "."
 
-const props = defineProps({
-    colors: { type: Array, required: true, default: () => [] },
-    index: { type: String, required: true },
-    items: { type: Array, required: true },
-    customTooltip: { type: null, required: false },
-    valueFormatter: { type: Function, required: false },
+const props = withDefaults(defineProps<{
+    colors: string[]
+    index: string
+    items: BulletLegendItemInterface[]
+    customTooltip?: Component
+    valueFormatter?: Function
+}>(), {
+    colors: () => [],
 })
 
 // Use weakmap to store reference to each datapoint for Tooltip
 const wm = new WeakMap()
 
-function template (d) {
+function template(d: any) {
     if (wm.has(d)) {
         return wm.get(d)
     } else {
-        const componentDiv = document.createElement('div')
-        const omittedData = Object.entries(omit(d, [props.index])).map(
-            ([key, value]) => {
-                const legendReference = props.items.find((i) => i.name === key)
-                return { ...legendReference, value: props.valueFormatter?.(value) ?? value }
-            },
-        )
+        const componentDiv = document.createElement("div")
+        const omittedData = Object.entries(omit(d, [props.index])).map(([key, value]) => {
+            const legendReference = props.items.find(i => i.name === key)
+            return {...legendReference, value: props.valueFormatter?.(value) ?? value}
+        })
         const TooltipComponent = props.customTooltip ?? ChartTooltip
-        createApp(TooltipComponent, {
-            title: d[props.index].toString(),
-            data: omittedData,
-        }).mount(componentDiv)
+        createApp(TooltipComponent, {title: d[props.index].toString(), data: omittedData}).mount(componentDiv)
         wm.set(d, componentDiv.innerHTML)
         return componentDiv.innerHTML
     }
 }
 
-function color (d, i) {
-    return props.colors[i] ?? 'transparent'
+function color(d: unknown, i: number) {
+    return props.colors[i] ?? "transparent"
 }
 </script>
 
