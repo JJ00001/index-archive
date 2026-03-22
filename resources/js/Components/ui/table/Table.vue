@@ -1,9 +1,13 @@
-<script setup>
-import { cn } from '@/lib/utils'
+<script lang="ts"
+        setup>
+import type {HTMLAttributes} from "vue"
+import {cn} from "@/lib/utils"
 
-const props = defineProps({
-    class: { type: null, required: false },
-    stickyHeader: { type: Boolean, default: true },
+const props = withDefaults(defineProps<{
+    class?: HTMLAttributes["class"]
+    stickyHeader?: boolean
+}>(), {
+    stickyHeader: true,
 })
 
 const containerStyle = props.stickyHeader ? 'relative w-full' : 'relative w-full overflow-auto'
@@ -14,12 +18,8 @@ const tableStyle = props.stickyHeader
 </script>
 
 <template>
-    <div :class="cn(containerStyle)"
-         data-slot="table-container">
-        <table
-            :class="cn(tableStyle, props.class)"
-            data-slot="table"
-        >
+    <div :class="cn(containerStyle)">
+        <table :class="cn(tableStyle, props.class)">
             <slot />
         </table>
     </div>
