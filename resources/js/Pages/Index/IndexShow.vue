@@ -1,49 +1,36 @@
-<script setup>
-import { ref } from 'vue'
-import { Head, router } from '@inertiajs/vue3'
+<script lang="ts"
+        setup>
+import {ref} from 'vue'
+import {Head, router} from '@inertiajs/vue3'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
-import { useI18n } from 'vue-i18n'
+import {useI18n} from 'vue-i18n'
 import SectorIndexTable from '@/Components/tables/SectorIndexTable.vue'
 import CountryIndexTable from '@/Components/tables/CountryIndexTable.vue'
 import IndexActivityLog from '@/Components/IndexActivityLog.vue'
 import IndexHoldingDialog from '@/Components/Dialogs/IndexHoldingDialog.vue'
 import IndexSectorDialog from '@/Components/Dialogs/IndexSectorDialog.vue'
 import IndexCountryDialog from '@/Components/Dialogs/IndexCountryDialog.vue'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/Components/ui/card'
 import IndexHoldingTable from '@/Components/tables/IndexHoldingTable.vue'
+import type {Index} from "@/interfaces";
+import type {Paginated} from "@/interfaces/Paginated.ts";
+import type {Company} from "@/interfaces/Company.ts";
+import type {IndexHolding} from "@/interfaces/IndexHolding.ts";
+import type {Sector} from "@/interfaces/Sector.ts";
+import type {Country} from "@/interfaces/Country.ts";
+import type {IndexActivity} from "@/interfaces/IndexActivity.ts";
 
-const props = defineProps({
-    index: {
-        type: Object,
-        required: true,
-    },
-    stats: {
-        type: Array,
-        required: true,
-    },
-    companies: {
-        type: Object,
-        required: true,
-    },
-    sectors: {
-        type: Object,
-        required: true,
-    },
-    countries: {
-        type: Object,
-        required: true,
-    },
-    activities: {
-        type: Object,
-        required: true,
-    },
-    sort: {
-        type: Object,
-        required: true,
-    },
-})
+const props = defineProps<{
+    index: Index
+    stats: []
+    companies: Paginated<Company>
+    sectors: Sector[]
+    countries: Country[]
+    activities: IndexActivity[]
+    sort: {}
+}>()
 
 const { t } = useI18n()
 
@@ -60,19 +47,19 @@ const breadcrumbItems = [
 
 const companiesCount = props.index.index_holdings_count
 
-const holdingDialogRef = ref(null)
-const sectorDialogRef = ref(null)
-const countryDialogRef = ref(null)
+const holdingDialogRef = ref<InstanceType<typeof IndexHoldingDialog>>()
+const sectorDialogRef = ref<InstanceType<typeof IndexSectorDialog>>()
+const countryDialogRef = ref<InstanceType<typeof IndexCountryDialog>>()
 
-const handleIndexHoldingRowClick = (holding) => {
+const handleIndexHoldingRowClick = (holding: IndexHolding) => {
     holdingDialogRef.value?.open(holding.index_holding_id)
 }
 
-const handleSectorRowClick = (sector) => {
+const handleSectorRowClick = (sector: Sector) => {
     sectorDialogRef.value?.open(sector.id)
 }
 
-const handleCountryRowClick = (country) => {
+const handleCountryRowClick = (country: Country) => {
     countryDialogRef.value?.open(country.id)
 }
 
