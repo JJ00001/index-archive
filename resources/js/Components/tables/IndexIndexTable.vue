@@ -3,7 +3,7 @@
 import {ref} from 'vue'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/Components/ui/table'
 import {router} from '@inertiajs/vue3'
-import type {Index} from "@/interfaces";
+import type {Index} from "@/interfaces/Index.ts";
 
 const props = defineProps<{
     indices: Index[],

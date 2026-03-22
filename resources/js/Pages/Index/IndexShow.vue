@@ -14,7 +14,7 @@ import IndexSectorDialog from '@/Components/Dialogs/IndexSectorDialog.vue'
 import IndexCountryDialog from '@/Components/Dialogs/IndexCountryDialog.vue'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/Components/ui/card'
 import IndexHoldingTable from '@/Components/tables/IndexHoldingTable.vue'
-import type {Index} from "@/interfaces";
+import type {Index} from "@/interfaces/Index.ts";
 import type {Paginated} from "@/interfaces/Paginated.ts";
 import type {Company} from "@/interfaces/Company.ts";
 import type {IndexHolding} from "@/interfaces/IndexHolding.ts";
