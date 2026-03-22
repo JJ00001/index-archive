@@ -1,13 +1,15 @@
-<script setup>
-const props = defineProps({
-    class: { type: null, required: false },
-})
+<script lang="ts"
+        setup>
+import type {HTMLAttributes} from "vue"
+
+const props = defineProps<{
+    class?: HTMLAttributes["class"]
+}>()
 </script>
 
 <template>
     <nav :class="props.class"
-         aria-label="breadcrumb"
-         data-slot="breadcrumb">
+         aria-label="breadcrumb">
         <slot />
     </nav>
 </template>
