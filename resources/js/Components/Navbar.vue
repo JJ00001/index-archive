@@ -37,14 +37,14 @@ onMounted(fetchData)
 </script>
 
 <template>
-    <div class="border-b">
+    <div class="border-b overflow-x-clip">
         <div class="max-lg:px-2 px-0 py-1">
             <div class="flex items-center justify-between lg:w-10/12 mx-auto max-w-(--breakpoint-xl)">
                 <Link class="hover:opacity-80 transition-opacity"
                       href="/">
                     <h1 class="font-apple-garamond text-5xl max-lg:text-4xl">IndexArchive</h1>
                 </Link>
-                <NavigationMenu>
+                <NavigationMenu :viewport="false">
                     <NavigationMenuList class="gap-2">
                         <!-- Indices Dropdown -->
                         <NavigationMenuItem>
