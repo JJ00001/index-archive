@@ -1,24 +1,13 @@
-<script setup>
-import { reactiveOmit } from '@vueuse/core'
-import { NavigationMenuItem } from 'reka-ui'
-import { cn } from '@/lib/utils'
+<script lang="ts"
+        setup>
+import type {NavigationMenuItemProps} from "reka-ui"
+import {NavigationMenuItem} from "reka-ui"
 
-const props = defineProps({
-    value: { type: String, required: false },
-    asChild: { type: Boolean, required: false },
-    as: { type: null, required: false },
-    class: { type: null, required: false },
-})
-
-const delegatedProps = reactiveOmit(props, 'class')
+const props = defineProps<NavigationMenuItemProps>()
 </script>
 
 <template>
-    <NavigationMenuItem
-        :class="cn('relative', props.class)"
-        data-slot="navigation-menu-item"
-        v-bind="delegatedProps"
-    >
+    <NavigationMenuItem v-bind="props">
         <slot />
     </NavigationMenuItem>
 </template>
