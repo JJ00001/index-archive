@@ -1,22 +1,19 @@
 <script lang="ts"
         setup>
 import {router} from '@inertiajs/vue3'
-import type {VisitOptions} from '@inertiajs/core'
 import {createColumnHelper} from '@tanstack/vue-table'
 import {computed, h} from 'vue'
 import {useI18n} from 'vue-i18n'
-import {route} from 'ziggy-js'
 import CompanyDisplay from '@/Components/CompanyDisplay.vue'
 import DataTable from '@/Components/ui/data-table/DataTable.vue'
 import DataTableColumnHeader from '@/Components/ui/data-table/DataTableColumnHeader.vue'
 import useDataTableSorting from '@/composables/useDataTableSorting'
 import type {Company} from "@/interfaces/Company.ts";
 import type {Paginated} from "@/interfaces/Paginated.ts";
-import type {Sort} from "@/interfaces/Sort.ts";
 
 const props = defineProps<{
     companies: Paginated<Company>,
-    sort: Sort,
+    sort: Object,
     onRowClick?: ((company: Company) => void) | null,
 }>()
 

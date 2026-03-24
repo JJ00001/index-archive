@@ -7,11 +7,10 @@ import CompanyIndexTable from '@/Components/tables/CompanyIndexTable.vue'
 import {Card, CardContent} from '@/Components/ui/card'
 import type {Company} from "@/interfaces/Company.ts";
 import type {Paginated} from "@/interfaces/Paginated.ts";
-import type {Sort} from "@/interfaces/Sort.ts";
 
 defineProps<{
     companies: Paginated<Company>,
-    sort: Sort,
+    sort: Object,
 }>()
 
 const { t } = useI18n()

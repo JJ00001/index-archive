@@ -1,9 +1,7 @@
 <script lang="ts"
         setup>
-import type {VisitOptions} from '@inertiajs/core'
 import {ref} from 'vue'
 import {Head, router} from '@inertiajs/vue3'
-import {route} from 'ziggy-js'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
 import Breadcrumbs from '@/Components/Breadcrumbs.vue'
@@ -23,7 +21,6 @@ import type {IndexHolding} from "@/interfaces/IndexHolding.ts";
 import type {Sector} from "@/interfaces/Sector.ts";
 import type {Country} from "@/interfaces/Country.ts";
 import type {IndexActivity} from "@/interfaces/IndexActivity.ts";
-import type {Sort} from "@/interfaces/Sort.ts";
 
 const props = defineProps<{
     index: Index
@@ -32,7 +29,7 @@ const props = defineProps<{
     sectors: Sector[]
     countries: Country[]
     activities: IndexActivity[]
-    sort: Sort
+    sort: {}
 }>()
 
 const { t } = useI18n()
