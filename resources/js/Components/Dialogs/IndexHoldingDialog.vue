@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import IndexEntityDialogBase from '@/Components/Dialogs/IndexEntityDialogBase.vue'
-import useIndexEntityDialog from '@/composables/useIndexEntityDialog'
+import useIndexEntityDialog from '@/composables/useIndexEntityDialog.ts'
 import { useI18n } from 'vue-i18n'
 import CompanyInfoHeader from '@/Components/CompanyInfoHeader.vue'
 import WeightChart from '@/Components/Charts/WeightChart.vue'

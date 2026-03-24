@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import IndexEntityDialogBase from '@/Components/Dialogs/IndexEntityDialogBase.vue'
-import useIndexEntityDialog from '@/composables/useIndexEntityDialog'
+import useIndexEntityDialog from '@/composables/useIndexEntityDialog.ts'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
 import WeightChart from '@/Components/Charts/WeightChart.vue'
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card'

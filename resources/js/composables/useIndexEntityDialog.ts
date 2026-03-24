@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import {ref} from 'vue'
 
 export default function useIndexEntityDialog () {
   const isOpen = ref(false)

@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import CompanyDisplay from '@/Components/CompanyDisplay.vue'
 import DataTable from '@/Components/ui/data-table/DataTable.vue'
 import DataTableColumnHeader from '@/Components/ui/data-table/DataTableColumnHeader.vue'
-import useDataTableSorting from '@/composables/useDataTableSorting'
+import useDataTableSorting from '@/composables/useDataTableSorting.ts'
 
 const props = defineProps({
     companies: {

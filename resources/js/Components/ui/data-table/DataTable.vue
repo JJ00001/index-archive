@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { getCoreRowModel, getFilteredRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
 import { InfiniteScroll } from '@inertiajs/vue3'
 import DataTableContent from '@/Components/ui/data-table/DataTableContent.vue'
-import useRememberedScroll from '@/composables/useRememberedScroll'
+import useRememberedScroll from '@/composables/useRememberedScroll.ts'
 
 const props = defineProps({
     // Data

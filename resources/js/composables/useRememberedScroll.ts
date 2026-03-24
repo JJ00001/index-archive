@@ -1,5 +1,5 @@
-import { useRemember } from '@inertiajs/vue3'
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import {useRemember} from '@inertiajs/vue3'
+import {onBeforeUnmount, onMounted, ref} from 'vue'
 
 export default function useRememberedScroll (key) {
   const rememberKey = `remembered-scroll:${key}`
