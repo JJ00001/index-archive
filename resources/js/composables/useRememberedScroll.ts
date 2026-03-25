@@ -1,58 +1,60 @@
 import {useRemember} from '@inertiajs/vue3'
-import {onBeforeUnmount, onMounted, ref} from 'vue'
+import {onBeforeUnmount, onMounted, ref, unref} from 'vue'
 
 export default function useRememberedScroll(key: string) {
-  const rememberKey = `remembered-scroll:${key}`
-  const state = useRemember({ top: 0 }, rememberKey)
+    const rememberKey = `remembered-scroll:${key}`
+    const state = useRemember({top: 0}, rememberKey)
     const scrollContainer = ref<HTMLElement | null>(null)
-  const storage = window.sessionStorage
+    const storage = window.sessionStorage
 
-  const remember = () => {
-      if (!scrollContainer.value) {
-          return
-      }
+    const remember = () => {
+        if (!scrollContainer.value) {
+            return
+        }
 
-    storage.setItem(rememberKey, String(state.top))
-  }
+        unref(state).top = scrollContainer.value.scrollTop
 
-  const restore = async () => {
-      if (!scrollContainer.value) {
-          return
-      }
+        storage.setItem(rememberKey, String(unref(state).top))
+    }
 
-    const storedTop = storage.getItem(rememberKey)
-    const parsedTop = Number(storedTop)
+    const restore = async () => {
+        if (!scrollContainer.value) {
+            return
+        }
 
-    scrollContainer.value.scrollTop = parsedTop
-  }
+        const storedTop = storage.getItem(rememberKey)
+        const parsedTop = Number(storedTop)
 
-  const resetScrollPosition = () => {
-      if (!scrollContainer.value) {
-          return
-      }
+        scrollContainer.value.scrollTop = parsedTop
+    }
 
-      rememberedState.top = 0
+    const resetScrollPosition = () => {
+        if (!scrollContainer.value) {
+            return
+        }
 
-    storage.setItem(rememberKey, '0')
+        unref(state).top = 0
 
-    scrollContainer.value.scrollTop = 0
-  }
+        storage.setItem(rememberKey, '0')
 
-  onMounted(() => {
-    void restore()
-  })
+        scrollContainer.value.scrollTop = 0
+    }
 
-  onBeforeUnmount(() => {
-    remember()
-  })
+    onMounted(() => {
+        void restore()
+    })
 
-  const handleScroll = () => {
-    remember()
-  }
+    onBeforeUnmount(() => {
+        remember()
+    })
 
-  return {
-    scrollContainer,
-    handleScroll,
-    resetScrollPosition,
-  }
+    const handleScroll = () => {
+        remember()
+    }
+
+    return {
+        scrollContainer,
+        handleScroll,
+        resetScrollPosition,
+    }
 }
