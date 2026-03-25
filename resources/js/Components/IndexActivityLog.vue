@@ -5,6 +5,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/C
 import CompanyDisplay from '@/Components/CompanyDisplay.vue'
 import {useI18n} from 'vue-i18n'
 import type {IndexActivity, IndexActivityDescription} from "@/interfaces/IndexActivity.ts";
+import type {Component} from 'vue'
 
 defineProps<{
     activities: IndexActivity[]
@@ -12,25 +13,25 @@ defineProps<{
 
 const { t } = useI18n()
 
-const activityTypes = {
-    ADDED: 'company_added_to_index',
-    REMOVED: 'company_removed_from_index',
-}
-
 const activityStyles = {
-    [activityTypes.ADDED]: {
+    company_added_to_index: {
         row: 'border-l-2 border-l-green-500',
         icon: 'bg-green-100 text-green-700',
         text: 'text-green-900',
         iconComponent: Plus,
     },
-    [activityTypes.REMOVED]: {
+    company_removed_from_index: {
         row: 'border-l-2 border-l-red-500',
         icon: 'bg-red-100 text-red-700',
         text: 'text-red-900',
         iconComponent: Minus,
     },
-}
+} satisfies Record<IndexActivityDescription, {
+    row: string
+    icon: string
+    text: string
+    iconComponent: Component
+}>
 
 const getActivityStyle = (description: IndexActivityDescription) => {
     return activityStyles[description]
