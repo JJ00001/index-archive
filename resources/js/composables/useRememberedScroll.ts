@@ -8,12 +8,18 @@ export default function useRememberedScroll (key) {
   const storage = window.sessionStorage
 
   const remember = () => {
-    state.top = scrollContainer.value.scrollTop
+      if (!scrollContainer.value) {
+          return
+      }
 
     storage.setItem(rememberKey, String(state.top))
   }
 
   const restore = async () => {
+      if (!scrollContainer.value) {
+          return
+      }
+
     const storedTop = storage.getItem(rememberKey)
     const parsedTop = Number(storedTop)
 
@@ -21,7 +27,11 @@ export default function useRememberedScroll (key) {
   }
 
   const resetScrollPosition = () => {
-    state.top = 0
+      if (!scrollContainer.value) {
+          return
+      }
+
+      rememberedState.top = 0
 
     storage.setItem(rememberKey, '0')
 
