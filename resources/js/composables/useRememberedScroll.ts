@@ -1,10 +1,10 @@
 import {useRemember} from '@inertiajs/vue3'
 import {onBeforeUnmount, onMounted, ref} from 'vue'
 
-export default function useRememberedScroll (key) {
+export default function useRememberedScroll(key: string) {
   const rememberKey = `remembered-scroll:${key}`
   const state = useRemember({ top: 0 }, rememberKey)
-  const scrollContainer = ref(null)
+    const scrollContainer = ref<HTMLElement | null>(null)
   const storage = window.sessionStorage
 
   const remember = () => {
