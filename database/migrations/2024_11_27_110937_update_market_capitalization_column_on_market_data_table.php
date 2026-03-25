@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('market_data', function (Blueprint $table) {
-            $table->unsignedBigInteger('market_capitalization')->change();
+            $table->bigInteger('market_capitalization')->change();
         });
     }
 

@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::table('market_data', function (Blueprint $table) {
             // TODO - change to not nullable after completing transition period
-            $table->foreignIdFor(IndexHolding::class)->after('id')->nullable()->constrained();
+            $table->foreignIdFor(IndexHolding::class)->nullable()->constrained();
         });
     }
 
