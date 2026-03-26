@@ -51,7 +51,7 @@ onMounted(fetchData)
                             <NavigationMenuTrigger>
                                 {{ t('index.name') }}
                             </NavigationMenuTrigger>
-                            <NavigationMenuContent>
+                            <NavigationMenuContent class="absolute">
                                 <div class="w-60">
                                     <!-- View All Button -->
                                     <div class="mb-2 pb-2 border-b">
@@ -82,7 +82,7 @@ onMounted(fetchData)
                             <NavigationMenuTrigger>
                                 {{ t('company.name') }}
                             </NavigationMenuTrigger>
-                            <NavigationMenuContent>
+                            <NavigationMenuContent class="!absolute !top-full !right-0 !left-auto !z-50 !mt-1.5 !w-60 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow">
                                 <div class="w-60">
                                   Coming soon!
                                   <!--                                    &lt;!&ndash; View All Button &ndash;&gt;-->
