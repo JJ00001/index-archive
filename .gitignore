@@ -20,3 +20,13 @@ yarn-error.log
 /.vscode
 /storage/holdingsData
 /database/Backups/
+/backups
+/.mcp.json
+/boost.json
+/CLAUDE.md
+/AGENTS.md
+/junie/
+/.ai/*
+/.agents/*
+/.codex/*
+boost.json
