@@ -75,8 +75,8 @@ class Company extends Model
     {
         $filePath = 'logos/'.$this->isin.'.png';
 
-        if (Storage::disk('public')->exists($filePath)) {
-            return Storage::disk('public')->url($filePath);
+        if (Storage::disk()->exists($filePath)) {
+            return Storage::disk()->url($filePath);
         }
 
         return null;

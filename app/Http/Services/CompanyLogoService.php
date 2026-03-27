@@ -257,7 +257,7 @@ class CompanyLogoService
         $response = Http::get($this->logoUrl);
         $logo = $response->body();
         $logoPathInStorage = 'logos/'.$this->company->isin.'.png';
-        Storage::disk('public')->put($logoPathInStorage, $logo);
+        Storage::disk()->put($logoPathInStorage, $logo);
 
         Log::info("Logo stored for: {$this->company->name} ({$this->company->ticker})");
     }
