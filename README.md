@@ -46,7 +46,7 @@ Built with:
 - **Laravel** – Backend API and business logic
 - **Vue.js + Inertia.js** – Frontend SPA experience
 - **Tailwind CSS** – UI styling
-- **MySQL** – Relational data storage
+- **PostgreSQL** – Relational data storage
 
 ## Why I Built This
 
