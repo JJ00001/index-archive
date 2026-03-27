@@ -12,19 +12,22 @@ use Illuminate\Support\Facades\Storage;
 
 class Company extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
         'name',
         'ticker',
         'isin',
-        'logo',
+        'has_stored_logo',
         'sector_id',
         'country_id',
         'exchange_id',
         'currency_id',
         'asset_class_id',
+    ];
+
+    protected $casts = [
+        'has_stored_logo' => 'bool',
     ];
 
     protected $appends = ['logo'];
@@ -67,19 +70,17 @@ class Company extends Model
     public function logo(): Attribute
     {
         return Attribute::make(
-            get: fn(): ?string => $this->localLogoPath() ?? $this->brandfetchLogoUrl()
+            get: fn(): ?string => $this->storedLogoUrl() ?? $this->brandfetchLogoUrl()
         );
     }
 
-    protected function localLogoPath(): ?string
+    protected function storedLogoUrl(): ?string
     {
-        $filePath = 'logos/'.$this->isin.'.png';
-
-        if (Storage::disk()->exists($filePath)) {
-            return Storage::disk()->url($filePath);
+        if ( ! $this->has_stored_logo) {
+            return null;
         }
 
-        return null;
+        return Storage::disk()->url('logos/'.$this->isin.'.png');
     }
 
     protected function brandfetchLogoUrl(): ?string
@@ -89,13 +90,9 @@ class Company extends Model
         }
 
         $clientId = config('app.brandfetch_api_key');
-
-        $identifier = $this->isin;
-
-        $encodedIdentifier = rawurlencode($identifier);
-        $query             = http_build_query(['c' => $clientId]);
+        $encodedIdentifier = rawurlencode($this->isin);
+        $query = http_build_query(['c' => $clientId]);
 
         return 'https://cdn.brandfetch.io/'.$encodedIdentifier.'/fallback/404?'.$query;
     }
-
 }

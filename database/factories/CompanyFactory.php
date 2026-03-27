@@ -25,6 +25,7 @@ class CompanyFactory extends Factory
             'name' => fake()->company(),
             'ticker' => fake()->regexify('[A-Z]{2,5}'),
             'isin' => fake()->regexify('[A-Z]{2}[0-9]{10}'),
+            'has_stored_logo' => false,
             'sector_id' => Sector::factory(),
             'country_id' => Country::factory(),
             'exchange_id' => Exchange::factory(),
