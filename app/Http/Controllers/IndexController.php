@@ -8,34 +8,41 @@ use App\Http\Resources\IndexHoldingSectorCollection;
 use App\Models\CurrentIHMarketData;
 use App\Models\Index;
 use Inertia\Inertia;
+use Inertia\Response;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class IndexController extends Controller
 {
 
-    public function index()
+    public function index(): Response
     {
         $indices = Index::withCount('indexHoldings')
-                        ->with('indexProvider:id,name')
-                        ->get();
+            ->with('indexProvider:id,name')
+            ->get();
 
         return inertia('Index/IndexIndex', [
             'indices' => $indices,
+        ])->withViewData([
+            'seo' => new SEOData(
+                title: 'Browse indices',
+                description: 'Explore tracked market indices and compare their providers, constituents, sector weights, and country exposure.',
+            ),
         ]);
     }
 
-    public function show(Index $index)
+    public function show(Index $index): Response
     {
         $index->load(['indexProvider'])->loadCount('indexHoldings');
 
         $currentIndexHoldings = QueryBuilder::for(
             CurrentIHMarketData::query()
-                               ->forIndex($index->id)
-                               ->with('company')
-                               ->leftJoin('companies', 'companies.id', '=',
-                                   'current_index_holding_market_data.company_id')
-                               ->select('current_index_holding_market_data.*'))
+                ->forIndex($index->id)
+                ->with('company')
+                ->leftJoin('companies', 'companies.id', '=',
+                    'current_index_holding_market_data.company_id')
+                ->select('current_index_holding_market_data.*'))
                                             ->defaultSort('-weight')
                                             ->allowedSorts([
                                                 'weight',
@@ -44,7 +51,7 @@ class IndexController extends Controller
                                             ->paginate(20, pageName: 'companies')
                                             ->withQueryString();
 
-        $sort         = request('sort');
+        $sort = request('sort');
         $resolvedSort = $sort ?? '-weight';
 
         $currentSort = [
@@ -72,7 +79,8 @@ class IndexController extends Controller
             'sectors' => $sectors,
             'countries' => $countries,
             'activities' => $activities,
+        ])->withViewData([
+            'seo' => $index->getDynamicSEOData(),
         ]);
     }
-
 }
