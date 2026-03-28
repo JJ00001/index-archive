@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Seo\IndexSeoData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,10 +10,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 
-class Index extends Model
+class Index extends Model implements Sitemapable
 {
     use HasFactory;
+    use HasSEO;
 
     protected $fillable = [
         'name',
@@ -111,5 +117,17 @@ class Index extends Model
                 'value' => $this->currency,
             ],
         ];
+    }
+
+    // SEO
+
+    public function getDynamicSEOData(): SEOData
+    {
+        return IndexSeoData::for($this);
+    }
+
+    public function toSitemapTag(): Url|string|array
+    {
+        return IndexSeoData::sitemapTagFor($this);
     }
 }
