@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Seo\CompanySeoData;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,10 +10,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Storage;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 
-class Company extends Model
+class Company extends Model implements Sitemapable
 {
     use HasFactory;
+    use HasSEO;
 
     protected $fillable = [
         'name',
@@ -94,5 +100,17 @@ class Company extends Model
         $query = http_build_query(['c' => $clientId]);
 
         return 'https://cdn.brandfetch.io/'.$encodedIdentifier.'/fallback/404?'.$query;
+    }
+
+    // SEO
+
+    public function getDynamicSEOData(): SEOData
+    {
+        return CompanySeoData::for($this);
+    }
+
+    public function toSitemapTag(): Url|string|array
+    {
+        return CompanySeoData::sitemapTagFor($this);
     }
 }
