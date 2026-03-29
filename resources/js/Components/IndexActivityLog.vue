@@ -1,14 +1,12 @@
 <script lang="ts"
         setup>
 import {createColumnHelper} from '@tanstack/vue-table'
-import {Minus, Plus} from 'lucide-vue-next'
-import type {Component} from 'vue'
 import {computed, h} from 'vue'
+import ActivityStatusBadge from '@/Components/ActivityStatusBadge.vue'
 import CompanyDisplay from '@/Components/CompanyDisplay.vue'
-import {Badge} from '@/Components/ui/badge'
 import DataTable from '@/Components/ui/data-table/DataTable.vue'
 import {useI18n} from 'vue-i18n'
-import type {IndexActivity, IndexActivityDescription} from '@/interfaces/IndexActivity.ts'
+import type {IndexActivity} from '@/interfaces/IndexActivity.ts'
 
 const props = defineProps<{
     activities: IndexActivity[]
@@ -21,29 +19,43 @@ const columnVisibility = {
     date: false,
 }
 
-const activityStyles = {
-    company_added_to_index: {
-        badgeClass: 'gap-1.5 rounded-md border border-transparent bg-emerald-50 px-2 py-1 font-medium text-emerald-700 shadow-none',
-        tone: 'text-emerald-700',
-        icon: Plus,
-    },
-    company_removed_from_index: {
-        badgeClass: 'gap-1.5 rounded-md border border-transparent bg-rose-50 px-2 py-1 font-medium text-rose-700 shadow-none',
-        tone: 'text-rose-700',
-        icon: Minus,
-    },
-} satisfies Record<IndexActivityDescription, {
-    badgeClass: string
-    tone: string
-    icon: Component
-}>
+const getMonthActivitySummary = (row: { groupingValue: string, subRows: Array<{ original: IndexActivity }> }) => {
+    const activityCounts = row.subRows.reduce((counts, subRow) => {
+        if (subRow.original.description === 'company_added_to_index') {
+            counts.added += 1
+        }
 
-const getActivityStyle = (description: IndexActivityDescription) => {
-    return activityStyles[description]
-}
+        if (subRow.original.description === 'company_removed_from_index') {
+            counts.removed += 1
+        }
 
-const getActivityLabel = (description: IndexActivityDescription): string => {
-    return t(`activity.${description}`)
+        return counts
+    }, {
+        added: 0,
+        removed: 0,
+    })
+
+    return {
+        label: row.groupingValue,
+        details: [
+            {
+                key: 'added-count',
+                component: ActivityStatusBadge,
+                props: {
+                    count: activityCounts.added,
+                    description: 'company_added_to_index',
+                },
+            },
+            {
+                key: 'removed-count',
+                component: ActivityStatusBadge,
+                props: {
+                    count: activityCounts.removed,
+                    description: 'company_removed_from_index',
+                },
+            },
+        ],
+    }
 }
 
 const columns = [
@@ -67,16 +79,9 @@ const columns = [
         id: 'description',
         header: () => t('activity.status'),
         cell: ({getValue}) => {
-            const description = getValue()
-            const style = getActivityStyle(description)
-
-            return h(Badge, {
-                variant: 'outline',
-                class: style.badgeClass,
-            }, () => [
-                h(style.icon, {class: ['size-3.5', style.tone]}),
-                getActivityLabel(description),
-            ])
+            return h(ActivityStatusBadge, {
+                description: getValue(),
+            })
         },
         meta: {
             headerClass: 'w-2/12',
@@ -103,6 +108,7 @@ const activityTableData = computed(() => ({
         :columns="columns"
         :data="activityTableData"
         :expanded="true"
+        :format-group-header="getMonthActivitySummary"
         :grouping="grouping"
         :loading="false"
         body-id="index-activity-log-body"
