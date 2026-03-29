@@ -18,7 +18,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const columnHelper = createColumnHelper()
+const columnHelper = createColumnHelper<Company>()
 
 const visitCompaniesIndex = (params = {}) => {
     router.get(
