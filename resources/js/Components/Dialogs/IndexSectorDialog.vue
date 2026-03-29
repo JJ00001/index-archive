@@ -58,10 +58,12 @@ const stats = computed(() => {
         {
             title: t('company.count'),
             value: sectorData.value.companies_count ?? 0,
+            valueClass: 'font-financial',
         },
         {
             title: t('weight'),
             value: n(Number(sectorData.value.weight ?? 0), 'percent'),
+            valueClass: 'font-financial',
         },
     ]
 })
