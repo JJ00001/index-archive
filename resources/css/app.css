@@ -152,6 +152,11 @@
   --font-data: 'IBM Plex Mono', monospace;
 }
 
+@utility font-financial {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+
 @font-face {
   font-family: 'Apple Garamond';
   src: url('../fonts/apple_garamond/AppleGaramond.ttf') format('truetype');
