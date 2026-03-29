@@ -21,30 +21,38 @@ const handleRowClick = (sector: Sector): void => {
 
 <template>
     <div class="max-h-[50vh] overflow-auto">
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead class="w-4/6">{{ $t('sector.name') }}</TableHead>
-          <TableHead class="w-1/6">{{ $t('weight') }}</TableHead>
-          <TableHead class="w-1/6">{{ $t('company.count') }}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow
-            v-for="sector in sectorData"
-            :key="sector.id"
-            class="cursor-pointer hover:bg-muted/50"
-            @click="handleRowClick(sector)"
-        >
-          <TableCell>{{ sector.name }}</TableCell>
-          <TableCell>
-            {{ $n(Number(sector.weight), 'percent') }}
-            <Progress :model-value="sector.weight * 100"
-                      class="h-2" />
-          </TableCell>
-          <TableCell>{{ sector.companies_count }}</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  </div>
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead class="w-3/12">{{ $t('sector.name') }}</TableHead>
+                    <TableHead class="w-7/12">{{ $t('weight') }}</TableHead>
+                    <TableHead class="w-2/12 text-right">{{ $t('company.count') }}</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <TableRow
+                    v-for="sector in sectorData"
+                    :key="sector.id"
+                    class="cursor-pointer"
+                    @click="handleRowClick(sector)"
+                >
+                    <TableCell>
+                        {{ sector.name }}
+                    </TableCell>
+                    <TableCell>
+                        <div class="flex items-center gap-3">
+                            <AllocationWeightBar :items="sectorData"
+                                                 :weight="sector.weight" />
+                            <span class="font-data text-right text-sm tabular-nums text-foreground">
+                                {{ $n(Number(sector.weight), 'percent') }}
+                            </span>
+                        </div>
+                    </TableCell>
+                    <TableCell class="font-data text-right text-sm tabular-nums text-muted-foreground">
+                        {{ sector.companies_count }}
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
+    </div>
 </template>
