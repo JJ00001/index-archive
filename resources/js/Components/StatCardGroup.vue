@@ -1,13 +1,12 @@
-<script setup>
-import { Link } from '@inertiajs/vue3'
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card'
+<script lang="ts"
+        setup>
+import {Link} from '@inertiajs/vue3'
+import {Card, CardContent, CardHeader, CardTitle} from '@/Components/ui/card'
+import type {StatCard} from '@/interfaces/StatCard.ts'
 
-defineProps({
-    stats: {
-        type: Array,
-        required: true
-    }
-})
+defineProps<{
+    stats: StatCard[]
+}>()
 </script>
 
 <template>
@@ -21,10 +20,16 @@ defineProps({
             <CardContent class="px-4">
                 <Link v-if="stat.route"
                       :href="stat.route"
-                      class="font-data text-lg underline underline-offset-2">{{ stat.value }}
+                      :class="[
+                          'text-lg underline underline-offset-2',
+                          stat.valueClass ?? '',
+                      ]">{{ stat.value }}
                 </Link>
                 <span v-else
-                      class="font-data text-lg">{{ stat.value }}</span>
+                      :class="[
+                          'text-lg',
+                          stat.valueClass ?? '',
+                      ]">{{ stat.value }}</span>
             </CardContent>
         </Card>
     </div>
