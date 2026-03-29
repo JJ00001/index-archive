@@ -55,7 +55,7 @@ const companyStats = [
                        class="text-lg"
                        variant="secondary">
                     {{ key }}
-                    <span class="font-light">{{ value }}</span>
+                    <span class="font-data font-light">{{ value }}</span>
                 </Badge>
             </div>
         </div>
