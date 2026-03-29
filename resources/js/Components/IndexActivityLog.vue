@@ -71,8 +71,8 @@ const columns = [
             })
         },
         meta: {
-            headerClass: 'w-10/12',
-            cellClass: 'w-10/12',
+            headerClass: 'w-11/12',
+            cellClass: 'w-11/12',
         },
     }),
     columnHelper.accessor('description', {
@@ -84,8 +84,8 @@ const columns = [
             })
         },
         meta: {
-            headerClass: 'w-2/12',
-            cellClass: 'w-2/12',
+            headerClass: 'w-1/12',
+            cellClass: 'w-1/12',
         },
     }),
 ]
