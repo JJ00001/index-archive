@@ -1,20 +1,16 @@
-<script setup>
-import { router } from '@inertiajs/vue3'
-import { Progress } from '@/Components/ui/progress'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+<script lang="ts"
+        setup>
+import {router} from '@inertiajs/vue3'
+import AllocationWeightBar from '@/Components/AllocationWeightBar.vue'
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/Components/ui/table'
+import type {Country} from '@/interfaces/Country'
 
-const props = defineProps({
-    countryData: {
-        type: Array,
-        required: true,
-    },
-    onRowClick: {
-        type: Function,
-        default: null,
-    },
-})
+const props = defineProps<{
+    countryData: Country[]
+    onRowClick?: ((country: Country) => void) | null
+}>()
 
-const handleRowClick = (country) => {
+const handleRowClick = (country: Country): void => {
     if (props.onRowClick) {
         props.onRowClick(country)
     } else {
