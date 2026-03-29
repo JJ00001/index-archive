@@ -1,6 +1,6 @@
 <script lang="ts"
         setup>
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import {Head, router} from '@inertiajs/vue3'
 import LayoutMain from '@/Layouts/LayoutMain.vue'
 import StatCardGroup from '@/Components/StatCardGroup.vue'
@@ -21,10 +21,11 @@ import type {IndexHolding} from "@/interfaces/IndexHolding.ts";
 import type {Sector} from "@/interfaces/Sector.ts";
 import type {Country} from "@/interfaces/Country.ts";
 import type {IndexActivity} from "@/interfaces/IndexActivity.ts";
+import type {StatCard} from "@/interfaces/StatCard.ts";
 
 const props = defineProps<{
     index: Index
-    stats: []
+    stats: StatCard[]
     companies: Paginated<Company>
     sectors: Sector[]
     countries: Country[]
