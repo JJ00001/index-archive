@@ -73,6 +73,7 @@ createInertiaApp({
                     },
                     activity: {
                         action: 'Action',
+                        status: 'Status',
                         dataDate: 'Date',
                         noRecentActivity: 'No recent activity',
                         company_added_to_index: 'Added',
