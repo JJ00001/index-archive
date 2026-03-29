@@ -108,6 +108,10 @@ const props = defineProps({
         type: Function,
         default: null,
     },
+    formatGroupHeader: {
+        type: Function,
+        default: null,
+    },
 })
 
 const searchTerm = ref('')
@@ -235,6 +239,7 @@ onMounted(() => {
                 <DataTableContent
                     :body-id="bodyId"
                     :empty-state-message="emptyStateMessage"
+                    :format-group-header="formatGroupHeader"
                     :handle-row-click="handleRowClick"
                     :loading="loading"
                     :loading-infinite-scroll="loadingInfiniteScroll"
@@ -247,6 +252,7 @@ onMounted(() => {
                 v-else
                 :body-id="bodyId"
                 :empty-state-message="emptyStateMessage"
+                :format-group-header="formatGroupHeader"
                 :handle-row-click="handleRowClick"
                 :loading="loading"
                 :loading-infinite-scroll="false"

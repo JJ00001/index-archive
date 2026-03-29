@@ -26,6 +26,10 @@ const props = defineProps({
         type: Function,
         required: true,
     },
+    formatGroupHeader: {
+        type: Function,
+        default: null,
+    },
     emptyStateMessage: {
         type: String,
         required: true,
@@ -41,6 +45,26 @@ const props = defineProps({
 })
 
 const getGroupedCellRender = (cell) => cell.column.columnDef.aggregatedCell ?? cell.column.columnDef.cell
+
+const getGroupHeader = (row) => {
+    if (!props.formatGroupHeader) {
+        return {
+            label: row.groupingValue,
+            details: [
+                {
+                    parts: [
+                        {
+                            text: `(${row.subRows.length})`,
+                            class: 'text-muted-foreground text-xs',
+                        },
+                    ],
+                },
+            ],
+        }
+    }
+
+    return props.formatGroupHeader(row)
+}
 </script>
 
 <template>
@@ -86,9 +110,24 @@ const getGroupedCellRender = (cell) => cell.column.columnDef.aggregatedCell ?? c
                                 :is="row.getIsExpanded() ? ChevronDown : ChevronRight"
                                 class="h-4 w-4 shrink-0"
                             />
-                            <span>{{ row.groupingValue }}</span>
-                            <span class="text-muted-foreground text-xs">
-                                ({{ row.subRows.length }})
+                            <span>{{ getGroupHeader(row).label }}</span>
+                            <span
+                                v-for="detail in getGroupHeader(row).details ?? []"
+                                :key="detail.key ?? JSON.stringify(detail.parts ?? detail.props)"
+                                :class="detail.class"
+                            >
+                                <component
+                                    :is="detail.component"
+                                    v-if="detail.component"
+                                    v-bind="detail.props"
+                                />
+                                <template
+                                    v-for="part in detail.parts ?? []"
+                                    v-else
+                                    :key="part.key ?? part.text"
+                                >
+                                    <span :class="part.class">{{ part.text }}</span>
+                                </template>
                             </span>
                         </Button>
                     </TableCell>
