@@ -24,8 +24,8 @@ const handleRowClick = (sector: Sector): void => {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead class="w-3/12">{{ $t('sector.name') }}</TableHead>
-                    <TableHead class="w-7/12">{{ $t('weight') }}</TableHead>
+                    <TableHead class="w-2/12">{{ $t('sector.name') }}</TableHead>
+                    <TableHead class="w-8/12">{{ $t('weight') }}</TableHead>
                     <TableHead class="w-2/12 text-right">{{ $t('company.count') }}</TableHead>
                 </TableRow>
             </TableHeader>
