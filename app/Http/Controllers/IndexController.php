@@ -15,7 +15,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class IndexController extends Controller
 {
-
     public function index(): Response
     {
         $indices = Index::withCount('indexHoldings')
@@ -43,13 +42,13 @@ class IndexController extends Controller
                 ->leftJoin('companies', 'companies.id', '=',
                     'current_index_holding_market_data.company_id')
                 ->select('current_index_holding_market_data.*'))
-                                            ->defaultSort('-weight')
-                                            ->allowedSorts([
-                                                'weight',
-                                                'companies.name',
-                                            ])
-                                            ->paginate(20, pageName: 'companies')
-                                            ->withQueryString();
+            ->defaultSort('-weight')
+            ->allowedSorts([
+                'weight',
+                'companies.name',
+            ])
+            ->paginate(20, pageName: 'companies')
+            ->withQueryString();
 
         $sort = request('sort');
         $resolvedSort = $sort ?? '-weight';
@@ -67,6 +66,14 @@ class IndexController extends Controller
             Activity::query()
                 ->where('properties->index_id', $index->id)
                 ->orderBy('properties->date', 'desc')
+                ->orderByRaw("
+                    case description
+                        when 'company_added_to_index' then 0
+                        when 'company_removed_from_index' then 1
+                        else 2
+                    end
+                ")
+                ->orderByDesc('id')
                 ->limit(50)
                 ->get()
         )->resolve();
