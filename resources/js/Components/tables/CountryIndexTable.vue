@@ -21,30 +21,38 @@ const handleRowClick = (country: Country): void => {
 
 <template>
     <div class="max-h-[50vh] overflow-auto">
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead class="w-4/6">{{ $t('country.name') }}</TableHead>
-          <TableHead class="w-1/6">{{ $t('weight') }}</TableHead>
-          <TableHead class="w-1/6">{{ $t('company.count') }}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow
-            v-for="country in countryData"
-            :key="country.id"
-            class="cursor-pointer hover:bg-muted/50"
-            @click="handleRowClick(country)"
-        >
-          <TableCell>{{ country.name }}</TableCell>
-          <TableCell>
-            {{ $n(Number(country.weight), 'percent') }}
-            <Progress :model-value="country.weight * 100"
-                      class="h-2" />
-          </TableCell>
-          <TableCell>{{ country.companies_count }}</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  </div>
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead class="w-2/12">{{ $t('country.name') }}</TableHead>
+                    <TableHead class="w-8/12">{{ $t('weight') }}</TableHead>
+                    <TableHead class="w-2/12 text-right">{{ $t('company.count') }}</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <TableRow
+                    v-for="country in countryData"
+                    :key="country.id"
+                    class="cursor-pointer"
+                    @click="handleRowClick(country)"
+                >
+                    <TableCell>
+                        {{ country.name }}
+                    </TableCell>
+                    <TableCell>
+                        <div class="flex items-center gap-3">
+                            <AllocationWeightBar :items="countryData"
+                                                 :weight="country.weight" />
+                            <span class="font-data text-right text-sm tabular-nums text-foreground">
+                                {{ $n(Number(country.weight), 'percent') }}
+                            </span>
+                        </div>
+                    </TableCell>
+                    <TableCell class="font-data text-right text-sm tabular-nums text-muted-foreground">
+                        {{ country.companies_count }}
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
+    </div>
 </template>
