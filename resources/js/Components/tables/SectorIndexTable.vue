@@ -1,20 +1,16 @@
-<script setup>
-import { router } from '@inertiajs/vue3'
-import { Progress } from '@/Components/ui/progress'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+<script lang="ts"
+        setup>
+import {router} from '@inertiajs/vue3'
+import AllocationWeightBar from '@/Components/AllocationWeightBar.vue'
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/Components/ui/table'
+import type {Sector} from '@/interfaces/Sector'
 
-const props = defineProps({
-    sectorData: {
-        type: Array,
-        required: true,
-    },
-    onRowClick: {
-        type: Function,
-        default: null,
-    },
-})
+const props = defineProps<{
+    sectorData: Sector[]
+    onRowClick?: ((sector: Sector) => void) | null
+}>()
 
-const handleRowClick = (sector) => {
+const handleRowClick = (sector: Sector): void => {
     if (props.onRowClick) {
         props.onRowClick(sector)
     } else {
