@@ -47,6 +47,10 @@ const breadcrumbItems = [
 ]
 
 const companiesCount = props.index.index_holdings_count
+const displayStats = computed(() => props.stats.map((stat) => ({
+    ...stat,
+    valueClass: typeof stat.value === 'number' ? 'font-financial' : stat.valueClass,
+})))
 
 const holdingDialogRef = ref<InstanceType<typeof IndexHoldingDialog>>()
 const sectorDialogRef = ref<InstanceType<typeof IndexSectorDialog>>()
@@ -86,7 +90,7 @@ const visitIndexShow = (params = {}, options = {}) => {
 
         <div class="space-y-10">
             <h1 class="text-3xl font-semibold">{{ index.name }}</h1>
-            <StatCardGroup :stats="stats" />
+            <StatCardGroup :stats="displayStats" />
             <Card>
                 <CardHeader>
                     <CardTitle>{{ t('indexHolding.name', 2) + ' (' + companiesCount + ')' }}</CardTitle>
