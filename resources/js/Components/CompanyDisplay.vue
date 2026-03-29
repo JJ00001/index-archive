@@ -19,7 +19,7 @@ defineProps<{
         <div>
             <span class="font-semibold">{{ company.name }}</span>
             <br>
-            <span class="text-sm text-muted-foreground">{{ company.ticker }}</span>
+            <span class="font-data text-sm text-muted-foreground">{{ company.ticker }}</span>
         </div>
     </div>
 </template>
