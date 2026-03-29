@@ -39,7 +39,7 @@ const handleRowClick = (index: Index): void => {
                     <TableCell>
                         {{ index.index_provider?.name }}
                     </TableCell>
-                    <TableCell>
+                    <TableCell class="font-financial">
                         {{ index.index_holdings_count || '-' }}
                     </TableCell>
                 </TableRow>

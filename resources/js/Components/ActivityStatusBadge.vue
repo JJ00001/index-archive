@@ -45,7 +45,7 @@ const badgeText = computed(() => {
 
 <template>
     <Badge
-        :class="badgeStyle.badgeClass"
+        :class="[badgeStyle.badgeClass, count !== undefined ? 'font-financial' : '']"
         variant="outline"
     >
         <component

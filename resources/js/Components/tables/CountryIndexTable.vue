@@ -43,12 +43,12 @@ const handleRowClick = (country: Country): void => {
                         <div class="flex items-center gap-3">
                             <AllocationWeightBar :items="countryData"
                                                  :weight="country.weight" />
-                            <span class="font-data text-right text-sm tabular-nums text-foreground">
+                            <span class="font-financial text-right text-sm text-foreground">
                                 {{ $n(Number(country.weight), 'percent') }}
                             </span>
                         </div>
                     </TableCell>
-                    <TableCell class="font-data text-right text-sm tabular-nums text-muted-foreground">
+                    <TableCell class="font-financial text-right text-sm text-muted-foreground">
                         {{ country.companies_count }}
                     </TableCell>
                 </TableRow>
