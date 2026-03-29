@@ -13,6 +13,7 @@ import IndexHoldingDialog from '@/Components/Dialogs/IndexHoldingDialog.vue'
 import IndexSectorDialog from '@/Components/Dialogs/IndexSectorDialog.vue'
 import IndexCountryDialog from '@/Components/Dialogs/IndexCountryDialog.vue'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/Components/ui/card'
+import {Badge} from '@/Components/ui/badge'
 import IndexHoldingTable from '@/Components/tables/IndexHoldingTable.vue'
 import type {Index} from "@/interfaces/Index.ts";
 import type {Paginated} from "@/interfaces/Paginated.ts";
@@ -93,7 +94,13 @@ const visitIndexShow = (params = {}, options = {}) => {
             <StatCardGroup :stats="displayStats" />
             <Card>
                 <CardHeader>
-                    <CardTitle>{{ t('indexHolding.name', 2) + ' (' + companiesCount + ')' }}</CardTitle>
+                    <CardTitle class="flex items-center gap-2">
+                        {{ t('indexHolding.name', 2) }}
+                        <Badge class="font-financial font-normal"
+                               variant="secondary">
+                            {{ companiesCount }}
+                        </Badge>
+                    </CardTitle>
                     <CardDescription>
                         Companies currently held in the {{ index.name }} index
                     </CardDescription>
@@ -109,7 +116,13 @@ const visitIndexShow = (params = {}, options = {}) => {
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle>{{ t('sector.name', 2) }}</CardTitle>
+                    <CardTitle class="flex items-center gap-2">
+                        {{ t('sector.name', 2) }}
+                        <Badge class="font-financial font-normal"
+                               variant="secondary">
+                            {{ sectors.length }}
+                        </Badge>
+                    </CardTitle>
                     <CardDescription>
                         Sector allocation for the {{ index.name }} index
                     </CardDescription>
@@ -121,7 +134,13 @@ const visitIndexShow = (params = {}, options = {}) => {
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle>{{ t('country.name', 2) }}</CardTitle>
+                    <CardTitle class="flex items-center gap-2">
+                        {{ t('country.name', 2) }}
+                        <Badge class="font-financial font-normal"
+                               variant="secondary">
+                            {{ countries.length }}
+                        </Badge>
+                    </CardTitle>
                     <CardDescription>
                         Country allocation for the {{ index.name }} index
                     </CardDescription>
