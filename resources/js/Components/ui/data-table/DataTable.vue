@@ -1,6 +1,13 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { getCoreRowModel, getFilteredRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
+import {
+    getCoreRowModel,
+    getExpandedRowModel,
+    getFilteredRowModel,
+    getGroupedRowModel,
+    getSortedRowModel,
+    useVueTable,
+} from '@tanstack/vue-table'
 import { InfiniteScroll } from '@inertiajs/vue3'
 import DataTableContent from '@/Components/ui/data-table/DataTableContent.vue'
 import useRememberedScroll from '@/composables/useRememberedScroll.ts'
@@ -18,7 +25,7 @@ const props = defineProps({
     // Behavior
     onRowClick: {
         type: Function,
-        required: true,
+        default: null,
     },
     // Search
     enableSearch: {
@@ -81,6 +88,26 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    columnVisibility: {
+        type: Object,
+        default: () => ({}),
+    },
+    grouping: {
+        type: Array,
+        default: () => [],
+    },
+    onGroupingChange: {
+        type: Function,
+        default: null,
+    },
+    expanded: {
+        type: [Boolean, Object],
+        default: () => ({}),
+    },
+    onExpandedChange: {
+        type: Function,
+        default: null,
+    },
 })
 
 const searchTerm = ref('')
@@ -98,6 +125,16 @@ const handleSortingChange = (updater) => {
     props.onSortingChange?.(updater)
 }
 
+const handleGroupingChange = (updater) => {
+    resetScrollPosition()
+
+    props.onGroupingChange?.(updater)
+}
+
+const handleExpandedChange = (updater) => {
+    props.onExpandedChange?.(updater)
+}
+
 const table = useVueTable({
     get data () {
         return rows.value
@@ -109,12 +146,25 @@ const table = useVueTable({
         get sorting () {
             return props.sorting
         },
+        get grouping () {
+            return props.grouping
+        },
+        get columnVisibility () {
+            return props.columnVisibility
+        },
+        get expanded () {
+            return props.expanded
+        },
     },
     manualSorting: true,
     onSortingChange: handleSortingChange,
+    onGroupingChange: handleGroupingChange,
+    onExpandedChange: handleExpandedChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getGroupedRowModel: getGroupedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
 })
 
 const applySearchFilter = (value) => {
@@ -138,9 +188,11 @@ const rowClasses = computed(() =>
 )
 
 const handleRowClick = (row) => {
-    const entity = row.original
+    if (!props.onRowClick) {
+        return
+    }
 
-    props.onRowClick(entity)
+    props.onRowClick(row.original)
 }
 
 onMounted(() => {

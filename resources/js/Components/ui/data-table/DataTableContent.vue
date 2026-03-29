@@ -1,7 +1,9 @@
 <script setup>
 import { FlexRender } from '@tanstack/vue-table'
+import { ChevronDown, ChevronRight } from 'lucide-vue-next'
 import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
 import DataTableRowSkeleton from '@/Components/ui/data-table/DataTableRowSkeleton.vue'
+import { Button } from '@/Components/ui/button'
 
 const props = defineProps({
     table: {
@@ -37,6 +39,8 @@ const props = defineProps({
         required: true,
     },
 })
+
+const getGroupedCellRender = (cell) => cell.column.columnDef.aggregatedCell ?? cell.column.columnDef.cell
 </script>
 
 <template>
@@ -65,15 +69,47 @@ const props = defineProps({
                 <TableRow
                     v-for="row in table.getRowModel().rows"
                     :key="row.id"
-                    :class="rowClasses"
-                    @click="handleRowClick(row)"
+                    :class="row.getIsGrouped() ? '' : rowClasses"
+                    @click="!row.getIsGrouped() && handleRowClick(row)"
                 >
                     <TableCell
+                        v-if="row.getIsGrouped()"
+                        :colspan="table.getVisibleLeafColumns().length"
+                    >
+                        <Button
+                            class="h-auto justify-start gap-2 px-0 py-0 font-medium hover:bg-transparent"
+                            type="button"
+                            variant="ghost"
+                            @click.stop="row.getToggleExpandedHandler()()"
+                        >
+                            <component
+                                :is="row.getIsExpanded() ? ChevronDown : ChevronRight"
+                                class="h-4 w-4 shrink-0"
+                            />
+                            <span>{{ row.groupingValue }}</span>
+                            <span class="text-muted-foreground text-xs">
+                                ({{ row.subRows.length }})
+                            </span>
+                        </Button>
+                    </TableCell>
+                    <TableCell
+                        v-else
                         v-for="cell in row.getVisibleCells()"
                         :key="cell.id"
                         :class="cell.column.columnDef.meta?.cellClass"
                     >
                         <FlexRender
+                            v-if="cell.getIsAggregated()"
+                            :props="cell.getContext()"
+                            :render="getGroupedCellRender(cell)"
+                        />
+                        <span
+                            v-else-if="cell.getIsPlaceholder()"
+                            aria-hidden="true"
+                            class="block h-4"
+                        />
+                        <FlexRender
+                            v-else
                             :props="cell.getContext()"
                             :render="cell.column.columnDef.cell"
                         />
@@ -81,7 +117,7 @@ const props = defineProps({
                 </TableRow>
             </template>
             <TableEmpty v-else-if="!(loading || loadingInfiniteScroll)"
-                        :colspan="table.getAllColumns().length">
+                        :colspan="table.getVisibleLeafColumns().length">
                 {{ emptyStateMessage }}
             </TableEmpty>
             <DataTableRowSkeleton
