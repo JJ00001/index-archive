@@ -16,11 +16,15 @@ defineProps({
               :key="stat.title"
               class="flex-1 gap-4 py-4">
             <CardHeader class="px-4">
-                <CardTitle class="whitespace-nowrap">{{ stat.title }}</CardTitle>
+                <CardTitle class="whitespace-nowrap text-lg font-medium">{{ stat.title }}</CardTitle>
             </CardHeader>
             <CardContent class="px-4">
-                <Link v-if="stat.route" :href="stat.route" class="underline underline-offset-2">{{ stat.value }}</Link>
-                <span v-else>{{ stat.value }}</span>
+                <Link v-if="stat.route"
+                      :href="stat.route"
+                      class="font-data text-lg underline underline-offset-2">{{ stat.value }}
+                </Link>
+                <span v-else
+                      class="font-data text-lg">{{ stat.value }}</span>
             </CardContent>
         </Card>
     </div>
