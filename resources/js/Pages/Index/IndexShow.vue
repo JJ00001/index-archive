@@ -84,7 +84,7 @@ const visitIndexShow = (params = {}, options = {}) => {
         <breadcrumbs :items="breadcrumbItems" />
 
         <div class="space-y-10">
-            <h1 class="text-3xl font-bold">{{ index.name }}</h1>
+            <h1 class="text-3xl font-semibold">{{ index.name }}</h1>
             <StatCardGroup :stats="stats" />
             <Card>
                 <CardHeader>
