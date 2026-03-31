@@ -14,6 +14,7 @@ import IndexSectorDialog from '@/Components/Dialogs/IndexSectorDialog.vue'
 import IndexCountryDialog from '@/Components/Dialogs/IndexCountryDialog.vue'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/Components/ui/card'
 import {Badge} from '@/Components/ui/badge'
+import DataFreshnessBadge from '@/Components/DataFreshnessBadge.vue'
 import IndexHoldingTable from '@/Components/tables/IndexHoldingTable.vue'
 import type {Index} from "@/interfaces/Index.ts";
 import type {Paginated} from "@/interfaces/Paginated.ts";
@@ -26,6 +27,7 @@ import type {StatCard} from "@/interfaces/StatCard.ts";
 
 const props = defineProps<{
     index: Index
+    dataUpdatedAt: string | null
     stats: StatCard[]
     companies: Paginated<Company>
     sectors: Sector[]
@@ -90,7 +92,10 @@ const visitIndexShow = (params = {}, options = {}) => {
         <breadcrumbs :items="breadcrumbItems" />
 
         <div class="space-y-10">
-            <h1 class="text-3xl font-semibold">{{ index.name }}</h1>
+            <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <h1 class="text-3xl font-semibold">{{ index.name }}</h1>
+                <DataFreshnessBadge :date="dataUpdatedAt" />
+            </div>
             <StatCardGroup :stats="displayStats" />
             <Card>
                 <CardHeader>

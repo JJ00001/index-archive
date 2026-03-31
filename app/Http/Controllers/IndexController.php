@@ -80,6 +80,7 @@ class IndexController extends Controller
 
         return inertia('Index/IndexShow', [
             'index' => $index,
+            'dataUpdatedAt' => $index->latestMarketDataDate(),
             'stats' => $index->stats(),
             'companies' => Inertia::scroll($currentIndexHoldings),
             'sort' => $currentSort,
