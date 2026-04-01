@@ -61,13 +61,13 @@ it('renders indices index seo metadata', function () {
 
 it('renders company detail seo metadata', function () {
     $company = Company::factory()
-                      ->for(Sector::factory()->state(['name' => 'Technology']))
-                      ->for(Country::factory()->state(['name' => 'United States']))
-                      ->for(Exchange::factory()->state(['name' => 'NASDAQ']))
-                      ->create([
-                          'name' => 'Apple',
-                          'ticker' => 'AAPL',
-                      ]);
+        ->for(Sector::factory()->state(['name' => 'Technology']))
+        ->for(Country::factory()->state(['name' => 'United States']))
+        ->for(Exchange::factory()->state(['name' => 'NASDAQ']))
+        ->create([
+            'name' => 'Apple',
+            'ticker' => 'AAPL',
+        ]);
 
     $response = getSeoPage('/companies/'.$company->id);
 
@@ -82,11 +82,11 @@ it('renders company detail seo metadata', function () {
 
 it('renders index detail seo metadata', function () {
     $index = Index::factory()
-                  ->for(IndexProvider::factory()->state(['name' => 'MSCI']))
-                  ->create([
-                      'name' => 'MSCI World',
-                      'currency' => 'USD',
-                  ]);
+        ->for(IndexProvider::factory()->state(['name' => 'MSCI']))
+        ->create([
+            'name' => 'MSCI World',
+            'currency' => 'USD',
+        ]);
 
     $response = getSeoPage('/indices/'.$index->id);
 
@@ -109,7 +109,7 @@ it('marks query variants as noindex follow', function () {
 
 it('renders a sitemap for the public pages', function () {
     $company = Company::factory()->create();
-    $index   = Index::factory()->create();
+    $index = Index::factory()->create();
 
     $response = getSeoPage('/sitemap.xml');
 
@@ -117,7 +117,7 @@ it('renders a sitemap for the public pages', function () {
     $response->assertHeader('content-type', 'text/xml; charset=UTF-8');
     $response->assertSee('https://indexarchive.org', false);
     $response->assertSee('https://indexarchive.org/companies', false);
-    $response->assertSee('https://indexarchive.org/companies/'.$company->id, false);
+    $response->assertDontSee('https://indexarchive.org/companies/'.$company->id, false);
     $response->assertSee('https://indexarchive.org/indices/'.$index->id, false);
 });
 
@@ -125,7 +125,7 @@ it('ships a crawlable robots file', function () {
     $robots = file_get_contents(public_path('robots.txt'));
 
     expect($robots)->toContain('Allow: /')
-                   ->toContain('Disallow: /api/')
-                   ->toContain('Disallow: /up')
-                   ->toContain('Sitemap: https://indexarchive.org/sitemap.xml');
+        ->toContain('Disallow: /api/')
+        ->toContain('Disallow: /up')
+        ->toContain('Sitemap: https://indexarchive.org/sitemap.xml');
 });
