@@ -37,6 +37,7 @@ it('renders homepage seo metadata', function () {
     $response->assertSee('href="https://indexarchive.org"', false);
     $response->assertSee('<meta name="robots" content="max-snippet:-1,max-image-preview:large,max-video-preview:-1">',
         false);
+    $response->assertSee('favicon.svg', false);
 });
 
 it('renders companies index seo metadata', function () {
