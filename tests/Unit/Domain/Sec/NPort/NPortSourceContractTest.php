@@ -4,7 +4,8 @@ use App\Domain\Sec\NPort\Data\NPortFile;
 use App\Domain\Sec\NPort\Data\NPortQuarter;
 
 it('validates supported quarters and creates quarter slugs', function () {
-    expect(NPortQuarter::from(2019, 4)->slug())->toBe('2019q4')
+    expect(NPortQuarter::firstPublic())->toEqual(NPortQuarter::from(2019, 4))
+        ->and(NPortQuarter::firstPublic()->slug())->toBe('2019q4')
         ->and(NPortQuarter::from(2026, 2)->slug())->toBe('2026q2')
         ->and(fn () => NPortQuarter::from(2019, 3))
         ->toThrow(InvalidArgumentException::class, 'N-PORT datasets begin at 2019 Q4.')
