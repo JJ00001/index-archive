@@ -1,11 +1,14 @@
 {
   "mcpServers": {
     "laravel-boost": {
-      "command": "php",
+      "command": "./vendor/bin/sail",
       "args": [
         "artisan",
         "boost:mcp"
-      ]
+      ],
+      "env": {
+        "DOCKER_CONTEXT": "desktop-linux"
+      }
     },
     "herd": {
       "command": "php",

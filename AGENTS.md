@@ -10,15 +10,37 @@
 
 ## Build, Test, and Development Commands
 
-- `composer install`: Install PHP dependencies defined in `composer.json`.
-- `npm install`: Install JS dependencies for the Vue frontend and Vite tooling.
-- `php artisan test`: Run the global test suite (Pest/Laravel).
-- `npm run lint`: Lint Vue and JavaScript assets according to project rules.
+- `docker --context desktop-linux compose exec -T -u sail laravel.test composer install`: Install PHP dependencies
+  defined in `composer.json`.
+- `docker --context desktop-linux compose exec -T -u sail laravel.test npm install`: Install JS dependencies for the
+  Vue frontend and Vite tooling.
+- `docker --context desktop-linux compose exec -T -u sail laravel.test php artisan test`: Run the global test suite
+  (Pest/Laravel).
+- `docker --context desktop-linux compose exec -T -u sail laravel.test npm run lint`: Lint Vue and JavaScript assets
+  according to project rules.
+
+## Container Execution
+
+- Codex may inspect and edit repository files from the host, including with `rg`, `git status`, `git diff`, and
+  `apply_patch`.
+- Every command that executes the application or its PHP/JavaScript toolchain must run inside the Sail container. Never
+  run host `php`, `artisan`, `composer`, `node`, `npm`, `npx`, `yarn`, `pnpm`, `bun`, `pest`, `phpunit`, `pint`, or
+  `vite` commands.
+- Codex must execute application commands with
+  `docker --context desktop-linux compose exec -T -u sail laravel.test <command>`. This direct entrypoint is approved
+  for Docker access in Codex's sandbox and avoids repeated Sail-wrapper permission prompts.
+- Developers working outside Codex may use the equivalent `DOCKER_CONTEXT=desktop-linux ./vendor/bin/sail <command>`
+  wrapper.
+- Host Docker commands may only manage or inspect the Sail services. Prefer the Sail wrapper whenever it supports the
+  operation.
+- Laravel Boost MCP must be launched inside `laravel.test` with
+  `docker --context desktop-linux compose exec -T -u sail laravel.test php artisan boost:mcp`.
 
 ## Coding Style & Naming Conventions
 
-- PHP: Follow Laravel defaults; PSR-12 formatting enforced via `./vendor/bin/pint --dirty`. Don't ever run it without
-  the --dirty flag.
+- PHP: Follow Laravel defaults; PSR-12 formatting enforced via
+  `docker --context desktop-linux compose exec -T -u sail laravel.test ./vendor/bin/pint --dirty`. Don't ever run it
+  without the `--dirty` flag.
 - Vue/JS: Use 2-space indentation and script setup syntax where appropriate.
 - Filenames: Singular models (`Company.php`), snake_case migrations, and PascalCase Vue components (e.g.,
   `CompanyInfoHeader.vue`).
@@ -28,7 +50,8 @@
 - Framework: Pest with Laravel test helpers.
 - Place feature tests in `tests/Feature/`; name files after the service under test (e.g.,
   `IndexHoldingActivityLogTest.php`).
-- Run `php artisan test` before submitting changes; ensure new logic has coverage and assertions for critical paths.
+- Run `docker --context desktop-linux compose exec -T -u sail laravel.test php artisan test` before submitting changes;
+  ensure new logic has coverage and assertions for critical paths.
 
 ## Commit & Pull Request Guidelines
 
