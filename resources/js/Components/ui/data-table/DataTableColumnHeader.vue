@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-vue-next'
+import { ArrowDown, ArrowUp, ArrowUpDown } from '@lucide/vue'
 import { Button } from '@/Components/ui/button'
 
 const props = defineProps({

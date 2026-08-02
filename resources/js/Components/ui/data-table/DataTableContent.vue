@@ -1,6 +1,6 @@
 <script setup>
 import { FlexRender } from '@tanstack/vue-table'
-import { ChevronDown, ChevronRight } from 'lucide-vue-next'
+import { ChevronDown, ChevronRight } from '@lucide/vue'
 import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
 import DataTableRowSkeleton from '@/Components/ui/data-table/DataTableRowSkeleton.vue'
 import { Button } from '@/Components/ui/button'

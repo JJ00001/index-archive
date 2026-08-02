@@ -43,10 +43,10 @@ class IndexController extends Controller
                     'current_index_holding_market_data.company_id')
                 ->select('current_index_holding_market_data.*'))
             ->defaultSort('-weight')
-            ->allowedSorts([
+            ->allowedSorts(
                 'weight',
                 'companies.name',
-            ])
+            )
             ->paginate(20, pageName: 'companies')
             ->withQueryString();
 

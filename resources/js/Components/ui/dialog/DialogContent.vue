@@ -4,7 +4,7 @@ import type {DialogContentEmits, DialogContentProps} from "reka-ui"
 import {DialogClose, DialogContent, DialogOverlay, DialogPortal, useForwardPropsEmits,} from "reka-ui"
 import type {HTMLAttributes} from "vue"
 import {reactiveOmit} from "@vueuse/core"
-import {X} from "lucide-vue-next"
+import {X} from "@lucide/vue"
 import {cn} from "@/lib/utils"
 
 const props = defineProps<DialogContentProps & { class?: HTMLAttributes["class"] }>()
