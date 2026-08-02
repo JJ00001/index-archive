@@ -1,7 +1,7 @@
 <script lang="ts"
         setup>
 import {computed} from 'vue'
-import {Minus, Plus} from 'lucide-vue-next'
+import {Minus, Plus} from '@lucide/vue'
 import {useI18n} from 'vue-i18n'
 import {Badge} from '@/Components/ui/badge'
 import type {IndexActivityDescription} from '@/interfaces/IndexActivity'

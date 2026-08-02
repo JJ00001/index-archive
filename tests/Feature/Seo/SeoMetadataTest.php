@@ -31,7 +31,7 @@ it('renders homepage seo metadata', function () {
     $response = getSeoPage('/');
 
     $response->assertOk();
-    $response->assertSee('<title inertia>Track global index composition - IndexArchive</title>', false);
+    $response->assertSee('<title data-inertia>Track global index composition - IndexArchive</title>', false);
     $response->assertSee('<meta name="description" content="IndexArchive tracks how major market indices change over time across countries, sectors, and companies.">',
         false);
     $response->assertSee('href="https://indexarchive.org"', false);
@@ -44,7 +44,7 @@ it('renders companies index seo metadata', function () {
     $response = getSeoPage('/companies');
 
     $response->assertOk();
-    $response->assertSee('<title inertia>Browse companies - IndexArchive</title>', false);
+    $response->assertSee('<title data-inertia>Browse companies - IndexArchive</title>', false);
     $response->assertSee('Explore companies that appear in tracked market indices and compare their sector, country, and exchange footprint.',
         false);
     $response->assertSee('href="https://indexarchive.org/companies"', false);
@@ -54,7 +54,7 @@ it('renders indices index seo metadata', function () {
     $response = getSeoPage('/indices');
 
     $response->assertOk();
-    $response->assertSee('<title inertia>Browse indices - IndexArchive</title>', false);
+    $response->assertSee('<title data-inertia>Browse indices - IndexArchive</title>', false);
     $response->assertSee('Explore tracked market indices and compare their providers, constituents, sector weights, and country exposure.',
         false);
     $response->assertSee('href="https://indexarchive.org/indices"', false);
@@ -73,7 +73,7 @@ it('renders company detail seo metadata', function () {
     $response = getSeoPage('/companies/'.$company->id);
 
     $response->assertOk();
-    $response->assertSee('<title inertia>Apple - IndexArchive</title>', false);
+    $response->assertSee('<title data-inertia>Apple - IndexArchive</title>', false);
     $response->assertSee('Apple (AAPL) is a Technology company listed on NASDAQ in United States. Explore its index memberships and market footprint on IndexArchive.',
         false);
     $response->assertSee('href="https://indexarchive.org/companies/'.$company->id.'"', false);
@@ -92,7 +92,7 @@ it('renders index detail seo metadata', function () {
     $response = getSeoPage('/indices/'.$index->id);
 
     $response->assertOk();
-    $response->assertSee('<title inertia>MSCI World - IndexArchive</title>', false);
+    $response->assertSee('<title data-inertia>MSCI World - IndexArchive</title>', false);
     $response->assertSee('MSCI World is managed by MSCI reported in USD with 0 current holdings. Explore its constituents, sector allocation, country exposure, and recent composition changes on IndexArchive.',
         false);
     $response->assertSee('href="https://indexarchive.org/indices/'.$index->id.'"', false);
