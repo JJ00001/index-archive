@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[UseFactory(FundReportFactory::class)]
 class FundReport extends Model
@@ -76,6 +77,12 @@ class FundReport extends Model
     public function fund(): BelongsTo
     {
         return $this->belongsTo(Fund::class, 'fund_id');
+    }
+
+    /** @return HasMany<Position, $this> */
+    public function positions(): HasMany
+    {
+        return $this->hasMany(Position::class, 'fund_report_id');
     }
 
     /** @return array<string, string> */
